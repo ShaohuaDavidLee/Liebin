@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<!--
+  列宾 · 三变体确认样张模板
+  用法：复制此文件，替换所有 {{...}} 占位，并在 .stage 内写入每个变体每一屏的真实渲染。
+  约束：单文件、内联一切、除 Google Fonts 外无外部依赖、不要用 localStorage。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{产品名}} · 设计方向确认</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --muted:#6b6b6b; --line:#e5e5e5; --bg:#fafaf9; --accent:#1a1a1a;
+    --col-gap:20px; --stage-w:1280px; --stage-h:860px;
+    /* aspect-ratio 只接受无单位数值，必须单独维护一个不带 px 的比例 token。
+       写成 var(--stage-w)/var(--stage-h) 会解析成 1280px/860px —— 非法，frame 会塌成零高。 */
+    --stage-ar:1280/860;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.75;}
+  header{padding:32px 40px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:10}
+  h1{font-size:19px;margin:0 0 6px;font-weight:600;letter-spacing:0}
+  .axis{font-size:13px;color:var(--muted);margin:0}
+  .axis b{color:var(--ink);font-weight:600}
+  .screens{display:flex;gap:8px;margin-top:16px}
+  .screens button{font:inherit;font-size:13px;padding:6px 16px;border:1px solid var(--line);
+    background:#fff;border-radius:999px;cursor:pointer;color:var(--muted);transition:.15s}
+  .screens button[aria-selected="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--col-gap);padding:24px 40px 40px}
+  .variant > .meta{margin-bottom:10px}
+  .variant .name{font-size:15px;font-weight:600}
+  .variant .desc{font-size:12.5px;color:var(--muted);line-height:1.6;min-height:2.6em}
+  .frame{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;
+    position:relative;aspect-ratio:var(--stage-ar)}
+  .stage{width:var(--stage-w);height:var(--stage-h);transform-origin:0 0;position:absolute;top:0;left:0}
+  .stage > .screen{display:none;width:100%;height:100%}
+  .stage > .screen.on{display:block}
+
+  /* ── 确认区 ── */
+  .confirm{border-top:1px solid var(--line);padding:36px 40px 80px;max-width:820px}
+  .confirm h2{font-size:16px;margin:0 0 4px}
+  .confirm .hint{font-size:13px;color:var(--muted);margin:0 0 28px}
+  .q{margin-bottom:26px}
+  .q label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+  .q .why{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+  .q textarea,.q select{width:100%;font:inherit;font-size:14px;padding:10px 12px;
+    border:1px solid var(--line);border-radius:8px;background:#fff;resize:vertical}
+  .q textarea{min-height:76px}
+  .copy{font:inherit;font-size:14px;font-weight:600;padding:11px 26px;border:none;border-radius:999px;
+    background:var(--accent);color:#fff;cursor:pointer}
+  .copied{font-size:13px;color:var(--muted);margin-left:12px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>{{产品名}} · 三个方案，请选一个</h1>
+  <p class="axis">这三个方案沿同一条轴排开：<b>{{轴的名字，如「取舍程度」}}</b>。{{一句话说明这条轴为什么是它}}</p>
+  <div class="screens" role="tablist">
+    <button role="tab" aria-selected="true"  data-s="0">首屏</button>
+    <button role="tab" aria-selected="false" data-s="1">{{核心操作屏名，如「记录一次」}}</button>
+    <button role="tab" aria-selected="false" data-s="2">{{空状态或结果屏名}}</button>
+  </div>
+</header>
+
+<div class="grid">
+  <!-- 复制这个 .variant 三次；{{变体名}} 用两个字，用户反馈时会引用它 -->
+  <section class="variant">
+    <div class="meta">
+      <div class="name">{{变体名·一}}</div>
+      <div class="desc">{{这一档在轴上的位置，一句话}}</div>
+    </div>
+    <div class="frame"><div class="stage">
+      <div class="screen on"><!-- 首屏真实渲染 --></div>
+      <div class="screen"><!-- 操作屏真实渲染 --></div>
+      <div class="screen"><!-- 空状态真实渲染 --></div>
+    </div></div>
+  </section>
+  <!-- 变体二、变体三 同上 -->
+</div>
+
+<div class="confirm">
+  <h2>三个问题</h2>
+  <p class="hint">填完点下面的按钮，内容会复制到剪贴板，贴回对话里就行。</p>
+
+  <div class="q">
+    <label>1 · 选哪个？</label>
+    <select id="pick">
+      <option value="">— 请选择 —</option>
+      <option>{{变体名·一}}</option><option>{{变体名·二}}</option><option>{{变体名·三}}</option>
+      <option>三个都不要</option>
+    </select>
+  </div>
+
+  <div class="q">
+    <label>2 · 另外两个，哪里不要？</label>
+    <p class="why">这一问最重要。说得越具体越好——「圆角太软」「字太挤」「这个蓝太商务」。你骂出来的原话会原样变成设计约束，不会被改写。</p>
+    <textarea id="reject" placeholder="例：「{{变体名·二}}」的圆角太软，看着像儿童产品；「{{变体名·三}}」留白太多，滑半天看不到重点。"></textarea>
+  </div>
+
+  <div class="q">
+    <label>3 · 你的用户，在什么状态下打开这个产品？</label>
+    <p class="why">不是问画面。是问人——什么时间、什么心情、单手还是双手、周围有没有人。这一问会推翻一半「好看」的选择。</p>
+    <textarea id="context" placeholder="例：多半是深夜躺床上，一只手拿手机，另一只手空不出来，情绪偏焦虑。"></textarea>
+  </div>
+
+  <button class="copy" id="copyBtn">复制我的选择</button><span class="copied" id="tip"></span>
+</div>
+
+<script>
+(function(){
+  var stages = [].slice.call(document.querySelectorAll('.stage'));
+  function fit(){
+    stages.forEach(function(st){
+      var w = st.parentElement.clientWidth;
+      st.style.transform = 'scale(' + (w / st.offsetWidth) + ')';
+    });
+  }
+  window.addEventListener('resize', fit); fit();
+
+  var tabs = [].slice.call(document.querySelectorAll('.screens button'));
+  tabs.forEach(function(b){
+    b.addEventListener('click', function(){
+      tabs.forEach(function(x){ x.setAttribute('aria-selected', x === b); });
+      var i = +b.dataset.s;
+      stages.forEach(function(st){
+        [].slice.call(st.children).forEach(function(sc, j){ sc.classList.toggle('on', i === j); });
+      });
+    });
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var txt = '【设计方向确认】\n'
+      + '1 选择：' + (document.getElementById('pick').value || '（未选）') + '\n'
+      + '2 否决理由（原话）：' + (document.getElementById('reject').value || '（空）') + '\n'
+      + '3 使用场景：' + (document.getElementById('context').value || '（空）');
+    navigator.clipboard.writeText(txt).then(function(){
+      document.getElementById('tip').textContent = '已复制，贴回对话里即可';
+    }, function(){
+      document.getElementById('tip').textContent = '复制失败，请手动选中下方文本';
+      var pre = document.createElement('pre'); pre.textContent = txt;
+      document.getElementById('copyBtn').parentElement.appendChild(pre);
+    });
+  });
+})();
+</script>
+</body>
+</html>
