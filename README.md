@@ -2,6 +2,8 @@
 
 > 画《伏尔加河上的纤夫》之前，列宾在伏尔加河边住了两个夏天，画了大量习作，才动定稿的笔。
 
+落地页：[liebin.caojuege.com](https://liebin.caojuege.com)
+
 一个 Claude Code / Claude Skill：**在动手写页面之前，先把设计方向做成三张能被否决的样张。**
 
 ---
@@ -93,9 +95,13 @@ assets/
   preview-template.html         样张模板：三变体并列 + 底部确认表单
 evals/
   evals.json                    触发准确性与流程完整性测试
+site/                           落地页静态站（Cloudflare Pages 产出目录）
+wrangler.toml                   Pages 配置
 ```
 
 样张是**单文件 HTML**，内联 CSS/JS，除 Google Fonts 外无外部依赖，双击就能打开。它的寿命是二十分钟——别用框架，别上构建工具。
+
+落地页是另一回事：`site/` 是给 Cloudflare **Pages** 用的静态站（不是 Worker）。没有构建命令，产出目录就是 `site`。自定义域名 `liebin.caojuege.com` 在 Pages 项目里绑一次即可。
 
 ---
 
