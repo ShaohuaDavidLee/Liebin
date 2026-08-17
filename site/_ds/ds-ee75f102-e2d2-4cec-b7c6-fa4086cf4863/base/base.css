@@ -1,0 +1,15 @@
+/* 元素默认值 */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-size:var(--fs-body);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+img{display:block}
+a{color:var(--link);text-decoration:none;transition:color var(--dur-hover)}
+a:hover{color:var(--link-hover)}
+::selection{background:var(--selection-bg);color:var(--selection-ink)}
+h1,h2,h3,h4{font-family:var(--font-serif);font-weight:var(--fw-bold);letter-spacing:var(--ls-title);margin:0;text-wrap:balance}
+h1{font-size:var(--fs-display);line-height:var(--lh-title)}
+h2{font-size:var(--fs-h2);line-height:var(--lh-h2)}
+h3{font-size:var(--fs-h3);line-height:1.3}
+h4{font-size:var(--fs-h4);line-height:1.3}
+h1 em,h2 em,h3 em,.em{font-style:italic;color:var(--crimson)}
+p{margin:0;text-wrap:pretty}

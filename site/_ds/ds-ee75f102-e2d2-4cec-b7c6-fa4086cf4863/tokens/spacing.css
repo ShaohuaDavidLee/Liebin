@@ -1,0 +1,24 @@
+/* 文艺复兴 · 间距与版心 */
+:root{
+  --sp-1:4px;  --sp-2:8px;  --sp-3:12px; --sp-4:16px;
+  --sp-5:22px; --sp-6:26px; --sp-7:32px; --sp-8:40px;
+  --sp-9:52px; --sp-10:64px; --sp-11:76px; --sp-12:96px;
+
+  /* 版心 Measure */
+  --page-max:1240px;
+  --gutter:28px;
+  --gutter-sm:16px;
+  --section-y:76px;
+  --row-y:28px;
+  --row-hover-shift:12px;
+
+  /* 文字宽度 Text measure */
+  --measure-bio:56ch;
+  --measure-note:72ch;
+  --measure-lead:46ch;
+
+  /* 幻灯片安全区 Slide padding @1920×1080 */
+  --slide-pad-x:132px;
+  --slide-pad-t:96px;
+  --slide-pad-b:78px;
+}

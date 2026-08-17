@@ -1,0 +1,10 @@
+/* 文艺复兴 · 动效 — 只有淡入上浮和悬停位移，没有弹跳 */
+:root{
+  --ease:cubic-bezier(.16,1,.3,1);
+  --dur-hover:.3s;
+  --dur-shift:.35s;
+  --dur-rise:.8s;
+  --rise-y:18px;
+  --rise-y-slide:22px;
+  --stagger:.1s;
+}
