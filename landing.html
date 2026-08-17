@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>列宾 · Liebin — 先做三版，你挑一版，再写代码</title>
+<meta name="description" content="列宾是给 Claude Code 这类 AI 编程工具用的一个 skill：动手写页面之前，先用你的真实文案渲染三版设计并列给你看。你挑一版、说另外两版哪里不要，它把你的原话写成一份 DESIGN.md，交给 AI 去写代码。">
+<meta name="theme-color" content="#f7f7f4">
+<link rel="canonical" href="https://liebin.caojuege.com/">
+<meta property="og:title" content="列宾 · Liebin">
+<meta property="og:description" content="先做三版，你挑一版，再写代码。你说出「不要那个」的那一刻，设计才真正有了约束。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liebin.caojuege.com/">
+<meta property="og:locale" content="zh_CN">
+<link rel="icon" href="./site/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap">
+<link rel="stylesheet" href="./site/css/liebin.css">
+<style>
+/* 沿用既有 token 与组件语言，只为「对照」「例子」「常见问题」三处补最少的版式 */
+.contrast{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;margin-top:34px}
+.contrast .pit .n{font-family:var(--font-latin);font-style:italic}
+.say{display:block;font-family:var(--font-serif);font-size:16px;line-height:1.95;color:var(--ink-soft);padding:9px 0;border-bottom:1px solid var(--hair)}
+.say:last-child{border-bottom:0}
+.say.dim{color:var(--muted)}
+.say .mk{color:var(--gold);font-family:var(--font-latin);font-style:italic;margin-right:9px}
+.say.dim .mk{color:var(--hair-2)}
+
+.case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:18px;margin-top:34px}
+.case{display:flex;flex-direction:column;gap:12px}
+.case__shot{margin:0;border:1px solid var(--hair-2);border-radius:var(--r-sm);overflow:hidden;background:var(--surface);box-shadow:var(--sh-sm)}
+.case__shot img{width:100%;height:auto}
+.case.is-picked .case__shot{border-color:var(--gold-soft);box-shadow:var(--sh)}
+.case__name{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.case__name h3{margin:0;font-size:var(--fs-h4)}
+.case__name .axis{font-family:var(--font-latin);font-style:italic;font-size:14px;color:var(--muted)}
+.case__tag{flex:none;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:var(--ls-badge);text-transform:uppercase;border-radius:var(--r-pill);padding:4px 12px;border:1px solid var(--hair-2);color:var(--muted)}
+.case__tag.on{border-color:var(--primary);color:var(--primary)}
+.case p{color:var(--muted);font-size:14.5px;line-height:1.72}
+
+.verdict{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:30px;align-items:center;margin-top:44px;padding-top:30px;border-top:1px solid var(--hair)}
+.verdict blockquote{margin:0;font-family:var(--font-serif);font-size:clamp(21px,2.4vw,30px);line-height:1.55;color:var(--ink);text-wrap:balance}
+.verdict blockquote em{font-style:normal;color:var(--crimson)}
+.verdict .by{margin-top:14px;font-family:var(--font-latin);font-style:italic;font-size:15px;color:var(--muted)}
+.md{background:var(--ink-900);border-radius:var(--r);padding:22px 24px;overflow-x:auto}
+.md pre{margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.85;color:rgba(247,247,244,.9);white-space:pre-wrap;overflow-wrap:anywhere}
+.md .k{color:var(--ochre)}
+.md .q{color:#f0b7a0}
+.md__cap{margin-top:14px;color:var(--muted);font-size:13.5px;line-height:1.7}
+
+.qa{border-top:1px solid var(--hair)}
+.qa__item{padding:26px 4px;border-bottom:1px solid var(--hair)}
+.qa__item h3{margin:0 0 10px;font-size:var(--fs-h4)}
+.qa__item p{color:var(--muted);font-size:15px;line-height:1.78;max-width:var(--measure-note)}
+.qa__item p .ink{color:var(--ink-soft)}
+</style>
+</head>
+<body class="grain">
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="mark" href="#top">列宾<em>Liebin</em></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav id="nav" class="site-nav">
+      <a href="#steps">它怎么工作</a>
+      <a href="#case">一个例子</a>
+      <a href="#faq">常见问题</a>
+      <a href="#how">怎么开始</a>
+      <a class="rn-btn rn-btn--crimson rn-btn--sm" href="https://github.com/ShaohuaDavidLee/Liebin" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3z"/></svg>
+        GitHub
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="rise">
+      <span class="rn-badge rn-badge--live"><span class="rn-badge__dot"></span>列宾 Skill · 写代码前的设计确认</span>
+      <h1>先做<em>三版</em>，<br>你挑一版，<br>再写代码。</h1>
+      <p class="hero__quote">「做出来的和我想要的<br>不是一个东西，<br>但我说不清哪里不对。」</p>
+      <p class="latin hero__latin">it isn't ugly — it just isn't what you meant —</p>
+      <p class="hero__bio">列宾是给 Claude Code 这类 AI 编程工具装的一个 skill。动手写页面之前，它先用<span class="key">你自己的真实文案</span>渲染三版设计、每版三屏，并列摆在一张网页上。你挑一版，再说说另外两版哪里不要——你说的那句原话会被逐字写进一份 DESIGN.md，交给 AI 照着去写代码。</p>
+      <div class="hero__cta">
+        <a class="rn-btn rn-btn--dark" href="#how">装上列宾<span class="rn-btn__arrow">→</span></a>
+        <a class="rn-btn rn-btn--ghost" href="#case">先看一个真实的例子</a>
+      </div>
+    </div>
+
+    <div class="schematic rise d2">
+      <div class="schematic__head">
+        <span class="latin">preview.html — one file, three ways</span>
+        <span class="schematic__tag">三版 × 三屏</span>
+      </div>
+      <div class="schematic__cols">
+        <div class="col">
+          <div class="col__name"><span class="latin n">I</span><h3>照搬</h3></div>
+          <div class="col__stack">
+            <div class="pane" style="height:88px"><span class="pane__bar"></span><span class="pane__bar s"></span><span class="pane__lab">首屏</span></div>
+            <div class="pane" style="height:60px"><span class="pane__lab">主要操作页</span></div>
+            <div class="pane" style="height:46px"><span class="pane__lab">没内容时</span></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="col__name"><span class="latin n">II</span><h3>取气</h3></div>
+          <div class="col__stack">
+            <div class="pane" style="height:70px"><span class="pane__bar" style="width:52%"></span><span class="pane__lab">首屏</span></div>
+            <div class="pane" style="height:74px"><span class="pane__bar s" style="width:66%"></span><span class="pane__lab">主要操作页</span></div>
+            <div class="pane" style="height:50px"><span class="pane__lab">没内容时</span></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="col__name"><span class="latin n is-iii">III</span><h3>反手</h3></div>
+          <div class="col__stack">
+            <div class="pane is-outline" style="height:52px"><span class="pane__lab">首屏</span></div>
+            <div class="pane is-outline" style="height:64px"><span class="pane__bar s" style="width:58%"></span><span class="pane__lab">主要操作页</span></div>
+            <div class="pane is-outline" style="height:78px"><span class="pane__lab">没内容时</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="schematic__foot">
+        <p>选哪个？另外两个，哪里不要？</p>
+        <span class="ln"></span>
+        <span class="go">→</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="problem" class="section">
+    <div class="wrap">
+      <header class="rn-sechead">
+        <div class="rn-sechead__lead">
+          <span class="rn-kicker">The problem · 你遇到的</span>
+          <h2 class="rn-sechead__title">不是做得丑，是<em>不对</em>。</h2>
+          <div class="rn-rule"></div>
+        </div>
+        <p class="rn-aside rn-sechead__aside">and you can't say why —</p>
+      </header>
+      <p class="note">AI 写页面很快，快到你还没想清楚要什么，页面已经写完了。等看见成品才发现不对，返工的成本已经付掉了。</p>
+      <p class="note" style="margin-top:14px">更难的是，你也说不出到底哪里不对。给你一版，你只能回一句「嗯挺好的」或者「感觉不太对」——两种回答都等于没说。</p>
+
+      <div class="contrast">
+        <article class="pit">
+          <div class="n">i.</div>
+          <h3>你说不出口的</h3>
+          <p style="margin-bottom:14px">人很难先说清自己要什么。</p>
+          <span class="say dim"><span class="mk">“</span>我想要那种高级感。</span>
+          <span class="say dim"><span class="mk">“</span>嗯，挺好的。</span>
+          <span class="say dim"><span class="mk">“</span>感觉不太对。</span>
+        </article>
+        <article class="pit">
+          <div class="n">ii.</div>
+          <h3>你一眼能指出的</h3>
+          <p style="margin-bottom:14px">但看见东西，就能一眼指出哪里不像。</p>
+          <span class="say"><span class="mk">“</span>这个圆角太软了。</span>
+          <span class="say"><span class="mk">“</span>这个字太挤了。</span>
+          <span class="say"><span class="mk">“</span>要这个，不要那个。</span>
+        </article>
+      </div>
+      <p class="note" style="margin-top:26px">列宾只做一件事：<span style="color:var(--ink-soft)">把设计方向提前做成一个能被你否决的东西</span>——好让你从「这个圆角太软了」开始说，而不是从「我想要那种高级感」开始猜。</p>
+    </div>
+  </section>
+
+  <section id="steps" class="section">
+    <div class="wrap">
+      <header class="rn-sechead">
+        <div class="rn-sechead__lead">
+          <span class="rn-kicker">How it works · 四步</span>
+          <h2 class="rn-sechead__title">四步走完，就<em>停</em>。</h2>
+          <div class="rn-rule"></div>
+        </div>
+        <p class="rn-aside rn-sechead__aside">then it hands over —</p>
+      </header>
+      <div class="step-grid">
+        <article class="step">
+          <div class="latin step__n">01</div>
+          <h3>你给它材料</h3>
+          <p>你喜欢的网站、几张截图，或者只有一句「我想要那种高级感」都行。最要紧的是这一屏上的真实文案——没有它，做出来的样张一定是骗你的。</p>
+          <span class="step__tag">参考 + 你的真实文案</span>
+        </article>
+        <article class="step">
+          <div class="latin step__n">02</div>
+          <h3>它做出三版</h3>
+          <p>三版只沿一条轴分开：密度、气质或节奏。每版都渲染三屏——首屏、主要操作页，还有没内容时长什么样。第三版故意偏离你给的参考。</p>
+          <span class="step__tag">三版 × 三屏</span>
+        </article>
+        <article class="step">
+          <div class="latin step__n">03</div>
+          <h3>你挑一版，骂两版</h3>
+          <p>选中一版，说出另外两版哪里不要，再回答一句：你的用户会在什么状态下打开这个产品。你骂出来的那句原话，就是真正的设计约束。</p>
+          <span class="step__tag">一句原话</span>
+        </article>
+        <article class="step">
+          <div class="latin step__n">04</div>
+          <h3>它写成一份文件</h3>
+          <p>选中的方向、你的原话、不许再犯的禁忌，全部写进一份 DESIGN.md，你的原话逐字保留、不做润色。把这份文件丢给 AI，代码才开始写。</p>
+          <span class="step__tag">DESIGN.md → 交给 AI 写</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="case" class="section">
+    <div class="wrap">
+      <header class="rn-sechead">
+        <div class="rn-sechead__lead">
+          <span class="rn-kicker">A real run · 一个例子</span>
+          <h2 class="rn-sechead__title">这三版，是列宾给<em>自己</em>做的。</h2>
+          <div class="rn-rule"></div>
+        </div>
+        <p class="rn-aside rn-sechead__aside">same page you're reading —</p>
+      </header>
+      <p class="note">给列宾自己做落地页时，视觉先定了下来，剩下的问题只有一个：首页到底该讲多少。于是三版沿同一条轴排开——高、中、低信息密度，各自渲染三屏，并列摆出来让人挑。</p>
+
+      <div class="case-grid">
+        <div class="case is-picked">
+          <figure class="case__shot"><img src="./site/img/case/sample-beiwen.jpg" alt="样张一「碑文」：高信息密度的首屏，主张旁边并列四步流程卡" width="1280" height="700"></figure>
+          <div class="case__name"><h3>碑文</h3><span class="axis">高</span><span class="case__tag on">选中</span></div>
+          <p>首屏同时讲清问题、四步流程和安装路径，给已经在找方法、想立刻判断能不能用的人看。</p>
+        </div>
+        <div class="case">
+          <figure class="case__shot"><img src="./site/img/case/sample-liubai.jpg" alt="样张二「留白」：中信息密度的首屏，一句主张加三项事实" width="1280" height="700"></figure>
+          <div class="case__name"><h3>留白</h3><span class="axis">中</span><span class="case__tag">否决</span></div>
+          <p>先把一句主张讲透，流程和安装放到下一层，给第一次认识列宾的人看。</p>
+        </div>
+        <div class="case">
+          <figure class="case__shot"><img src="./site/img/case/sample-jingye.jpg" alt="样张三「静页」：低信息密度的首屏，只有一个观点和一个安装按钮" width="1280" height="700"></figure>
+          <div class="case__name"><h3>静页</h3><span class="axis">低</span><span class="case__tag">否决</span></div>
+          <p>把方法论全藏到后面，只留一个观点和一个安装动作，用来试探首页该不该更像一张宣言。</p>
+        </div>
+      </div>
+
+      <div class="verdict">
+        <div>
+          <span class="rn-kicker">他的原话</span>
+          <blockquote style="margin-top:12px">「<em>另外两个hero传达的信息太少</em>」</blockquote>
+          <p class="by">2026-08-17 · 选中「碑文」，否决「留白」「静页」</p>
+        </div>
+        <div>
+          <div class="md">
+<pre><span class="k">## 8. Do's and Don'ts</span>
+
+<span class="k">### Don'ts</span>
+
+- ❌<span class="q">「另外两个hero传达的信息太少」</span>— 用户在 2026-08-17
+  否决「留白」「静页」的原话；不可把首屏重新做成
+  只留一句宣言。</pre>
+          </div>
+          <p class="md__cap">这句话原样躺在 DESIGN.md 里，一个字没改。之后每一次生成，都要先过它这一关。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="why" class="on-ink grain" style="padding:var(--section-y) 0">
+    <div class="wrap">
+      <div class="why-head">
+        <span class="rn-kicker">Why Liebin · 为什么叫列宾</span>
+        <h2>两个夏天的习作，换一张<em>定稿</em>。</h2>
+        <p class="latin">studies first, then the canvas —</p>
+      </div>
+      <div class="why-art">
+        <figure class="rn-photo study" style="aspect-ratio:960/413">
+          <img src="./site/img/repin-study-1870.jpg" alt="列宾《伏尔加河上的纤夫》习作，1870" width="1280" height="551">
+          <span class="rn-photo__frame" aria-hidden="true"></span>
+          <span class="rn-photo__scrim" aria-hidden="true"></span>
+          <figcaption class="caption-pill">习作 · 1870<span class="hint">study</span></figcaption>
+        </figure>
+        <figure class="rn-photo canvas" style="aspect-ratio:281/132">
+          <img src="./site/img/repin-volga-1873.jpg" alt="伊利亚·列宾《伏尔加河上的纤夫》，1870–1873" width="1920" height="888">
+          <span class="rn-photo__frame" aria-hidden="true"></span>
+          <span class="rn-photo__scrim" aria-hidden="true"></span>
+          <figcaption class="caption-pill">定稿 · 1873<span class="hint">oil on canvas</span></figcaption>
+        </figure>
+      </div>
+      <div class="why-note">
+        <p class="serif">画《伏尔加河上的纤夫》之前，列宾在河边住了两个夏天，画满了习作，才动定稿的笔。<span class="gold">习作不是热身，是把「我以为的」和「实际是的」对上。</span></p>
+        <p class="latin credit">Ilya Repin, <span style="font-style:normal;font-family:var(--font-serif);font-size:14px">《伏尔加河上的纤夫》</span> 1870–1873 · 131.5 × 281 cm<br>Russian Museum · images from Wikimedia Commons, public domain</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="pitfalls" class="section">
+    <div class="wrap">
+      <header class="rn-sechead">
+        <div class="rn-sechead__lead">
+          <span class="rn-kicker">What it guards · 四个坑</span>
+          <h2 class="rn-sechead__title">它替你盯住的<em>四件事</em>。</h2>
+          <div class="rn-rule"></div>
+        </div>
+        <p class="rn-aside rn-sechead__aside">four ways this goes wrong —</p>
+      </header>
+      <div class="pit-grid">
+        <article class="pit">
+          <div class="latin n">i.</div>
+          <h3>照抄参考里的数字</h3>
+          <p>参考里的 <span class="latin ink">-2.46px</span> 字距，是 80px 拉丁标题下的 <span class="latin ink">-0.031em</span>。照抄到 48px 中文标题上会挤成一团。列宾一律先转成 em 再迁移，<span class="ink">中文标题不用负字距</span>。</p>
+        </article>
+        <article class="pit">
+          <div class="latin n">ii.</div>
+          <h3>拿占位文字凑数</h3>
+          <p>「标题标题标题」会让每一版看起来都还行。真实中文文案的长度、语气和断行，才决定一个设计成不成立——所以它一定问你要真话。</p>
+        </article>
+        <article class="pit">
+          <div class="latin n">iii.</div>
+          <h3>只给你一个方案</h3>
+          <p>一版只能换来「嗯挺好的」或者「感觉不太对」，两种回答都零信息量。三版并列，你才有话可说。</p>
+        </article>
+        <article class="pit">
+          <div class="latin n">iv.</div>
+          <h3>替你写禁忌</h3>
+          <p>AI 自己写的禁忌永远是「保持一致性」「避免视觉噪音」这类正确的废话，对下一次生成毫无约束力。<span class="ink">这一段只能由你来填。</span></p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="section">
+    <div class="wrap">
+      <header class="rn-sechead">
+        <div class="rn-sechead__lead">
+          <span class="rn-kicker">FAQ · 常见问题</span>
+          <h2 class="rn-sechead__title">你大概会问这几件事。</h2>
+          <div class="rn-rule"></div>
+        </div>
+        <p class="rn-aside rn-sechead__aside">before you install —</p>
+      </header>
+      <div class="qa">
+        <div class="qa__item">
+          <h3>它会直接帮我把网站写出来吗？</h3>
+          <p><span class="ink">不会。</span>列宾只管动笔前那一步：三版样张，加一份 DESIGN.md。写代码是下一步的事——把这份文件交给 Claude Code、Codex 或任何会写代码的 agent 去落地。</p>
+        </div>
+        <div class="qa__item">
+          <h3>我什么参考都没有，只有一句「想要那种高级感」，能用吗？</h3>
+          <p>能，这是它最常见的入口。什么都没有时，它会把这一句解读成三种不同的气质，让你从里面挑；你手上有网址、有截图、有一份现成的 design md，走的又是另外三条路。</p>
+        </div>
+        <div class="qa__item">
+          <h3>我不是设计师，看得懂那三版吗？</h3>
+          <p>你不需要说出自己要什么。你要做的只是指着三版说「要这个、不要那个」，再补一句哪里不像。<span class="ink">它要的就是这个。</span></p>
+        </div>
+        <div class="qa__item">
+          <h3>只能配 Claude Code 用吗？</h3>
+          <p>不挑 agent。Codex、Cursor、Grok、Openclaw、Kimi Work、WorkBuddy、Hermes、DeepSeek harness——把仓库放进项目里，让它读 SKILL.md 就行。</p>
+        </div>
+        <div class="qa__item">
+          <h3>它和那些「一键提取设计系统」的工具有什么不同？</h3>
+          <p>提取器满大街都是，提得再准也解决不了开头那个问题：你说不清哪里不对。列宾里的提取只是给三版找个起点，粗糙没关系——它马上就要被你否决和修正。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="section">
+    <div class="wrap">
+      <header class="rn-sechead">
+        <div class="rn-sechead__lead">
+          <span class="rn-kicker">Get started · 怎么开始</span>
+          <h2 class="rn-sechead__title">装上，攒一包材料，丢给你的 AI。</h2>
+          <div class="rn-rule"></div>
+        </div>
+        <p class="rn-aside rn-sechead__aside">three moves, that's it —</p>
+      </header>
+
+      <div class="idx-row">
+        <span class="latin n">I</span>
+        <h3>装上</h3>
+        <span class="latin">one command —</span>
+      </div>
+      <div class="rn-chips" aria-label="支持的 agent">
+        <span class="rn-chip">Claude Code</span>
+        <span class="rn-chip">Codex</span>
+        <span class="rn-chip">Cursor</span>
+        <span class="rn-chip">Grok</span>
+        <span class="rn-chip">Openclaw</span>
+        <span class="rn-chip">Kimi Work</span>
+        <span class="rn-chip">WorkBuddy</span>
+        <span class="rn-chip">Hermes</span>
+        <span class="rn-chip">DeepSeek harness</span>
+      </div>
+      <div class="scope" role="tablist" aria-label="安装位置">
+        <button type="button" class="is-on" data-scope="global" aria-pressed="true">全局 ~/.claude/skills</button>
+        <button type="button" data-scope="project" aria-pressed="false">项目内 .claude/skills</button>
+      </div>
+      <div class="term">
+        <code id="install-cmd">git clone https://github.com/ShaohuaDavidLee/Liebin.git ~/.claude/skills/liebin</code>
+        <button type="button" id="copy-install">复制</button>
+      </div>
+      <p class="note mt-16" id="install-note">重开一个 Claude Code 会话即可生效，或直接 /liebin 调用。Codex、Cursor、Grok、Openclaw、Kimi Work、WorkBuddy、Hermes、DeepSeek harness——把仓库放进项目里，让它读 SKILL.md 就行，不挑 agent。</p>
+
+      <div class="idx-row mt-60">
+        <span class="latin n">II</span>
+        <h3>攒一包材料</h3>
+        <span class="latin">paste, drop, download —</span>
+      </div>
+      <p class="note tight">你喜欢的网址、参考图，还有你要做的东西——填在这儿，打包成一个 zip。里面是一份写好的说明加你的参考图，列宾读它就能开工。</p>
+
+      <form class="pack" id="brief-form" onsubmit="return false">
+        <div class="pack__grid">
+          <div class="field">
+            <div>
+              <label class="lbl" for="refs">你喜欢的网址 · reference urls</label>
+              <textarea id="refs" rows="4" placeholder="https://stripe.com&#10;https://linear.app"></textarea>
+              <p class="field-hint">第一行是主参考，用来定气质。最多再加 1–2 个，每个网址单独一行；回车分行即可，不要用逗号或空格连在一起。</p>
+            </div>
+            <div>
+              <label class="lbl" for="notes">你要做的是什么 · 真实文案与备注</label>
+              <textarea id="notes" rows="6" placeholder="产品叫什么、给谁用、这一屏上的真实文案&#10;（别写占位文字，真话越具体越好）"></textarea>
+            </div>
+          </div>
+          <div class="field">
+            <span class="lbl">参考图片 · reference images</span>
+            <label class="drop" id="drop">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="m21 15-4.5-4.5L9 18"/></svg>
+              <span>把截图拖进来，或点击选择</span>
+              <span class="latin" style="color:var(--muted);font-size:14px">they go into refs/ —</span>
+              <input id="files" type="file" accept="image/*" multiple hidden>
+            </label>
+            <div class="files" id="file-list"></div>
+          </div>
+        </div>
+        <div class="pack__foot">
+          <button type="button" class="rn-btn rn-btn--dark" id="download-zip">打包下载 zip<span class="rn-btn__arrow">↓</span></button>
+          <button type="button" class="rn-btn rn-btn--ghost" id="copy-brief">复制成一段话</button>
+          <span class="pack__hint" id="pack-hint">包内：BRIEF.md（还没有参考图也能用）</span>
+        </div>
+      </form>
+
+      <div class="idx-row mt-60">
+        <span class="latin n">III</span>
+        <h3>丢给你的 AI</h3>
+        <span class="latin">then get out of the way —</span>
+      </div>
+      <div class="handoff">
+        <p>把 zip 解开丢进项目，说一句「读一下 SKILL.md，用列宾走一遍这个任务包」。你会拿到一张单文件网页：三版设计、每版三屏，并列着让你挑。挑完回答两个问题——<span class="key">另外两版哪里不要</span>、你的用户会在什么状态下打开这个产品——它把你的原话逐字写进 DESIGN.md。</p>
+        <p class="muted">DESIGN.md 交出来，列宾的活儿就干完了。它不替你开发产品，接着让任何一个会写代码的 agent 拿这份文件去落地。<br><span class="latin" style="font-size:15px">the skill stops here, on purpose —</span></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer on-ink grain">
+  <div class="site-footer__inner">
+    <span class="rn-kicker">Liebin · 列宾</span>
+    <p class="quote">你骂出来的那句原话，才是真正的<em>设计约束</em>。</p>
+    <div class="contacts">
+      <a class="rn-contact" href="https://www.caojuege.com" target="_blank" rel="noopener">
+        <span class="rn-contact__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <span class="rn-contact__lab">社区 Community</span>
+        <span class="rn-contact__val">草诀歌 AI Labs</span>
+      </a>
+      <a class="rn-contact" href="https://www.caojuege.com/davidli" target="_blank" rel="noopener">
+        <span class="rn-contact__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+        <span class="rn-contact__lab">关于开发者 About</span>
+        <span class="rn-contact__val">韶华David</span>
+      </a>
+      <a class="rn-contact" href="https://github.com/ShaohuaDavidLee/Liebin" target="_blank" rel="noopener">
+        <span class="rn-contact__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.7-2.8 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3z"/></svg></span>
+        <span class="rn-contact__lab">源码 Source</span>
+        <span class="rn-contact__val">ShaohuaDavidLee/Liebin</span>
+      </a>
+    </div>
+    <div class="thanks">
+      <div class="lbl">致谢 · Thanks</div>
+      <p>灵感来源于<a href="https://www.caojuege.com/camp/" target="_blank" rel="noopener">共创班</a>的学员朋友们。</p>
+    </div>
+  </div>
+  <div class="colophon">
+    <span class="brand">列宾 <span class="latin" style="color:var(--gold)">Liebin</span></span>
+    <span>DESIGN.md 规范来自 <a href="https://github.com/google-labs-code/design.md" target="_blank" rel="noopener">google-labs-code/design.md</a> · Apache-2.0</span>
+  </div>
+</footer>
+
+<script src="./site/js/app.js"></script>
+</body>
+</html>
