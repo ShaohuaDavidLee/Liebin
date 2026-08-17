@@ -1,0 +1,29 @@
+/* 招牌元素 — 不值得做成组件的那部分 */
+
+/* 纸面颗粒：加在 body 或任意区块上 */
+.grain{position:relative}
+.grain::before{content:"";position:absolute;inset:0;z-index:60;pointer-events:none;opacity:var(--grain-opacity);mix-blend-mode:multiply;background-image:var(--grain-image)}
+body.grain::before{position:fixed}
+.on-ink.grain::before{opacity:var(--grain-opacity-ink);mix-blend-mode:normal}
+
+/* 版心与章节 */
+.wrap{max-width:var(--page-max);margin:0 auto;padding:0 var(--gutter)}
+.section{padding:var(--section-y) 0;position:relative}
+.section+.section{border-top:1px solid var(--hair)}
+@media(max-width:720px){.wrap{padding:0 var(--gutter-sm)}}
+
+/* 拉丁斜体：旁注、域名、页码、落款 */
+.latin{font-family:var(--font-latin);font-style:italic;font-weight:var(--fw-regular)}
+
+/* 条纹图片占位 */
+.stripe-frame{background:var(--stripe);border:1px solid var(--hair-2);border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center}
+.stripe-frame .cap{font-family:var(--font-sans);font-size:var(--fs-fine);letter-spacing:.04em;color:var(--muted);text-align:center;padding:var(--sp-6);line-height:1.6}
+
+/* 图注胶囊 */
+.caption-pill{display:inline-flex;align-items:center;gap:var(--sp-2);background:var(--caption-bg);backdrop-filter:blur(4px);color:var(--caption-ink);font-family:var(--font-latin);font-style:italic;padding:7px 16px;border-radius:var(--r-pill)}
+
+/* 入场：淡入上浮 */
+.rise{animation:rise var(--dur-rise) var(--ease) both;opacity:0;transform:translateY(var(--rise-y))}
+.rise.d1{animation-delay:.1s}.rise.d2{animation-delay:.2s}.rise.d3{animation-delay:.3s}
+@keyframes rise{to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.rise{animation:none;opacity:1;transform:none}}

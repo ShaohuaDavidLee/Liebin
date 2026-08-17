@@ -1,0 +1,58 @@
+/* 文艺复兴 · 色彩 — 暖调纸白为底，墨色为文，朱红点睛，金褐串场 */
+:root{
+  /* 纸 Paper */
+  --paper-0:#ffffff;
+  --paper-1:#f7f7f4;
+  --paper-2:#f2f1ed;
+  --paper-3:#eae8e2;
+  /* 墨 Ink */
+  --ink-900:#26251e;
+  --ink-700:#4a4636;
+  --ink-500:#7c7460;
+  /* 颜料 Pigments */
+  --vermilion:#f54e00;
+  --crimson-lake:#b3003f;
+  --ochre:#c08532;
+  --ochre-30:rgba(192,133,50,.30);
+  --ochre-07:rgba(192,133,50,.07);
+  /* 界线 Hairlines */
+  --hair-12:rgba(38,37,30,.12);
+  --hair-20:rgba(38,37,30,.20);
+
+  /* ——— 语义别名 Semantic ——— */
+  --bg:var(--paper-1);
+  --surface:var(--paper-0);
+  --surface-soft:var(--paper-2);
+  --ink:var(--ink-900);
+  --ink-soft:var(--ink-700);
+  --muted:var(--ink-500);
+  --primary:var(--vermilion);
+  --crimson:var(--crimson-lake);
+  --gold:var(--ochre);
+  --gold-soft:var(--ochre-30);
+  --gold-wash:var(--ochre-07);
+  --hair:var(--hair-12);
+  --hair-2:var(--hair-20);
+  --link:var(--crimson-lake);
+  --link-hover:var(--vermilion);
+  --selection-bg:var(--crimson-lake);
+  --selection-ink:#ffffff;
+  /* 图注胶囊 Caption capsule */
+  --caption-bg:rgba(28,20,12,.62);
+  --caption-ink:#f0e8d8;
+}
+
+/* 反色区块 — 章扉 / 金句 / 转场 / 页脚。全篇 1–2 处即可。*/
+.on-ink{
+  --bg:var(--ink-900);
+  --surface:rgba(255,255,255,.04);
+  --surface-soft:rgba(255,255,255,.08);
+  --ink:var(--paper-1);
+  --ink-soft:rgba(247,247,244,.80);
+  --muted:rgba(247,247,244,.55);
+  --hair:rgba(255,255,255,.10);
+  --hair-2:rgba(255,255,255,.14);
+  --crimson:var(--ochre);
+  background:var(--ink-900);
+  color:var(--paper-1);
+}
