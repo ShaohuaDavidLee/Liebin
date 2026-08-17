@@ -30,6 +30,10 @@
   a{color:var(--link);text-decoration:none}
   a:hover{color:var(--link-hover)}
   input::placeholder,textarea::placeholder{color:var(--muted);opacity:1}
+  @media (min-width:900px){
+    .hero-copy{margin-left:clamp(32px,3vw,56px)}
+    .hero-portrait{margin-right:clamp(48px,4vw,72px)}
+  }
 </style>
 </helmet>
 
@@ -50,7 +54,7 @@
   </header>
 
   <section id="top" style="max-width:var(--page-max);margin:0 auto;padding:64px var(--gutter) 88px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:56px;align-items:center">
-    <div class="rise">
+    <div class="rise hero-copy">
       <x-import component-from-global-scope="DesignSystem_ee75f1.Badge" variant="live" hint-size="auto,32px">列宾 Skill · 设计方向确认</x-import>
       <h1 style="margin:22px 0 0;max-width:14ch">让大师帮你<em>「偷」</em>设计。</h1>
       <p style="font-family:var(--font-serif);font-size:21px;line-height:1.8;color:var(--ink-soft);margin:18px 0 0;max-width:26ch">「优秀的艺术家模仿，伟大的艺术家偷窃。」</p>
@@ -63,7 +67,7 @@
     </div>
 
     <sc-if value="{{ showSchematic }}" hint-placeholder-val="{{ true }}">
-      <div class="rise d2" style="max-width:360px;width:100%;margin-left:auto;margin-right:28px">
+      <div class="rise d2 hero-portrait" style="max-width:360px;width:100%;margin-left:auto">
         <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/repin-self-portrait.png" alt="伊利亚·列宾自画像，1878" ratio="789/1000" object-position="50% 22%" caption="Ilya Repin · 自画像 1878" hint-size="100%,440px"></x-import>
         <p class="latin" style="color:var(--muted);font-size:14.5px;line-height:1.6;margin:14px 0 0">Ilya Repin, <span style="font-style:normal;font-family:var(--font-serif);font-size:13.5px">自画像</span> 1878 · Tretyakov Gallery — public domain, via Wikimedia Commons</p>
       </div>
