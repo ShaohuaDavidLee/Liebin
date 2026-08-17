@@ -34,6 +34,15 @@
     .hero-copy{margin-left:clamp(32px,3vw,56px)}
     .hero-portrait{margin-right:clamp(48px,4vw,72px)}
   }
+  #steps{padding-top:clamp(40px,4vw,56px)}
+  @media (max-width:720px){
+    header > div{height:64px!important;padding:0 var(--gutter-sm)!important;gap:12px!important}
+    header > div > a{white-space:nowrap}
+    header nav{margin-left:auto;gap:0!important}
+    header nav > a{display:none}
+    #top{padding:48px var(--gutter-sm) 32px!important;gap:36px!important}
+    #steps{padding-top:40px}
+  }
 </style>
 </helmet>
 
@@ -48,12 +57,12 @@
         <a href="#how" style="color:var(--ink-soft)" style-hover="color:var(--primary)">怎么用</a>
         <a href="#pitfalls" style="color:var(--ink-soft)" style-hover="color:var(--primary)">三个坑</a>
         <a href="#faq" style="color:var(--ink-soft)" style-hover="color:var(--primary)">FAQ</a>
-        <x-import component-from-global-scope="DesignSystem_ee75f1.Button" variant="crimson" size="sm" href="https://github.com/ShaohuaDavidLee/Liebin" target="_blank" rel="noopener" icon="lucide:github" hint-size="auto,38px">GitHub</x-import>
+        <x-import component-from-global-scope="DesignSystem_ee75f1.Button" variant="crimson" size="sm" href="https://www.caojuege.com" target="_blank" rel="noopener" icon="lucide:users" hint-size="auto,38px">草诀歌 AI Labs</x-import>
       </nav>
     </div>
   </header>
 
-  <section id="top" style="max-width:var(--page-max);margin:0 auto;padding:64px var(--gutter) 88px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:56px;align-items:center">
+  <section id="top" style="max-width:var(--page-max);margin:0 auto;padding:64px var(--gutter) 48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:56px;align-items:center">
     <div class="rise hero-copy">
       <x-import component-from-global-scope="DesignSystem_ee75f1.Badge" variant="live" hint-size="auto,32px">列宾 Skill · 设计方向确认</x-import>
       <h1 style="margin:22px 0 0;max-width:14ch">让大师帮你<em>「偷」</em>设计。</h1>
