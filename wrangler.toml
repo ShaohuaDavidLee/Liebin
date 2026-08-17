@@ -1,4 +1,5 @@
 # 列宾落地页 · Cloudflare Pages（静态站，不是 Worker）
+# Production branch 请设为 main；不要 Retry 旧的 7a974c9 部署。
 name = "liebin"
 compatibility_date = "2026-08-17"
 pages_build_output_dir = "site"

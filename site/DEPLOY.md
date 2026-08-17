@@ -9,11 +9,13 @@
 1. 打开 [Cloudflare Dashboard → Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages)
 2. **Create** → **Pages** → **Connect to Git** → 选 `ShaohuaDavidLee/Liebin`
 3. 设置：
-   - Production branch：合并后的默认分支
+   - Production branch：`main`（不要选某个 commit，也不要 Retry 失败的旧部署）
    - Framework preset：None
    - Build command：留空
    - Output directory：`site`
-4. **Save and Deploy**
+4. **Save and Deploy** —— 日志里 HEAD 必须是带 `site/` 的提交，不能是 `7a974c9`
+
+如果第一次失败后再点 **Retry deployment**，Cloudflare 会重跑同一个旧 SHA，还是找不到 `site/`。正确做法是：Settings → Builds & deployments → Production branch 改成 `main`，然后 **Create deployment** / Save，让它拉最新代码。
 5. **Custom domains** → 添加 `liebin.caojuege.com`
 
 如果 `caojuege.com` 已经在同一个 Cloudflare 账号里，子域会自动出 CNAME，不用改 DNS。
