@@ -9,4 +9,4 @@ site/                    落地页（Cloudflare Pages 静态产出）
 wrangler.toml            Pages 配置：产出目录 site
 ```
 
-skill 与落地页互不依赖。落地页只负责让人装上、攒任务包、理解四步。真正的设计方向确认发生在 agent 读 `SKILL.md` 之后。
+skill 与落地页互不依赖。落地页只负责让人看清产出、装上、攒任务包。真正的设计方向确认发生在 agent 读 `SKILL.md` 之后。
