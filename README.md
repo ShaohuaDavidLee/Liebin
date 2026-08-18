@@ -1,10 +1,17 @@
 # 列宾 · Liebin
 
-> 画《伏尔加河上的纤夫》之前，列宾在伏尔加河边住了两个夏天，画了大量习作，才动定稿的笔。
+**让大师帮你「偷」设计。**
+
+「优秀的艺术家模仿，伟大的艺术家偷窃。」  
+*good artists copy, great artists steal —*
+
+把你想要的设计风格，先给出三个版本。你确定一版、吐槽另外两版哪里不好，它据此重新生成 DESIGN.md——你的 agent 拿着这份文件，去精准修改你的产品。
 
 落地页：[liebin.caojuege.com](https://liebin.caojuege.com)
 
-一个 Claude Code / Claude Skill：**在动手写页面之前，先把设计方向做成三张能被否决的样张。**
+[![列宾落地页首屏](assets/readme-hero.jpg)](https://liebin.caojuege.com)
+
+一个 Claude Code / Claude Skill：在动手写页面之前，先把设计方向做成三张能被否决的样张。
 
 ---
 
