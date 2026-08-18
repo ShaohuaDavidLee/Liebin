@@ -4,7 +4,7 @@
 
 ```
 site/
-  index.html     整页结构：hero / 为什么叫列宾 / 四步 / 怎么用 / 四个坑 / 页脚
+  index.html     整页结构：hero / 输出什么 / 怎么用 / 三个坑 / FAQ / 页脚
   css/liebin.css 文艺复兴设计系统 token + 组件 + 本页版式
   js/app.js      安装命令切换、任务包 zip、导航
   img/           列宾公版画（Wikimedia Commons）
