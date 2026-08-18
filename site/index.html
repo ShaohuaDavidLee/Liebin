@@ -1,280 +1,446 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>让大师帮你「偷」设计</title>
-<meta name="description" content="列宾 skill：动笔前先给你三版设计样张。你选一版、说清另外两版哪里不要，它把你的原话写进 DESIGN.md，交给你的 agent 去落地。">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@300;400;700&display=swap">
-<link rel="stylesheet" href="css/liebin.css">
+<script src="./support.js"></script>
 </head>
 <body>
+<x-dc>
+<helmet>
+<title>让大师帮你「偷」设计</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@1,400;1,500&display=swap">
+<link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/tokens/colors.css">
+<link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/tokens/typography.css">
+<link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/tokens/effects.css">
+<link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/tokens/motion.css">
+<link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/base/base.css">
+<link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/base/utilities.css">
+<link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/components/core/core.css">
+<link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/components/editorial/editorial.css">
+<link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/components/media/media.css">
+<link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/components/components.css">
+<link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/styles.css">
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<script src="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/_ds_bundle.js"></script>
+<style>
+  body{margin:0;background:var(--paper-1);color:var(--ink-900);font-family:var(--font-sans)}
+  a{color:var(--link);text-decoration:none}
+  a:hover{color:var(--link-hover)}
+  input::placeholder,textarea::placeholder{color:var(--muted);opacity:1}
+  @media (min-width:900px){
+    .hero-copy{margin-left:clamp(32px,3vw,56px)}
+    .hero-portrait{margin-right:clamp(48px,4vw,72px)}
+  }
+  @media (max-width:720px){
+    header > div{height:64px!important;padding:0 var(--gutter-sm)!important;gap:12px!important}
+    header > div > a{white-space:nowrap}
+    header nav{margin-left:auto;gap:0!important}
+    header nav > a{display:none}
+    #top{padding:48px var(--gutter-sm) 32px!important;gap:36px!important}
+  }
+</style>
+</helmet>
 
-<!-- 共用图形：飞鸽（几何拼的，30px 下手搓 path 会糊成白点）、月牙（两圆相减） -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="dove" viewBox="0 0 80 56"><g fill="#FFFDF5">
-    <path d="M18 33 L3 26 L5.5 40 Z"/>
-    <ellipse cx="40" cy="34" rx="20" ry="7" transform="rotate(-8 40 34)"/>
-    <circle cx="59" cy="30.5" r="5.6"/>
-    <path d="M64 30 L72.5 32.4 L64 34.8 Z"/>
-    <ellipse cx="34" cy="21" rx="17" ry="6.2" transform="rotate(-40 34 21)"/>
-    <ellipse cx="45" cy="41" rx="14.5" ry="5.4" transform="rotate(24 45 41)"/>
-  </g></symbol>
-</svg>
+<div class="grain" style="--section-y:{{ sectionY }};background:var(--bg);min-height:100vh;overflow-x:hidden">
 
-<div class="strip">列宾 Skill · 设计方向确认</div>
-
-<header class="site-header">
-  <div class="site-header__inner">
-    <a class="mark" href="#top">列宾<em>Liebin</em></a>
-    <nav class="site-nav" id="nav">
-      <a href="#directions">输出什么</a>
-      <a href="#how">怎么用</a>
-      <a href="#pitfalls">三个坑</a>
-      <a href="#faq">FAQ</a>
-    </nav>
-    <div class="site-header__end">
-      <a class="ghost-link" href="https://github.com/ShaohuaDavidLee/Liebin" target="_blank" rel="noopener">GitHub</a>
-      <a class="rn-btn rn-btn--dark rn-btn--sm" href="https://www.caojuege.com" target="_blank" rel="noopener">草诀歌 AI Labs</a>
-      <button class="nav-toggle" type="button" aria-label="展开导航" aria-expanded="false" aria-controls="nav">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-      </button>
+  <header style="position:sticky;top:0;z-index:50;background:rgba(247,247,244,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)">
+    <div style="max-width:var(--page-max);margin:0 auto;padding:0 var(--gutter);height:70px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+      <a href="#top" style="font-family:var(--font-serif);font-size:21px;font-weight:900;letter-spacing:-.01em;color:var(--ink)">列宾<span style="font-family:var(--font-latin);font-style:italic;font-weight:500;color:var(--crimson);margin-left:6px">Liebin</span></a>
+      <nav style="display:flex;align-items:center;gap:24px;font-family:var(--font-sans);font-size:14px;font-weight:500">
+        <a href="#directions" style="color:var(--ink-soft)" style-hover="color:var(--primary)">输出什么</a>
+        <a href="#how" style="color:var(--ink-soft)" style-hover="color:var(--primary)">怎么用</a>
+        <a href="#pitfalls" style="color:var(--ink-soft)" style-hover="color:var(--primary)">三个坑</a>
+        <a href="#faq" style="color:var(--ink-soft)" style-hover="color:var(--primary)">FAQ</a>
+        <x-import component-from-global-scope="DesignSystem_ee75f1.Button" variant="crimson" size="sm" href="https://www.caojuege.com" target="_blank" rel="noopener" icon="lucide:users" hint-size="auto,38px">草诀歌 AI Labs</x-import>
+      </nav>
     </div>
-  </div>
-</header>
+  </header>
 
-<!-- ═════════ 首屏 ═════════ -->
-<section class="hero" id="top">
-  <div class="sky"></div>
-  <svg class="arc" viewBox="0 0 1280 880" fill="none" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <path d="M-70 780C200 150 1080 150 1350 780" stroke="rgba(176,148,84,.30)" stroke-width="1" stroke-dasharray="2 8"/>
-    <circle cx="112" cy="452" r="3.5" fill="#FBF8F0" stroke="rgba(176,148,84,.5)"/>
-    <circle cx="1168" cy="452" r="3.5" fill="#FBF8F0" stroke="rgba(176,148,84,.5)"/>
-  </svg>
-  <span class="coord" style="left:26px;top:196px">56.3287° N</span>
-  <span class="coord" style="left:26px;top:220px">伏尔加河 · 1870</span>
-  <span class="coord" style="right:26px;top:196px">44.0020° E</span>
-  <svg class="dove" width="46" style="left:8%;top:150px;transform:rotate(-9deg)" viewBox="0 0 80 56" aria-hidden="true"><use href="#dove"/></svg>
-  <svg class="dove" width="30" style="left:15%;top:232px;opacity:.5;transform:rotate(7deg)" viewBox="0 0 80 56" aria-hidden="true"><use href="#dove"/></svg>
-  <svg class="dove" width="38" style="right:9%;top:182px;transform:scaleX(-1) rotate(-6deg)" viewBox="0 0 80 56" aria-hidden="true"><use href="#dove"/></svg>
-  <svg class="dove" width="26" style="right:17%;top:266px;opacity:.5;transform:scaleX(-1) rotate(10deg)" viewBox="0 0 80 56" aria-hidden="true"><use href="#dove"/></svg>
-
-  <div class="hero__inner">
-    <div class="hero__moon rise">
-      <svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true">
-        <mask id="crescent"><rect width="40" height="40" fill="#fff"/><circle cx="26.5" cy="15.5" r="15" fill="#000"/></mask>
-        <circle cx="20" cy="20" r="15" fill="#DEBE6C" mask="url(#crescent)"/>
-      </svg>
-    </div>
-    <h1 class="rise d1"><span class="gold">让大师帮你「偷」设计。</span></h1>
-    <p class="hero__latin rise d1"><span class="gold">good artists copy, great artists steal</span></p>
-    <p class="rise d2" style="font-family:var(--font-serif);font-weight:300;font-size:18px;line-height:1.9;color:var(--ink-soft);margin:14px 0 0">「优秀的艺术家模仿，伟大的艺术家偷窃。」</p>
-    <p class="lead rise d2">把你想要的设计风格，先给出三个版本。你确定一版、<span class="gold-ink">吐槽另外两版哪里不好</span>，它据此重新生成 DESIGN.md——你的 agent 拿着这份文件，去精准修改你的产品。</p>
-    <div class="hero__cta rise d3">
-      <a class="rn-btn rn-btn--dark" href="#how">立即使用<span class="rn-btn__arrow">→</span></a>
-    </div>
-
-    <figure class="portrait rise d3">
-      <img src="assets/repin-self-portrait-560.jpg" alt="伊利亚·列宾自画像，1878" width="560" height="710" loading="eager" decoding="async">
-      <figcaption>Ilya Repin, 列宾自画像 1878 · Tretyakov Gallery<br>public domain, via Wikimedia Commons</figcaption>
-    </figure>
-  </div>
-</section>
-
-<!-- ═════════ 输出什么 ═════════ -->
-<section class="section" id="directions">
-  <div class="sky sky--soft"></div>
-  <div class="wrap center">
-    <span class="kicker">输出什么</span>
-    <h2 style="margin:14px 0 0"><span class="gold">三版并列，你只要指着说：要这个、不要那个。</span></h2>
-    <p class="aside" style="margin:10px 0 0">one axis, three answers —</p>
-    <p class="note" style="margin:22px auto 0">下面这三张不是示意图，是这一页自己的确认现场：同一份真实文案，沿一条轴（<span class="gold-ink">照搬 → 取气 → 反手</span>）分化成三版，各自完整。三版只差在这一条轴上——不是换个颜色。</p>
-
-    <div class="dirs" style="margin-top:clamp(30px,3.6vw,50px);text-align:left">
-      <article class="dir">
-        <div class="dir__head"><span class="dir__n">I</span><span class="dir__name">照搬</span><span class="dir__tag">贴着参考</span></div>
-        <img src="assets/dir-1-bewen.png" alt="方向一「照搬」的首屏样张" width="843" height="540" loading="lazy" decoding="async" style="border-radius:var(--r-sm);border:1px solid var(--hair);margin:2px 0 12px">
-        <p>贴着参考走：结构、密度、节奏都照搬过来，先看看「就照这个做」到底合不合身。</p>
-      </article>
-      <article class="dir">
-        <div class="dir__head"><span class="dir__n">II</span><span class="dir__name">取气</span><span class="dir__tag">只取气质</span></div>
-        <img src="assets/dir-2-liubai.png" alt="方向二「取气」的首屏样张" width="843" height="540" loading="lazy" decoding="async" style="border-radius:var(--r-sm);border:1px solid var(--hair);margin:2px 0 12px">
-        <p>只取气质，不搬结构：参考里那点味道留下来，版面按你自己的内容重新组织。</p>
-      </article>
-      <article class="dir">
-        <div class="dir__head"><span class="dir__n dir__n--iii">III</span><span class="dir__name">反手</span><span class="dir__tag">刻意偏离</span></div>
-        <img src="assets/dir-3-jingye.png" alt="方向三「反手」的首屏样张" width="843" height="540" loading="lazy" decoding="async" style="border-radius:var(--r-sm);border:1px solid var(--hair);margin:2px 0 12px">
-        <p>故意反着来：参考怎么做，它偏不那么做。用来试出你的边界——你会在哪一刻说「这个不行」。</p>
-      </article>
-    </div>
-    <p class="aside" style="margin:22px 0 0">each direction also renders the core screen and the empty state — three screens apiece, one HTML file —</p>
-
-    <div style="margin-top:clamp(44px,5vw,76px)">
-      <h3 style="font-size:var(--fs-h3)">看完，它只问你三个问题。</h3>
-      <p class="aside" style="margin:8px 0 clamp(26px,3vw,40px)">answer in your own words —</p>
-      <div class="q3">
-        <div><span class="q3__n">1</span><h3>选哪个？</h3><p>照搬 / 取气 / 反手，或者「三个都不要」。都不要也是一次有效判断。</p></div>
-        <div><span class="q3__n">2</span><h3>另外两个，哪里不要？</h3><p>请用原话：「照搬太满」「反手没说清它怎么用」。这句话会一字不改地进入设计契约。</p></div>
-        <div><span class="q3__n">3</span><h3>谁会在什么状态下打开它？</h3><p>他正在做什么、为什么此刻需要这个产品。场景定下来，密度和语气才有依据。</p></div>
+  <section id="top" style="max-width:var(--page-max);margin:0 auto;padding:64px var(--gutter) 48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:56px;align-items:center">
+    <div class="rise hero-copy">
+      <x-import component-from-global-scope="DesignSystem_ee75f1.Badge" variant="live" hint-size="auto,32px">列宾 Skill · 设计方向确认</x-import>
+      <h1 style="margin:22px 0 0;max-width:14ch">让大师帮你<em>「偷」</em>设计。</h1>
+      <p style="font-family:var(--font-serif);font-size:21px;line-height:1.8;color:var(--ink-soft);margin:18px 0 0;max-width:26ch">「优秀的艺术家模仿，伟大的艺术家偷窃。」</p>
+      <p class="latin" style="margin:10px 0 0;font-size:18px;color:var(--muted)">good artists copy, great artists steal —</p>
+      <p style="font-size:var(--fs-bio);line-height:var(--lh-bio);color:var(--ink-soft);max-width:var(--measure-bio);margin:26px 0 0">把你想要的设计风格，先给出三个版本。你确定一版、<span style="font-family:var(--font-serif);font-style:italic;color:var(--crimson)">吐槽另外两版哪里不好</span>，它据此重新生成 DESIGN.md——你的 agent 拿着这份文件，去精准修改你的产品。</p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:34px">
+        <x-import component-from-global-scope="DesignSystem_ee75f1.Button" variant="dark" href="#how" arrow="{{ true }}" hint-size="auto,48px">立即使用</x-import>
       </div>
-      <p class="note" style="margin:clamp(26px,3vw,40px) auto 0;font-family:var(--font-serif);font-weight:300;font-size:17px">回答完这三句，它把你的原话逐字写进 <span class="latin gold-ink" style="font-size:19px">DESIGN.md</span>——包括你吐槽的那两版哪里不好。</p>
     </div>
-  </div>
-</section>
 
-<!-- ═════════ 怎么用 ═════════ -->
-<section class="section" id="how">
-  <div class="wrap center">
-    <span class="kicker">怎么用？输入什么</span>
-    <h2 style="margin:14px 0 0"><span class="gold">填一张表，复制一段话，丢给你的 agent。</span></h2>
-    <p class="aside" style="margin:10px 0 0">one paste, that's it —</p>
+    <sc-if value="{{ showSchematic }}" hint-placeholder-val="{{ true }}">
+      <div class="rise d2 hero-portrait" style="max-width:360px;width:100%;margin-left:auto">
+        <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/repin-self-portrait.png" alt="伊利亚·列宾自画像，1878" ratio="789/1000" object-position="50% 22%" caption="Ilya Repin · 列宾自画像 1878" hint-size="100%,440px"></x-import>
+        <p class="latin" style="color:var(--muted);font-size:14.5px;line-height:1.6;margin:14px 0 0">Ilya Repin, <span style="font-style:normal;font-family:var(--font-serif);font-size:13.5px">列宾自画像</span> 1878 · Tretyakov Gallery — public domain, via Wikimedia Commons</p>
+      </div>
+    </sc-if>
+  </section>
 
-    <ul class="chips" style="margin-top:clamp(24px,3vw,38px)">
-      <li>Claude Code</li><li>Codex</li><li>Cursor</li><li>Grok</li><li>Openclaw</li>
-      <li>Kimi Work</li><li>WorkBuddy</li><li>Hermes</li><li>DeepSeek harness</li>
-    </ul>
-    <p class="note" style="margin:22px auto clamp(34px,4vw,54px)">装一次，之后每次只做一件事：把参考和真实文案填进这张表，复制成一段话粘给你的 agent。参考图多的时候，改成下载 zip。</p>
+  <section id="directions" class="section">
+    <div class="wrap">
+      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="输出什么" title="三版并列，你只要指着说：要这个、不要那个。" aside="one axis, three answers —" hint-size="100%,90px"></x-import>
 
-    <div class="pack">
-      <div class="field">
+      <p style="color:var(--ink-soft);font-size:16px;line-height:1.85;max-width:var(--measure-note);margin:0 0 34px">下面这三张不是示意图，是这一页自己的确认现场：同一份真实文案，沿一条轴（<span style="color:var(--gold)">照搬 → 取气 → 反手</span>）分化成三版，各自完整。三版只差在这一条轴上——不是换个颜色。</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:26px">
         <div>
-          <label class="lbl" for="refs">参考网址 · reference urls</label>
-          <textarea id="refs" rows="3" placeholder="https://example.com&#10;一行一个"></textarea>
+          <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
+            <span class="latin" style="color:var(--gold);font-size:22px;line-height:1">I</span>
+            <span style="font-family:var(--font-serif);font-weight:900;font-size:20px">照搬</span>
+            <span style="margin-left:auto;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">贴着参考</span>
+          </div>
+          <div style="margin-top:16px">
+            <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-1-bewen.png" alt="方向一「照搬」的首屏样张" ratio="843/540" object-position="50% 0%" caption="照搬 · 首屏" hint="dense" hint-size="100%,210px"></x-import>
+          </div>
+          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">贴着参考走：结构、密度、节奏都照搬过来，先看看「就照这个做」到底合不合身。</p>
         </div>
+
         <div>
-          <label class="lbl" for="current">现在的页面 · 有就填，能省掉你重打一遍文案</label>
-          <textarea id="current" rows="2" placeholder="https://你的站.com&#10;或者本地代码路径 / 现有稿截图也行"></textarea>
+          <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
+            <span class="latin" style="color:var(--gold);font-size:22px;line-height:1">II</span>
+            <span style="font-family:var(--font-serif);font-weight:900;font-size:20px">取气</span>
+            <span style="margin-left:auto;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">只取气质</span>
+          </div>
+          <div style="margin-top:16px">
+            <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-2-liubai.png" alt="方向二「取气」的首屏样张" ratio="843/540" object-position="50% 0%" caption="取气 · 首屏" hint="balanced" hint-size="100%,210px"></x-import>
+          </div>
+          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">只取气质，不搬结构：参考里那点味道留下来，版面按你自己的内容重新组织。</p>
         </div>
+
         <div>
-          <label class="lbl" for="notes">要设计的是什么 · 真实文案与备注</label>
-          <textarea id="notes" rows="6" placeholder="产品叫什么、给谁用、这一屏上的真实文案&#10;（别写占位文字，真话越具体越好）"></textarea>
+          <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
+            <span class="latin" style="color:var(--crimson);font-size:22px;line-height:1">III</span>
+            <span style="font-family:var(--font-serif);font-weight:900;font-size:20px">反手</span>
+            <span style="margin-left:auto;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">刻意偏离</span>
+          </div>
+          <div style="margin-top:16px">
+            <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-3-jingye.png" alt="方向三「反手」的首屏样张" ratio="843/540" object-position="50% 0%" caption="反手 · 首屏" hint="spare" hint-size="100%,210px"></x-import>
+          </div>
+          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">故意反着来：参考怎么做，它偏不那么做。用来试出你的边界——你会在哪一刻说「这个不行」。</p>
         </div>
       </div>
-      <div style="display:flex;flex-direction:column">
-        <span class="lbl">参考图片 · reference images</span>
-        <label class="drop" id="drop">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-          <span>把截图拖进来，或点击选择</span>
-          <span class="aside" style="font-size:15px">they go into refs/ —</span>
-          <input type="file" id="files" accept="image/*" multiple hidden>
-        </label>
-        <div class="files" id="file-list"></div>
-      </div>
-      <div class="pack__foot">
-        <button class="rn-btn rn-btn--dark rn-btn--sm" type="button" id="download-zip">打包下载 zip<span class="rn-btn__arrow">↓</span></button>
-        <span class="pack__hint" id="pack-hint">包内：BRIEF.md（还没有参考图也能用）</span>
+
+      <p class="latin" style="color:var(--muted);font-size:15px;margin:22px 0 0">each direction also renders the core screen and the empty state — three screens apiece, one HTML file —</p>
+
+      <div style="border:1px solid var(--hair-2);border-radius:var(--r-lg);background:var(--surface);padding:32px 34px;margin-top:44px">
+        <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;padding-bottom:20px;border-bottom:1px solid var(--hair)">
+          <h3 style="margin:0">看完，它只问你三个问题。</h3>
+          <span class="latin" style="color:var(--muted);font-size:15px">answer in your own words —</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:26px;margin-top:24px">
+          <div>
+            <div style="display:flex;align-items:baseline;gap:9px"><span class="latin" style="color:var(--crimson);font-size:19px">1</span><span style="font-family:var(--font-serif);font-weight:700;font-size:17px">选哪个？</span></div>
+            <p style="color:var(--muted);font-size:14.5px;line-height:1.75;margin:9px 0 0">照搬 / 取气 / 反手，或者「三个都不要」。都不要也是一次有效判断。</p>
+          </div>
+          <div>
+            <div style="display:flex;align-items:baseline;gap:9px"><span class="latin" style="color:var(--crimson);font-size:19px">2</span><span style="font-family:var(--font-serif);font-weight:700;font-size:17px">另外两个，哪里不要？</span></div>
+            <p style="color:var(--muted);font-size:14.5px;line-height:1.75;margin:9px 0 0">请用原话：「照搬太满」「反手没说清它怎么用」。这句话会一字不改地进入设计契约。</p>
+          </div>
+          <div>
+            <div style="display:flex;align-items:baseline;gap:9px"><span class="latin" style="color:var(--crimson);font-size:19px">3</span><span style="font-family:var(--font-serif);font-weight:700;font-size:17px">谁会在什么状态下打开它？</span></div>
+            <p style="color:var(--muted);font-size:14.5px;line-height:1.75;margin:9px 0 0">他正在做什么、为什么此刻需要这个产品。场景定下来，密度和语气才有依据。</p>
+          </div>
+        </div>
+
+        <p style="font-family:var(--font-serif);font-size:17px;line-height:1.85;color:var(--ink-soft);margin:24px 0 0;padding-top:20px;border-top:1px solid var(--hair)">回答完这三句，它把你的原话逐字写进 <span class="latin" style="color:var(--gold);font-size:18px">DESIGN.md</span>——包括你吐槽的那两版哪里不好。</p>
       </div>
     </div>
+  </section>
 
-    <div style="margin-top:clamp(38px,4.4vw,62px)">
-      <span class="lbl" style="margin-bottom:0">一段话 · 装上 + 提示词 + 任务包</span>
-      <div class="scope">
-        <button type="button" data-scope="global" class="is-on" aria-pressed="true">全局 ~/.claude/skills</button>
-        <button type="button" data-scope="project" aria-pressed="false">项目内 .claude/skills</button>
+  <section id="how" class="section">
+    <div class="wrap">
+      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="怎么用？输入什么" title="填一张表，复制一段话，丢给你的 agent。" aside="one paste, that's it —" hint-size="100%,90px"></x-import>
+
+      <div class="rn-chips">
+        <span class="rn-chip">Claude Code</span>
+        <span class="rn-chip">Codex</span>
+        <span class="rn-chip">Cursor</span>
+        <span class="rn-chip">Grok</span>
+        <span class="rn-chip">Openclaw</span>
+        <span class="rn-chip">Kimi Work</span>
+        <span class="rn-chip">WorkBuddy</span>
+        <span class="rn-chip">Hermes</span>
+        <span class="rn-chip">DeepSeek harness</span>
       </div>
-      <div class="term" style="margin-top:18px">
-        <code id="install-cmd">git clone https://github.com/ShaohuaDavidLee/Liebin.git ~/.claude/skills/liebin</code>
-        <hr>
-        <p>读一下 liebin 的 SKILL.md，按它走一遍我贴在下面的任务包：先给我三版样张，别直接写代码。我选完之后，把我的原话写进 DESIGN.md。</p>
-        <div class="term__foot">
-          <button class="rn-btn rn-btn--onink rn-btn--sm" type="button" id="copy-install">复制</button>
-          <button class="rn-btn rn-btn--onink rn-btn--sm" type="button" id="copy-brief">复制成一段话</button>
-          <span>复制出来的一段话里，已经带上你填的参考与文案</span>
+      <p style="margin:26px 0 30px;color:var(--ink-soft);font-size:16px;line-height:1.85;max-width:var(--measure-note)">装一次，之后每次只做一件事：把参考和真实文案填进这张表，复制成一段话粘给你的 agent。参考图多的时候，改成下载 zip。</p>
+
+      <div style="border:1px solid var(--hair-2);border-radius:var(--r-lg);background:var(--surface);padding:30px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:26px">
+          <div style="display:flex;flex-direction:column;gap:22px">
+            <div>
+              <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">参考网址 · reference urls</label>
+              <textarea rows="3" onInput="{{ onRefs }}" placeholder="https://example.com&#10;一行一个" style="width:100%;box-sizing:border-box;resize:vertical;border:1px solid var(--hair-2);border-radius:var(--r-sm);background:var(--paper-1);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.7;padding:12px 14px;outline:none" style-focus="border-color:var(--gold-soft);background:var(--paper-0)"></textarea>
+            </div>
+            <div>
+              <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">要设计的是什么 · 真实文案与备注</label>
+              <textarea rows="6" onInput="{{ onNotes }}" placeholder="产品叫什么、给谁用、这一屏上的真实文案&#10;（别写占位文字，真话越具体越好）" style="width:100%;box-sizing:border-box;resize:vertical;border:1px solid var(--hair-2);border-radius:var(--r-sm);background:var(--paper-1);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.7;padding:12px 14px;outline:none" style-focus="border-color:var(--gold-soft);background:var(--paper-0)"></textarea>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">参考图片 · reference images</label>
+            <label onDragOver="{{ onDragOver }}" onDrop="{{ onDrop }}" style="flex:1;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:22px;cursor:pointer;border:1px solid var(--hair-2);border-radius:var(--r-sm);background:var(--stripe);transition:border-color var(--dur-hover)" style-hover="border-color:var(--gold-soft)">
+              <iconify-icon icon="lucide:image-plus" style="font-size:24px;color:var(--gold)"></iconify-icon>
+              <span style="font-family:var(--font-sans);font-size:13.5px;color:var(--ink-soft)">把截图拖进来，或点击选择</span>
+              <span class="latin" style="color:var(--muted);font-size:14px">they go into refs/ —</span>
+              <input type="file" accept="image/*" multiple="{{ true }}" onChange="{{ onFiles }}" style="display:none">
+            </label>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ files }}" as="f" hint-placeholder-count="0">
+                <span style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px 6px 14px;border-radius:var(--r-pill);border:1px solid var(--hair);background:var(--paper-1);font-family:var(--font-sans);font-size:12.5px;color:var(--ink-soft)">{{ f.name }}<button type="button" onClick="{{ f.remove }}" style="border:0;background:transparent;cursor:pointer;color:var(--muted);font-size:14px;line-height:1;padding:0 2px">×</button></span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:26px;padding-top:22px;border-top:1px solid var(--hair)">
+          <button type="button" class="rn-btn rn-btn--dark" onClick="{{ download }}">{{ zipLabel }}<span class="rn-btn__arrow">↓</span></button>
+          <span style="color:var(--muted);font-size:13.5px">{{ packHint }}</span>
         </div>
       </div>
-      <p class="note" id="install-note" style="margin:20px auto 0">重开一个 Claude Code 会话即可生效，或直接 /liebin 调用。Codex、Cursor、Grok、Openclaw、Kimi Work、WorkBuddy、Hermes、DeepSeek harness——把仓库放进项目里，让它读 SKILL.md 就行，不挑 agent。</p>
-      <p class="note" style="margin:14px auto 0">拿到三版之后，选一版、说清另外两版哪里不要——它把你的原话写进 DESIGN.md。之后让任何会写代码的 agent 读这份文件去落地，列宾到这里就停。<br><span class="aside">the skill stops here, on purpose —</span></p>
-    </div>
-  </div>
-</section>
 
-<!-- ═════════ 三个坑 ═════════ -->
-<section class="section" id="pitfalls">
-  <div class="sky sky--soft"></div>
-  <div class="wrap center">
-    <span class="kicker">Pitfalls · 三个坑</span>
-    <h2 style="margin:14px 0 0"><span class="gold">列宾帮你避开的三件事。</span></h2>
-    <p class="aside" style="margin:10px 0 clamp(34px,4vw,56px)">three ways this goes wrong —</p>
-    <div class="pits">
-      <article class="pit">
-        <div class="seal"><span>i</span></div>
-        <h3>数值崇拜</h3>
-        <p>参考里的 <span class="latin" style="color:var(--ink-soft)">-2.46px</span> 字距，是 80px 拉丁标题下的 <span class="latin" style="color:var(--ink-soft)">-0.031em</span>。照抄到 48px 中文标题上会挤成一团。所有间距一律转 em 再迁移，<span style="color:var(--ink-soft)">中文标题不用负字距</span>。</p>
-      </article>
-      <article class="pit">
-        <div class="seal"><span>ii</span></div>
-        <h3>只给一个方案</h3>
-        <p>单方案只能换来「嗯挺好的」或者「感觉不太对」，两种回答都零信息量。三个并列，才能拿到差异判断。</p>
-      </article>
-      <article class="pit">
-        <div class="seal"><span>iii</span></div>
-        <h3>替用户写 Don'ts</h3>
-        <p>模型生成的负面约束永远是「保持一致性」「避免视觉噪音」这类正确的废话，对后续生成零约束力。<span style="color:var(--ink-soft)">Don'ts 这一段只能由人填。</span></p>
-      </article>
+      <div style="font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:36px 0 12px">一段话 · 装上 + 提示词 + 任务包</div>
+      <div style="background:var(--ink-900);border-radius:var(--r);padding:22px 24px">
+        <code style="display:block;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--gold)">{{ installCmd }}</code>
+        <div style="height:1px;background:rgba(255,255,255,.14);margin:16px 0"></div>
+        <code style="display:block;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.85;font-family:var(--font-sans);font-size:14.5px;color:var(--paper-1)">读一下 liebin 的 SKILL.md，按它走一遍我贴在下面的任务包：先给我三版样张，别直接写代码。我选完之后，把我的原话写进 DESIGN.md。</code>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:20px">
+          <button type="button" onClick="{{ copyBrief }}" style="border-radius:var(--r-pill);padding:10px 20px;font-family:var(--font-sans);font-size:var(--fs-fine);font-weight:500;background:transparent;border:1px solid rgba(255,255,255,.28);color:var(--paper-1);cursor:pointer;transition:background var(--dur-hover)" style-hover="background:rgba(255,255,255,.1)">{{ briefLabel }}</button>
+          <span style="color:rgba(247,247,244,.55);font-size:13.5px">复制出来的一段话里，已经带上你填的参考与文案</span>
+        </div>
+      </div>
+      <p style="margin:18px 0 0;color:var(--muted);font-size:15px;line-height:1.8;max-width:var(--measure-note)">{{ installNote }}</p>
+      <p style="margin:14px 0 0;color:var(--muted);font-size:15px;line-height:1.8;max-width:var(--measure-note)">拿到三版之后，选一版、说清另外两版哪里不要——它把你的原话写进 DESIGN.md。之后让任何会写代码的 agent 读这份文件去落地，列宾到这里就停。<br><span class="latin" style="font-size:15px">the skill stops here, on purpose —</span></p>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ═════════ FAQ ═════════ -->
-<section class="section" id="faq">
-  <div class="wrap center">
-    <span class="kicker">FAQ · 常见问题</span>
-    <h2 style="margin:14px 0 0"><span class="gold">被问过不止一次的四个问题。</span></h2>
-    <p class="aside" style="margin:10px 0 clamp(30px,3.4vw,48px)">asked more than once —</p>
-    <div class="faq">
-      <div class="faq__row">
-        <h3>它会直接帮我把网站写出来吗？</h3>
-        <p>不会。列宾只管动笔前最关键那一步：给你三张可视化的样张，让你的 DESIGN.md 不再是盲盒。写代码是下一步的事——把这份文件交给 Claude Code、Codex 或任何会写代码的 agent 去落地。</p>
-      </div>
-      <div class="faq__row">
-        <h3>我不是设计师，看得懂那三版吗？</h3>
-        <p>你不需要说出自己要什么。你要做的只是指着三版说「要这个、不要那个」，再补一句哪里不像——它要的就是这个。</p>
-      </div>
-      <div class="faq__row">
-        <h3>只能配 Claude Code 用吗？</h3>
-        <p>不挑 agent。Codex、Cursor、Grok、Openclaw、Kimi Work、WorkBuddy、Hermes、DeepSeek harness——把仓库放进项目里，让它读 SKILL.md 就行。</p>
-      </div>
-      <div class="faq__row">
-        <h3>它和那些「一键提取设计系统」的工具有什么不同？</h3>
-        <p>提取器满大街都是，提得再准也解决不了开头那个问题：你说不清哪里不对。列宾知道，你看到三版设计样稿之后，才知道自己想要什么。</p>
+  <section id="pitfalls" class="section">
+    <div class="wrap">
+      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="Pitfalls · 三个坑" title="列宾帮你避开的三件事。" aside="three ways this goes wrong —" hint-size="100%,90px"></x-import>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px">
+        <div style="border:1px solid var(--hair);border-radius:var(--r);background:var(--surface);padding:30px 32px">
+          <div class="latin" style="color:var(--gold);font-size:20px;margin-bottom:10px">i.</div>
+          <h3 style="margin:0 0 10px">数值崇拜</h3>
+          <p style="color:var(--muted);font-size:15px;line-height:1.75">参考里的 <span class="latin" style="color:var(--ink-soft)">-2.46px</span> 字距，是 80px 拉丁标题下的 <span class="latin" style="color:var(--ink-soft)">-0.031em</span>。照抄到 48px 中文标题上会挤成一团。所有间距一律转 em 再迁移，<span style="color:var(--ink-soft)">中文标题不用负字距</span>。</p>
+        </div>
+        <div style="border:1px solid var(--hair);border-radius:var(--r);background:var(--surface);padding:30px 32px">
+          <div class="latin" style="color:var(--gold);font-size:20px;margin-bottom:10px">ii.</div>
+          <h3 style="margin:0 0 10px">只给一个方案</h3>
+          <p style="color:var(--muted);font-size:15px;line-height:1.75">单方案只能换来「嗯挺好的」或者「感觉不太对」，两种回答都零信息量。三个并列，才能拿到差异判断。</p>
+        </div>
+        <div style="border:1px solid var(--hair);border-radius:var(--r);background:var(--surface);padding:30px 32px">
+          <div class="latin" style="color:var(--gold);font-size:20px;margin-bottom:10px">iii.</div>
+          <h3 style="margin:0 0 10px">替用户写 Don'ts</h3>
+          <p style="color:var(--muted);font-size:15px;line-height:1.75">模型生成的负面约束永远是「保持一致性」「避免视觉噪音」这类正确的废话，对后续生成零约束力。<span style="color:var(--ink-soft)">Don'ts 这一段只能由人填。</span></p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ═════════ 页脚 ═════════ -->
-<footer class="site-footer">
-  <div class="sky"></div>
-  <svg class="dove" width="34" style="left:12%;top:60px;opacity:.45;transform:rotate(-6deg)" viewBox="0 0 80 56" aria-hidden="true"><use href="#dove"/></svg>
-  <svg class="dove" width="26" style="right:14%;top:96px;opacity:.4;transform:scaleX(-1)" viewBox="0 0 80 56" aria-hidden="true"><use href="#dove"/></svg>
-  <div class="site-footer__inner">
-    <span class="kicker">Liebin · 列宾</span>
-    <p class="quote"><span class="gold">优秀的艺术家模仿，伟大的艺术家偷窃。</span></p>
-    <div class="contacts">
-      <a class="contact" href="https://www.caojuege.com" target="_blank" rel="noopener">
-        <span class="contact__lab">社区 Community</span><span class="contact__val">草诀歌 AI Labs</span>
-      </a>
-      <a class="contact" href="https://www.caojuege.com/davidli" target="_blank" rel="noopener">
-        <span class="contact__lab">关于开发者 About</span><span class="contact__val">韶华David</span>
-      </a>
-      <a class="contact" href="https://github.com/ShaohuaDavidLee/Liebin" target="_blank" rel="noopener">
-        <span class="contact__lab">源码 Source</span><span class="contact__val latin">ShaohuaDavidLee/Liebin</span>
-      </a>
+  <section id="faq" class="section">
+    <div class="wrap">
+      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="FAQ · 常见问题" title="被问过不止一次的四个问题。" aside="asked more than once —" hint-size="100%,90px"></x-import>
+      <div style="border-top:1px solid var(--hair-2)">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
+          <h3 style="margin:0;max-width:20ch">它会直接帮我把网站写出来吗？</h3>
+          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">不会。列宾只管动笔前最关键那一步：给你三张可视化的样张，让你的 DESIGN.md 不再是盲盒。写代码是下一步的事——把这份文件交给 Claude Code、Codex 或任何会写代码的 agent 去落地。</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
+          <h3 style="margin:0;max-width:20ch">我不是设计师，看得懂那三版吗？</h3>
+          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">你不需要说出自己要什么。你要做的只是指着三版说「要这个、不要那个」，再补一句哪里不像——它要的就是这个。</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
+          <h3 style="margin:0;max-width:20ch">只能配 Claude Code 用吗？</h3>
+          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">不挑 agent。Codex、Cursor、Grok、Openclaw、Kimi Work、WorkBuddy、Hermes、DeepSeek harness——把仓库放进项目里，让它读 SKILL.md 就行。</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
+          <h3 style="margin:0;max-width:20ch">它和那些「一键提取设计系统」的工具有什么不同？</h3>
+          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">提取器满大街都是，提得再准也解决不了开头那个问题：你说不清哪里不对。列宾知道，你看到三版设计样稿之后，才知道自己想要什么。</p>
+        </div>
+      </div>
     </div>
-    <div class="thanks">
-      <span class="lbl" style="color:var(--gold)">致谢 · Thanks</span>
-      <p>灵感来源于<a href="https://www.caojuege.com/camp/" target="_blank" rel="noopener">共创班</a>的学员朋友们。</p>
-    </div>
-  </div>
-  <div class="colophon">
-    <span class="brand">列宾 <span class="latin gold-ink">Liebin</span></span>
-    <span>DESIGN.md 规范来自 <a href="https://github.com/google-labs-code/design.md" target="_blank" rel="noopener">google-labs-code/design.md</a> · Apache-2.0</span>
-  </div>
-</footer>
+  </section>
 
-<script src="js/app.js"></script>
+  <footer class="on-ink grain" style="border-radius:var(--r-lg) var(--r-lg) 0 0;margin-top:var(--section-y)">
+    <div style="max-width:var(--page-max);margin:0 auto;padding:72px var(--gutter) 44px;text-align:center">
+      <x-import component-from-global-scope="DesignSystem_ee75f1.Kicker" hint-size="auto,18px">Liebin · 列宾</x-import>
+      <p style="font-family:var(--font-serif);font-style:italic;font-size:var(--fs-quote);line-height:var(--lh-quote);margin:16px auto 0;max-width:22ch;text-wrap:balance">优秀的艺术家模仿，伟大的艺术家偷窃。</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:16px;max-width:860px;margin:44px auto 0">
+        <x-import component-from-global-scope="DesignSystem_ee75f1.ContactTile" icon="lucide:users" label="社区 Community" value="草诀歌 AI Labs" href="https://www.caojuege.com" target="_blank" rel="noopener" hint-size="100%,130px"></x-import>
+        <x-import component-from-global-scope="DesignSystem_ee75f1.ContactTile" icon="lucide:user-round" label="关于开发者 About" value="韶华David" href="https://www.caojuege.com/davidli" target="_blank" rel="noopener" hint-size="100%,130px"></x-import>
+        <x-import component-from-global-scope="DesignSystem_ee75f1.ContactTile" icon="lucide:github" label="源码 Source" value="ShaohuaDavidLee/Liebin" href="https://github.com/ShaohuaDavidLee/Liebin" target="_blank" rel="noopener" hint-size="100%,130px"></x-import>
+      </div>
+      <div style="max-width:52ch;margin:40px auto 0;padding-top:26px;border-top:1px solid var(--hair)">
+        <div style="font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px">致谢 · Thanks</div>
+        <p style="font-family:var(--font-serif);font-size:17px;line-height:1.85;color:var(--ink-soft)">灵感来源于<a href="https://www.caojuege.com/camp/" target="_blank" rel="noopener" style="color:var(--gold);border-bottom:1px solid var(--gold-soft)">共创班</a>的学员朋友们。</p>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--hair);max-width:var(--page-max);margin:0 auto;padding:22px var(--gutter);display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;font-family:var(--font-sans);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:var(--ls-foot)">
+      <span style="font-family:var(--font-serif);font-weight:700;text-transform:none;font-size:14px;color:var(--ink)">列宾 <span class="latin" style="color:var(--gold)">Liebin</span></span>
+      <span>DESIGN.md 规范来自 <a href="https://github.com/google-labs-code/design.md" target="_blank" rel="noopener" style="color:rgba(247,247,244,.85)">google-labs-code/design.md</a> · Apache-2.0</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;紧凑&quot;,&quot;基准&quot;,&quot;舒展&quot;],&quot;default&quot;:&quot;基准&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;版式&quot;},&quot;showSchematic&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;版式&quot;},&quot;installScope&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;全局 ~/.claude/skills&quot;,&quot;项目内 .claude/skills&quot;],&quot;default&quot;:&quot;全局 ~/.claude/skills&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;内容&quot;}}">
+class Component extends DCLogic {
+  state = { installCopied: false, briefCopied: false, kickoffCopied: false, handoffCopied: false, files: [], zipDone: false };
+
+  componentWillUnmount() { [1,2,3,4,5].forEach(i => clearTimeout(this["_t" + i])); }
+
+  _crc32(u8) {
+    if (!this._tab) {
+      const t = new Uint32Array(256);
+      for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; }
+      this._tab = t;
+    }
+    let c = 0xFFFFFFFF;
+    for (let i = 0; i < u8.length; i++) c = this._tab[(c ^ u8[i]) & 255] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  _zip(entries) {
+    const enc = new TextEncoder();
+    const p16 = (a, n) => a.push(n & 255, (n >>> 8) & 255);
+    const p32 = (a, n) => a.push(n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255);
+    const parts = [], central = [];
+    let offset = 0;
+    entries.forEach(e => {
+      const nb = enc.encode(e.name), crc = this._crc32(e.bytes), sz = e.bytes.length, h = [];
+      p32(h, 0x04034b50); p16(h, 20); p16(h, 0x0800); p16(h, 0); p16(h, 0); p16(h, 0);
+      p32(h, crc); p32(h, sz); p32(h, sz); p16(h, nb.length); p16(h, 0);
+      const head = Uint8Array.from(h);
+      parts.push(head, nb, e.bytes);
+      const c = [];
+      p32(c, 0x02014b50); p16(c, 20); p16(c, 20); p16(c, 0x0800); p16(c, 0); p16(c, 0); p16(c, 0);
+      p32(c, crc); p32(c, sz); p32(c, sz); p16(c, nb.length); p16(c, 0); p16(c, 0); p16(c, 0); p16(c, 0);
+      p32(c, 0); p32(c, offset);
+      central.push(Uint8Array.from(c), nb);
+      offset += head.length + nb.length + sz;
+    });
+    let cSize = 0;
+    central.forEach(x => { cSize += x.length; });
+    const end = [];
+    p32(end, 0x06054b50); p16(end, 0); p16(end, 0); p16(end, entries.length); p16(end, entries.length);
+    p32(end, cSize); p32(end, offset); p16(end, 0);
+    return new Blob(parts.concat(central, [Uint8Array.from(end)]), { type: "application/zip" });
+  }
+
+  _brief() {
+    const urls = (this._refs || "").split("\n").map(s => s.trim()).filter(Boolean);
+    const notes = (this._notes || "").trim();
+    const imgs = this.state.files.map(f => f.name);
+    const d = new Date().toISOString().slice(0, 10);
+    const L = [];
+    L.push("# 列宾任务包 · Liebin brief", "");
+    L.push("> 用 liebin skill 走一遍：定轴 → 三版 × 三屏（首屏 / 核心操作屏 / 空状态）→ 让我选一版、骂两版 → 回写 DESIGN.md。", "");
+    L.push("## 参考");
+    if (urls.length) urls.forEach(u => L.push("- " + u)); else L.push("- （没有网址参考）");
+    if (imgs.length) { L.push(""); L.push("参考图在 `refs/`："); imgs.forEach(n => L.push("- refs/" + n)); }
+    L.push("", "## 要设计的是什么");
+    L.push(notes || "（还没写。开工前先把三屏的真实文案定下来，别用占位文字。）");
+    L.push("", "## 渲染约束");
+    L.push("- 用上面的真实文案渲染，不许 Lorem ipsum");
+    L.push("- 三版沿一条轴排开，第三版故意偏离参考");
+    L.push("- 每版三屏，空状态屏不能跳过");
+    L.push("- 参考里的 px 先除以字号转成 em；中文标题不用负字距，正文行高 1.7–1.9");
+    L.push("", "## 我要回答的三个问题");
+    L.push("1. 选哪个？　2. 另外两个哪里不要（原话）？　3. 谁会在什么状态下打开它？");
+    L.push("", "---", "生成于 " + d + " · liebin");
+    return L.join("\n");
+  }
+
+  _paste() {
+    return "# 装上（终端里跑一次）\n" + (this._installCmd || "") +
+      "\n\n# 然后跟你的 agent 说这一句\n读一下 liebin 的 SKILL.md，按它走一遍我贴在下面的任务包：先给我三版样张，别直接写代码。我选完之后，把我的原话写进 DESIGN.md。\n\n" + this._brief();
+  }
+
+  _flash(key, timer) {
+    this.setState({ [key]: true });
+    clearTimeout(this[timer]);
+    this[timer] = setTimeout(() => this.setState({ [key]: false }), 1800);
+  }
+
+  _copy(text, key, timer) {
+    const done = () => this._flash(key, timer);
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, done);
+    else {
+      const ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta); done();
+    }
+  }
+
+  async _add(list) {
+    const picked = Array.prototype.slice.call(list).filter(f => f && f.size);
+    if (!picked.length) return;
+    const read = await Promise.all(picked.map(async f => ({ name: f.name.replace(/[\\/]/g, "_"), bytes: new Uint8Array(await f.arrayBuffer()) })));
+    this.setState(s => ({ files: s.files.concat(read) }));
+  }
+
+  renderVals() {
+    const density = this.props.density ?? "基准";
+    const sectionY = density === "紧凑" ? "56px" : density === "舒展" ? "104px" : "76px";
+
+    const scope = this.props.installScope ?? "全局 ~/.claude/skills";
+    const isProject = scope.indexOf("项目内") === 0;
+    const installCmd = isProject
+      ? "git clone https://github.com/ShaohuaDavidLee/Liebin.git .claude/skills/liebin"
+      : "git clone https://github.com/ShaohuaDavidLee/Liebin.git ~/.claude/skills/liebin";
+    const installNote = isProject
+      ? "只对当前仓库生效，团队里其他人拉下代码就一起有了。重开一个 Claude Code 会话即可，或直接 /liebin 调用。别的 agent 就让它读仓库里的 SKILL.md，一样能走完四步。"
+      : "重开一个 Claude Code 会话即可生效，或直接 /liebin 调用。Codex、Cursor、Grok、Openclaw、Kimi Work、WorkBuddy、Hermes、DeepSeek harness——把仓库放进项目里，让它读 SKILL.md 就行，不挑 agent。";
+
+    this._installCmd = installCmd;
+
+    const kickoff = "读一下 liebin 的 SKILL.md，按它走一遍我这个任务包（BRIEF.md 和 refs/ 里的参考图）：先给我三版样张，别直接写代码。";
+    const handoff = "读 DESIGN.md，按里面选中的方向和 Don'ts 改这个项目；DESIGN.md 里的原话是硬约束，不要润色，也不要自己发挥。";
+
+    const files = this.state.files.map((f, i) => ({
+      name: f.name,
+      remove: () => this.setState(s => ({ files: s.files.filter((_, j) => j !== i) }))
+    }));
+    const n = this.state.files.length;
+
+    return {
+      sectionY, installCmd, installNote, files,
+      showSchematic: this.props.showSchematic ?? true,
+      installLabel: this.state.installCopied ? "已复制" : "复制",
+      briefLabel: this.state.briefCopied ? "已复制到剪贴板" : "复制这一整段",
+      kickoffLabel: this.state.kickoffCopied ? "已复制" : "复制",
+      handoffLabel: this.state.handoffCopied ? "已复制" : "复制",
+      zipLabel: this.state.zipDone ? "已下载" : "打包下载 zip",
+      packHint: n ? "包内：BRIEF.md + refs/（" + n + " 张图）" : "包内：BRIEF.md（还没有参考图也能用）",
+      copyInstall: () => this._copy(installCmd, "installCopied", "_t1"),
+      copyBrief: () => this._copy(this._paste(), "briefCopied", "_t2"),
+      copyKickoff: () => this._copy(kickoff, "kickoffCopied", "_t4"),
+      copyHandoff: () => this._copy(handoff, "handoffCopied", "_t5"),
+      onRefs: e => { this._refs = e.target.value; },
+      onNotes: e => { this._notes = e.target.value; },
+      onFiles: e => { this._add(e.target.files); e.target.value = ""; },
+      onDragOver: e => { e.preventDefault(); },
+      onDrop: e => { e.preventDefault(); this._add(e.dataTransfer.files); },
+      download: () => {
+        const enc = new TextEncoder();
+        const entries = [{ name: "BRIEF.md", bytes: enc.encode(this._brief()) }, { name: "PROMPT.txt", bytes: enc.encode(kickoff) }];
+        this.state.files.forEach(f => entries.push({ name: "refs/" + f.name, bytes: f.bytes }));
+        const url = URL.createObjectURL(this._zip(entries));
+        const a = document.createElement("a");
+        a.href = url; a.download = "liebin-brief.zip";
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 4000);
+        this._flash("zipDone", "_t3");
+      }
+    };
+  }
+}
+</script>
 </body>
 </html>

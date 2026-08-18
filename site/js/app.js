@@ -8,7 +8,7 @@
     },
     project: {
       cmd: "git clone " + REPO + " .claude/skills/liebin",
-      note: "只对当前仓库生效，团队里其他人拉下代码就一起有了。重开一个 Claude Code 会话即可，或直接 /liebin 调用。别的 agent 就让它读仓库里的 SKILL.md，一样能走完五步。"
+      note: "只对当前仓库生效，团队里其他人拉下代码就一起有了。重开一个 Claude Code 会话即可，或直接 /liebin 调用。别的 agent 就让它读仓库里的 SKILL.md，一样能走完四步。"
     }
   };
 
@@ -113,20 +113,17 @@
 
   function buildBrief() {
     const urls = (document.getElementById("refs").value || "").split("\n").map(trim).filter(Boolean);
-    const current = (document.getElementById("current").value || "").trim();
     const notes = (document.getElementById("notes").value || "").trim();
     const d = new Date().toISOString().slice(0, 10);
     const L = [
       "# 列宾任务包 · Liebin brief",
       "",
-      "> 用 liebin skill 走一遍：定轴 → 三个变体 × 三屏（首屏 / 核心操作屏 / 空状态）→ 确认对话 → 回写 DESIGN.md → 页面落地后验收。",
+      "> 用 liebin skill 走一遍：定轴 → 三个变体 × 三屏（首屏 / 核心操作屏 / 空状态）→ 确认对话 → 回写 DESIGN.md。",
       "",
       "## 参考"
     ];
     if (urls.length) urls.forEach(function (u) { L.push("- " + u); });
     else L.push("- （没有网址参考）");
-    L.push("", "## 我现在长什么样");
-    L.push(current || "（还没有页面。那就先跟我一起把三屏的真实文案定下来，别用占位文字。）");
     if (files.length) {
       L.push("", "参考图在 `refs/`：");
       files.forEach(function (f) { L.push("- refs/" + f.name); });
@@ -138,8 +135,6 @@
     L.push("- 三个变体沿一条轴排开，第三个故意偏离参考");
     L.push("- 每个变体三屏，空状态屏不能跳过");
     L.push("- 参考里的 px 先除以字号转成 em；中文标题不用负字距，正文行高 1.7–1.9");
-    L.push("- 上面「我现在长什么样」是目标，不是参考——别把三个变体做成复刻我现在这一版");
-    L.push("- DESIGN.md 里每个数值标出处：量得 / 看图估的 / 我们定的");
     L.push("", "---", "生成于 " + d + " · liebin");
     return L.join("\n");
   }
