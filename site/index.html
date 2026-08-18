@@ -168,27 +168,28 @@
         <span class="rn-chip">Hermes</span>
         <span class="rn-chip">DeepSeek harness</span>
       </div>
-      <p style="margin:26px 0 30px;color:var(--ink-soft);font-size:16px;line-height:1.85;max-width:var(--measure-note)">装一次，之后每次只做一件事：把参考、现在的页面和真实文案填进这张表，复制成一段话粘给你的 agent。参考图多的时候，改成下载 zip。</p>
+      <p style="margin:26px 0 30px;color:var(--ink-soft);font-size:16px;line-height:1.85;max-width:var(--measure-note)">装一次，之后每次只做一件事：把你手上有的填进这张表，复制成一段话粘给你的 agent。参考和现有页面都可以空——<span style="color:var(--ink-soft)">全新产品、什么稿都没有，只写文案就行</span>。图多的时候改成下载 zip。</p>
 
       <div style="border:1px solid var(--hair-2);border-radius:var(--r-lg);background:var(--surface);padding:30px">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:26px">
           <div style="display:flex;flex-direction:column;gap:22px">
             <div>
-              <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">参考网址 · reference urls</label>
-              <textarea rows="3" onInput="{{ onRefs }}" placeholder="https://example.com&#10;一行一个 · 这是「我想要那样」" style="width:100%;box-sizing:border-box;resize:vertical;border:1px solid var(--hair-2);border-radius:var(--r-sm);background:var(--paper-1);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.7;padding:12px 14px;outline:none" style-focus="border-color:var(--gold-soft);background:var(--paper-0)"></textarea>
+              <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">参考网址 · 选填 · 我想做成那样</label>
+              <textarea rows="3" onInput="{{ onRefs }}" placeholder="https://example.com&#10;没有参考就空着。别人的站、灵感、设计稿网址，一行一个" style="width:100%;box-sizing:border-box;resize:vertical;border:1px solid var(--hair-2);border-radius:var(--r-sm);background:var(--paper-1);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.7;padding:12px 14px;outline:none" style-focus="border-color:var(--gold-soft);background:var(--paper-0)"></textarea>
             </div>
             <div>
-              <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">现在的页面 · 有就填，能省掉你重打一遍文案</label>
-              <textarea rows="2" onInput="{{ onCurrent }}" placeholder="https://你的站.com&#10;或者本地代码路径 / 现有稿截图也行 · 这是「我现在是这样」" style="width:100%;box-sizing:border-box;resize:vertical;border:1px solid var(--hair-2);border-radius:var(--r-sm);background:var(--paper-1);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.7;padding:12px 14px;outline:none" style-focus="border-color:var(--gold-soft);background:var(--paper-0)"></textarea>
+              <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">现在的页面 · 选填 · 我已经有一版了</label>
+              <textarea rows="2" onInput="{{ onCurrent }}" placeholder="https://你的站.com&#10;全新产品空着。有现成页面再填：线上地址 / 本地路径" style="width:100%;box-sizing:border-box;resize:vertical;border:1px solid var(--hair-2);border-radius:var(--r-sm);background:var(--paper-1);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.7;padding:12px 14px;outline:none" style-focus="border-color:var(--gold-soft);background:var(--paper-0)"></textarea>
+              <p style="margin:8px 0 0;color:var(--muted);font-size:12.5px;line-height:1.7">空着是正经选项，不是漏填。填了只是让 agent 去抄你已经写好的字，不用再打一遍。</p>
             </div>
             <div>
-              <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">要设计的是什么 · 真实文案与备注</label>
+              <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">要设计的是什么 · 必填 · 真实文案与备注</label>
               <textarea rows="6" onInput="{{ onNotes }}" placeholder="产品叫什么、给谁用、这一屏上的真实文案&#10;（别写占位文字，真话越具体越好）" style="width:100%;box-sizing:border-box;resize:vertical;border:1px solid var(--hair-2);border-radius:var(--r-sm);background:var(--paper-1);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.7;padding:12px 14px;outline:none" style-focus="border-color:var(--gold-soft);background:var(--paper-0)"></textarea>
             </div>
           </div>
 
           <div style="display:flex;flex-direction:column;gap:12px">
-            <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">参考图片 · reference images</label>
+            <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">参考图片 · 选填 · 我想做成那样</label>
             <label onDragOver="{{ onDragOver }}" onDrop="{{ onDrop }}" style="flex:1;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:22px;cursor:pointer;border:1px solid var(--hair-2);border-radius:var(--r-sm);background:var(--stripe);transition:border-color var(--dur-hover)" style-hover="border-color:var(--gold-soft)">
               <iconify-icon icon="lucide:image-plus" style="font-size:24px;color:var(--gold)"></iconify-icon>
               <span style="font-family:var(--font-sans);font-size:13.5px;color:var(--ink-soft)">把截图拖进来，或点击选择</span>
@@ -216,7 +217,7 @@
         <code style="display:block;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.85;font-family:var(--font-sans);font-size:14.5px;color:var(--paper-1)">读一下 liebin 的 SKILL.md，按它走一遍我贴在下面的任务包：先给我三版样张，别直接写代码。我选完之后，把我的原话写进 DESIGN.md。</code>
         <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:20px">
           <button type="button" onClick="{{ copyBrief }}" style="border-radius:var(--r-pill);padding:10px 20px;font-family:var(--font-sans);font-size:var(--fs-fine);font-weight:500;background:transparent;border:1px solid rgba(255,255,255,.28);color:var(--paper-1);cursor:pointer;transition:background var(--dur-hover)" style-hover="background:rgba(255,255,255,.1)">{{ briefLabel }}</button>
-          <span style="color:rgba(247,247,244,.55);font-size:13.5px">复制出来的一段话里，已经带上你填的参考、现在的页面和文案</span>
+          <span style="color:rgba(247,247,244,.55);font-size:13.5px">空着的栏不会写进任务包。文案在，就能开工</span>
         </div>
       </div>
       <p style="margin:18px 0 0;color:var(--muted);font-size:15px;line-height:1.8;max-width:var(--measure-note)">{{ installNote }}</p>
