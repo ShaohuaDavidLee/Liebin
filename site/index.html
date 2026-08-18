@@ -168,14 +168,18 @@
         <span class="rn-chip">Hermes</span>
         <span class="rn-chip">DeepSeek harness</span>
       </div>
-      <p style="margin:26px 0 30px;color:var(--ink-soft);font-size:16px;line-height:1.85;max-width:var(--measure-note)">装一次，之后每次只做一件事：把参考和真实文案填进这张表，复制成一段话粘给你的 agent。参考图多的时候，改成下载 zip。</p>
+      <p style="margin:26px 0 30px;color:var(--ink-soft);font-size:16px;line-height:1.85;max-width:var(--measure-note)">装一次，之后每次只做一件事：把参考、现在的页面和真实文案填进这张表，复制成一段话粘给你的 agent。参考图多的时候，改成下载 zip。</p>
 
       <div style="border:1px solid var(--hair-2);border-radius:var(--r-lg);background:var(--surface);padding:30px">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:26px">
           <div style="display:flex;flex-direction:column;gap:22px">
             <div>
               <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">参考网址 · reference urls</label>
-              <textarea rows="3" onInput="{{ onRefs }}" placeholder="https://example.com&#10;一行一个" style="width:100%;box-sizing:border-box;resize:vertical;border:1px solid var(--hair-2);border-radius:var(--r-sm);background:var(--paper-1);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.7;padding:12px 14px;outline:none" style-focus="border-color:var(--gold-soft);background:var(--paper-0)"></textarea>
+              <textarea rows="3" onInput="{{ onRefs }}" placeholder="https://example.com&#10;一行一个 · 这是「我想要那样」" style="width:100%;box-sizing:border-box;resize:vertical;border:1px solid var(--hair-2);border-radius:var(--r-sm);background:var(--paper-1);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.7;padding:12px 14px;outline:none" style-focus="border-color:var(--gold-soft);background:var(--paper-0)"></textarea>
+            </div>
+            <div>
+              <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">现在的页面 · 有就填，能省掉你重打一遍文案</label>
+              <textarea rows="2" onInput="{{ onCurrent }}" placeholder="https://你的站.com&#10;或者本地代码路径 / 现有稿截图也行 · 这是「我现在是这样」" style="width:100%;box-sizing:border-box;resize:vertical;border:1px solid var(--hair-2);border-radius:var(--r-sm);background:var(--paper-1);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.7;padding:12px 14px;outline:none" style-focus="border-color:var(--gold-soft);background:var(--paper-0)"></textarea>
             </div>
             <div>
               <label style="display:block;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">要设计的是什么 · 真实文案与备注</label>
@@ -212,11 +216,11 @@
         <code style="display:block;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.85;font-family:var(--font-sans);font-size:14.5px;color:var(--paper-1)">读一下 liebin 的 SKILL.md，按它走一遍我贴在下面的任务包：先给我三版样张，别直接写代码。我选完之后，把我的原话写进 DESIGN.md。</code>
         <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:20px">
           <button type="button" onClick="{{ copyBrief }}" style="border-radius:var(--r-pill);padding:10px 20px;font-family:var(--font-sans);font-size:var(--fs-fine);font-weight:500;background:transparent;border:1px solid rgba(255,255,255,.28);color:var(--paper-1);cursor:pointer;transition:background var(--dur-hover)" style-hover="background:rgba(255,255,255,.1)">{{ briefLabel }}</button>
-          <span style="color:rgba(247,247,244,.55);font-size:13.5px">复制出来的一段话里，已经带上你填的参考与文案</span>
+          <span style="color:rgba(247,247,244,.55);font-size:13.5px">复制出来的一段话里，已经带上你填的参考、现在的页面和文案</span>
         </div>
       </div>
       <p style="margin:18px 0 0;color:var(--muted);font-size:15px;line-height:1.8;max-width:var(--measure-note)">{{ installNote }}</p>
-      <p style="margin:14px 0 0;color:var(--muted);font-size:15px;line-height:1.8;max-width:var(--measure-note)">拿到三版之后，选一版、说清另外两版哪里不要——它把你的原话写进 DESIGN.md。之后让任何会写代码的 agent 读这份文件去落地，列宾到这里就停。<br><span class="latin" style="font-size:15px">the skill stops here, on purpose —</span></p>
+      <p style="margin:14px 0 0;color:var(--muted);font-size:15px;line-height:1.8;max-width:var(--measure-note)">拿到三版之后，选一版、说清另外两版哪里不要——它把你的原话写进 DESIGN.md。之后让任何会写代码的 agent 读这份文件去落地。落地后再回来并排看一眼：这跟你当初选的，还是同一个东西吗。<br><span class="latin" style="font-size:15px">the skill does not write the product —</span></p>
     </div>
   </section>
 
@@ -334,15 +338,18 @@ class Component extends DCLogic {
 
   _brief() {
     const urls = (this._refs || "").split("\n").map(s => s.trim()).filter(Boolean);
+    const current = (this._current || "").trim();
     const notes = (this._notes || "").trim();
     const imgs = this.state.files.map(f => f.name);
     const d = new Date().toISOString().slice(0, 10);
     const L = [];
     L.push("# 列宾任务包 · Liebin brief", "");
     L.push("> 用 liebin skill 走一遍：定轴 → 三版 × 三屏（首屏 / 核心操作屏 / 空状态）→ 让我选一版、骂两版 → 回写 DESIGN.md。", "");
-    L.push("## 参考");
+    L.push("## 参考 · 我想要那样");
     if (urls.length) urls.forEach(u => L.push("- " + u)); else L.push("- （没有网址参考）");
     if (imgs.length) { L.push(""); L.push("参考图在 `refs/`："); imgs.forEach(n => L.push("- refs/" + n)); }
+    L.push("", "## 我现在长什么样 · 这是目标，不是参考");
+    L.push(current || "（还没有页面。那就先跟我一起把三屏的真实文案定下来，别用占位文字。）");
     L.push("", "## 要设计的是什么");
     L.push(notes || "（还没写。开工前先把三屏的真实文案定下来，别用占位文字。）");
     L.push("", "## 渲染约束");
@@ -350,6 +357,9 @@ class Component extends DCLogic {
     L.push("- 三版沿一条轴排开，第三版故意偏离参考");
     L.push("- 每版三屏，空状态屏不能跳过");
     L.push("- 参考里的 px 先除以字号转成 em；中文标题不用负字距，正文行高 1.7–1.9");
+    L.push("- 「我现在长什么样」是目标，不是参考——别把三个变体做成复刻我现在这一版");
+    L.push("- DESIGN.md 里每个数值标出处：量得 / 看图估的 / 我们定的");
+    L.push("- 能学版式和气质，不能搬 logo、没授权的字体、图片素材、成段文案");
     L.push("", "## 我要回答的三个问题");
     L.push("1. 选哪个？　2. 另外两个哪里不要（原话）？　3. 谁会在什么状态下打开它？");
     L.push("", "---", "生成于 " + d + " · liebin");
@@ -395,7 +405,7 @@ class Component extends DCLogic {
       ? "git clone https://github.com/ShaohuaDavidLee/Liebin.git .claude/skills/liebin"
       : "git clone https://github.com/ShaohuaDavidLee/Liebin.git ~/.claude/skills/liebin";
     const installNote = isProject
-      ? "只对当前仓库生效，团队里其他人拉下代码就一起有了。重开一个 Claude Code 会话即可，或直接 /liebin 调用。别的 agent 就让它读仓库里的 SKILL.md，一样能走完四步。"
+      ? "只对当前仓库生效，团队里其他人拉下代码就一起有了。重开一个 Claude Code 会话即可，或直接 /liebin 调用。别的 agent 就让它读仓库里的 SKILL.md，一样能走完五步。"
       : "重开一个 Claude Code 会话即可生效，或直接 /liebin 调用。Codex、Cursor、Grok、Openclaw、Kimi Work、WorkBuddy、Hermes、DeepSeek harness——把仓库放进项目里，让它读 SKILL.md 就行，不挑 agent。";
 
     this._installCmd = installCmd;
@@ -423,6 +433,7 @@ class Component extends DCLogic {
       copyKickoff: () => this._copy(kickoff, "kickoffCopied", "_t4"),
       copyHandoff: () => this._copy(handoff, "handoffCopied", "_t5"),
       onRefs: e => { this._refs = e.target.value; },
+      onCurrent: e => { this._current = e.target.value; },
       onNotes: e => { this._notes = e.target.value; },
       onFiles: e => { this._add(e.target.files); e.target.value = ""; },
       onDragOver: e => { e.preventDefault(); },

@@ -1,0 +1,8 @@
+# 验收脚本要 playwright，装在仓库里的话别提交
+node_modules/
+package-lock.json
+
+# 只忽略仓库根上的产出。写成 /proof/ 而不是 proof/——后者会误伤任何叫这个名字的子目录
+/verify/
+/proof/
+/proof.html

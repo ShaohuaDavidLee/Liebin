@@ -44,6 +44,57 @@ Google Labs 已经把 DESIGN.md 开源成正式规范（Apache-2.0，`github.com
 
 规范里没有这一栏，但 99% 的设计事故都出在这儿。写清楚这套语言在什么内容、什么情绪、什么密度下会失效。
 
+### 3.5 每个数值标出处
+
+规范只管锁值，不管这个值是哪来的。但**「量出来的 #FBF8F0」和「我们拍的 #FBF8F0」在下游 agent 眼里长得一模一样**——
+它会把两者同等对待，一样当权威照着做。
+
+三档就够，写成 YAML 注释最省事（也不会被 linter 挑刺）：
+
+```yaml
+colors:
+  paper: "#FBF8F0"        # 看图估的 —— 截图分不出 2x 屏，这是对着色块取的
+  ink: "#2A271D"          # 量得 —— 参考站 computed CSS
+  crimson: "#A8102F"      # 我们定的 —— 参考里没有强调色，这一笔是这次加的
+```
+
+- `量得` —— 从 DOM / computed CSS / source map 读出来的
+- `看图估的` —— 对着截图定的，色相和关系可信，绝对值不可信
+- `我们定的` —— 参考里根本没有，这次拍板的
+
+**只有一张截图的时候，诚实的结果往往是整份 spec 八成都是「我们定的」。** 那就照实写。
+一份标着「我们定的」的 DESIGN.md 依然完全可用——它只是不再冒充测量结果。
+
+这一条和「数值崇拜」是一枚硬币的两面：那一条讲别照抄别人的数，这一条讲别让自己编的数冒充量出来的数。
+
+## 跑 lint 时会踩的四个坑
+
+`npx @google/design.md lint` 是有用的（它能替你查出对比度不达标），但 schema 比文档写的严，有四处会翻车：
+
+**① 渐变不能放在 `colors` 底下。** `linear-gradient(...)` 不是合法颜色，直接报 error。
+拆成色停放进 `colors`（`gold_grad_1/2/3`），完整配方写进正文的代码块——**这本来就是更对的分工**：YAML 锁值，散文承载配方。
+
+**② `clamp()` 不是合法 dimension。** 流体字号在 YAML 里锁不住。
+锁上限值（用 rem，可迁移），把实际用的 `clamp()` 区间写进正文。
+
+**③ 组件引用 token 必须加引号。**
+
+```yaml
+components:
+  nav: { backgroundColor: {colors.paper} }     # 错：YAML 把它解析成嵌套 map，引用静默失效
+  nav: { backgroundColor: "{colors.paper}" }   # 对
+```
+
+不加引号不会报错，只会让所有颜色都被判成「定义了但没人用」——**看起来像 27 条无关紧要的 warning，实际是引用整个没生效。**
+
+**④ 冒号和花括号之间必须有空格。** `nav:{ ... }` 会让 YAML 解析中断，
+而 linter 会拿**残缺的解析结果**给你一份"0 error"的报告。**看到 warning 数量突然变得很少，先确认 YAML 真的解析通过了**，
+别急着高兴：
+
+```bash
+python3 -c "import yaml,sys;yaml.safe_load(open('DESIGN.md').read().split('---')[1]);print('YAML OK')"
+```
+
 ## CJK 扩展（规范原生不支持中文）
 
 规范默认拉丁文。中文必须在 Typography 段补这几项，否则 agent 生成的中文页面必然失调：
@@ -87,4 +138,6 @@ presentation:
 - [ ] Overview 第一句是使用场景，不是风格形容词
 - [ ] Don'ts 里至少有两条用户原话，且没被润色
 - [ ] 有「什么时候别用这套」一节
+- [ ] 每个数值标了出处（量得 / 看图估的 / 我们定的）
+- [ ] YAML 单独解析通过（别只信 lint 的 0 error，见上面第 ④ 坑）
 - [ ] 跑一遍 `npx @google/design.md lint` 确认结构合法
