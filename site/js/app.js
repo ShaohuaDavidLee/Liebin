@@ -8,7 +8,7 @@
     },
     project: {
       cmd: "git clone " + REPO + " .claude/skills/liebin",
-      note: "只对当前仓库生效，团队里其他人拉下代码就一起有了。重开一个 Claude Code 会话即可，或直接 /liebin 调用。别的 agent 就让它读仓库里的 SKILL.md，一样能走完四步。"
+      note: "只对当前仓库生效，团队里其他人拉下代码就一起有了。重开一个 Claude Code 会话即可，或直接 /liebin 调用。别的 agent 就让它读仓库里的 SKILL.md，一样能走完五步。"
     }
   };
 
@@ -118,7 +118,7 @@
     const L = [
       "# 列宾任务包 · Liebin brief",
       "",
-      "> 用 liebin skill 走一遍：定轴 → 三个变体 × 三屏（首屏 / 核心操作屏 / 空状态）→ 确认对话 → 回写 DESIGN.md。",
+      "> 用 liebin skill 走一遍：定轴 → 三个变体 × 三屏（首屏 / 核心操作屏 / 空状态）→ 确认对话 → 回写 DESIGN.md → 页面落地后验收。",
       "",
       "## 参考"
     ];
@@ -135,6 +135,7 @@
     L.push("- 三个变体沿一条轴排开，第三个故意偏离参考");
     L.push("- 每个变体三屏，空状态屏不能跳过");
     L.push("- 参考里的 px 先除以字号转成 em；中文标题不用负字距，正文行高 1.7–1.9");
+    L.push("- DESIGN.md 里每个数值标出处：量得 / 看图估的 / 我们定的");
     L.push("", "---", "生成于 " + d + " · liebin");
     return L.join("\n");
   }

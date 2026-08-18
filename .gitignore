@@ -1,0 +1,10 @@
+# 验收脚本要 playwright，装在仓库里的话别提交
+node_modules/
+package-lock.json
+
+# scripts/verify-page.mjs 的产出
+verify/
+
+# scripts/proof.mjs 的输入输出（样张寿命二十分钟，不进版本库）
+proof/
+proof.html

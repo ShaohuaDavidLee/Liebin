@@ -9,34 +9,36 @@ origin: >
   拿不到精确数值、动效、响应式行为。下列数值是我们自己定的解，不是从参考里量出来的。
 
 colors:
-  primary: "#8D6E22"              # 金，全站主色
-  paper: "#FBF8F0"                # 象牙底，全站唯一底色
-  paper_lift: "#FFFDF7"           # 浮起面
-  ink: "#2A271D"
-  ink_soft: "#4C4738"
-  muted: "#7A725E"
-  muted_2: "#797262"
-  hairline: "rgba(42,39,29,.10)"
-  hairline_2: "rgba(42,39,29,.18)"
-  gold: "#8D6E22"                 # kicker、拉丁旁注
-  gold_light: "#B08F43"           # 编号、印章环
-  gold_glow: "#DEBE6C"            # 月牙、微光
-  gold_line: "rgba(170,142,80,.30)"
-  gold_grad_1: "#C39422"          # ↓ 标题金渐变三色停 —— 配方见正文 §2
-  gold_grad_2: "#DEBB64"
-  gold_grad_3: "#EFDCA8"
-  sky_1: "rgba(243,221,157,.60)"  # ↓ 云雾四层色停 —— 配方见正文 §2
-  sky_2: "rgba(253,246,228,.95)"
-  sky_3: "rgba(250,238,204,.80)"
-  sky_4: "rgba(254,250,238,.95)"
-  strip_bg: "#F5EEDA"              # 公告条底：rgba(232,214,166,.30) 压在象牙纸上的合成值
-  strip_ink: "#876721"
-  crimson: "#A8102F"              # 唯一强调色，每屏上限一处
-  ink_block: "#211F17"
-  ink_block_code: "#D9B45F"
-  ink_block_text: "#EFEADC"
-  btn_dark: "#4A4536"
-  btn_dark_ink: "#F8F5EC"
+  # 出处三档：量得 / 看图估的 / 我们定的。
+  # 这份 spec 的来源是三张截图，所以下面没有一个值是「量得」—— 照实标。
+  primary: "#8D6E22"               # 我们定的 · 由 gold 压暗到 AA 4.51:1 得来
+  paper: "#FBF8F0"                 # 看图估的 · 象牙底，截图分不出 2x 屏，对着色块取的
+  paper_lift: "#FFFDF7"            # 我们定的 · 浮起面，比底色亮一档
+  ink: "#2A271D"                   # 看图估的
+  ink_soft: "#4C4738"              # 我们定的
+  muted: "#7A725E"                 # 我们定的 · 由 #7C7460 压暗到 AA 4.50:1
+  muted_2: "#797262"               # 我们定的 · 由 #8B8371 压暗到 AA 4.50:1
+  hairline: "rgba(42,39,29,.10)"   # 我们定的
+  hairline_2: "rgba(42,39,29,.18)" # 我们定的
+  gold: "#8D6E22"                  # 我们定的 · kicker、拉丁旁注，已过 AA 4.51:1
+  gold_light: "#B08F43"            # 我们定的 · 编号、印章环，过 AA 大字 3.01:1
+  gold_glow: "#DEBE6C"             # 看图估的 · 月牙、微光
+  gold_line: "rgba(170,142,80,.30)" # 我们定的
+  gold_grad_1: "#C39422"           # 看图估的 · ↓ 标题金渐变三色停，配方见正文 §2
+  gold_grad_2: "#DEBB64"           # 看图估的
+  gold_grad_3: "#EFDCA8"           # 看图估的
+  sky_1: "rgba(243,221,157,.60)"   # 我们定的 · ↓ 云雾四层，参考里是插画，这里是纯 CSS 渐变，配方见 §2
+  sky_2: "rgba(253,246,228,.95)"   # 我们定的
+  sky_3: "rgba(250,238,204,.80)"   # 我们定的
+  sky_4: "rgba(254,250,238,.95)"   # 我们定的
+  strip_bg: "#F5EEDA"              # 量得 · rgba(232,214,166,.30) 压在象牙纸上的合成值，算出来的
+  strip_ink: "#876721"             # 我们定的 · 由 #8A6A22 压暗到 AA 4.54:1
+  crimson: "#A8102F"               # 我们定的 · 参考里没有强调色，这一笔是从列宾原来的朱红留下来的
+  ink_block: "#211F17"             # 我们定的
+  ink_block_code: "#D9B45F"        # 我们定的
+  ink_block_text: "#EFEADC"        # 我们定的
+  btn_dark: "#4A4536"              # 看图估的
+  btn_dark_ink: "#F8F5EC"          # 我们定的
 
 typography:
   # fontSize 锁的是上限值（rem，可迁移）。实际用的流体区间见正文 §3。
@@ -124,6 +126,10 @@ elevation:
 一句话：**克制的天光，不是华丽的装饰。** 全屏只有一处金渐变、一个按钮、一个朱红。
 
 ## 2. Colors
+
+**这套色板里没有一个值是量出来的。** 来源是三张截图，截图分不出 2x 屏，也读不到 computed CSS——
+所以 YAML 里逐条标了 `看图估的` 或 `我们定的`，只有 `strip_bg` 是算出来的合成值。
+色相和彼此之间的关系可信，绝对值不可信；要精确复刻参考站，得另外去量。
 
 底色只有 `#FBF8F0` 一种，全站不出现第二种白。层次靠云雾（四层 radial-gradient 叠加）做，
 不靠灰阶、不靠卡片边框。
