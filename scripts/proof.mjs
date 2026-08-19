@@ -12,9 +12,10 @@
  *   proof.json           轴、三个变体名、三屏名
  *   v1s1.html … v3s3.html   9 个片段（变体序号 × 屏序号），每个是一屏的完整渲染
  *
- * 它会拦下两件事，拦不过就不出文件：
+ * 它会拦下三件事，拦不过就不出文件：
  *   - 片段里有占位文字（Lorem ipsum / 标题标题 / TODO / 占位）
  *   - 不是正好 3 变体 × 3 屏
+ *   - 变体名不是固定的「贴着做 / 取其神 / 反着来」（轴可以变，名字不许另起）
  *
  * 无依赖，Node 18+。
  */
@@ -72,11 +73,17 @@ if (offences.length) die(
   "  就先帮他把三屏的文案写出来，让他改，改完再渲染。"
 );
 
-/* ── 软提醒，不拦 ── */
-const warn = [];
+/* ── 变体名锁死 ── */
+const LOCKED = ["贴着做", "取其神", "反着来"];
 variants.forEach((v, i) => {
   if (!v?.name) die(`variants[${i}] 缺 name。`);
-  if ([...v.name].length !== 2) warn.push(`变体名「${v.name}」不是两个字 —— 两个字最好记，用户反馈时会自然引用它`);
+  if (v.name !== LOCKED[i]) die(
+    `变体名固定为「${LOCKED.join(" / ")}」，第 ${i + 1} 个写成了「${v.name}」。\n` +
+    "  轴可以变（松紧、取舍、密度、气质），名字不许另起——用户要能记住、能骂。"
+  );
+});
+const warn = [];
+variants.forEach((v) => {
   if (!v.desc) warn.push(`变体「${v.name}」没写 desc（它在轴上的位置，一句话）`);
 });
 

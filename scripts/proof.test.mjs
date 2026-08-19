@@ -18,9 +18,9 @@ const cfg = {
   axis: { name: "取舍程度", why: "参考是网址，缺的是意图与取舍" },
   screens: ["首屏", "钉住今天", "空状态"],
   variants: [
-    { name: "照搬", tag: "贴着参考", desc: "结构密度节奏都照搬" },
-    { name: "取气", tag: "只取气质", desc: "味道留下，版面重排" },
-    { name: "反手", tag: "刻意偏离", desc: "参考怎么做它偏不那么做" },
+    { name: "贴着做", tag: "贴着参考", desc: "结构密度节奏都搬过来" },
+    { name: "取其神", tag: "只取味道", desc: "味道留下，版面重排" },
+    { name: "反着来", tag: "刻意偏离", desc: "参考怎么做它偏不那么做" },
   ],
 };
 
@@ -57,7 +57,7 @@ function check(name, ok, detail) {
   const out = join(dir, "out.html");
   check("合法输入出文件", r.status === 0 && existsSync(out), r.stderr);
   const html = existsSync(out) ? readFileSync(out, "utf8") : "";
-  check("外壳含三问和三个变体名", /另外两个/.test(html) && /照搬/.test(html) && /反手/.test(html));
+  check("外壳含三问和三个变体名", /另外两个/.test(html) && /贴着做/.test(html) && /取其神/.test(html) && /反着来/.test(html));
   check("画布默认 1280×880", /--stage-w:1280px/.test(html) && /--stage-h:880px/.test(html));
   rmSync(dir, { recursive: true });
 }
@@ -92,6 +92,23 @@ function check(name, ok, detail) {
   writeFileSync(join(dir, "proof.json"), JSON.stringify({ ...cfg, variants: cfg.variants.slice(0, 2) }));
   const r = run(dir);
   check("两个变体不出文件", r.status === 1 && /要正好 3 个变体/.test(r.stderr));
+  rmSync(dir, { recursive: true });
+}
+
+{
+  const dir = mkdtempSync(join(tmpdir(), "liebin-proof-oldnames-"));
+  writeProof(dir, {
+    config: {
+      ...cfg,
+      variants: [
+        { name: "照搬", tag: "贴着参考", desc: "旧名字" },
+        { name: "取气", tag: "只取气质", desc: "旧名字" },
+        { name: "反手", tag: "刻意偏离", desc: "旧名字" },
+      ],
+    },
+  });
+  const r = run(dir);
+  check("旧名字不出文件", r.status === 1 && /贴着做/.test(r.stderr) && !existsSync(join(dir, "out.html")));
   rmSync(dir, { recursive: true });
 }
 
