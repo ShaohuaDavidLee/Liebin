@@ -25,20 +25,19 @@
   h1{font-size:19px;margin:0 0 6px;font-weight:600;letter-spacing:0}
   .axis{font-size:13px;color:var(--muted);margin:0}
   .axis b{color:var(--ink);font-weight:600}
-  .screens{display:flex;gap:8px;margin-top:16px}
-  .screens button{font:inherit;font-size:13px;padding:6px 16px;border:1px solid var(--line);
-    background:#fff;border-radius:999px;cursor:pointer;color:var(--muted);transition:.15s}
-  .screens button[aria-selected="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .hint-read{font-size:13px;color:var(--muted);margin:14px 0 0;line-height:1.8}
 
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--col-gap);padding:24px 40px 40px}
-  .variant > .meta{margin-bottom:10px}
-  .variant .name{font-size:15px;font-weight:600}
-  .variant .desc{font-size:12.5px;color:var(--muted);line-height:1.6;min-height:2.6em}
+  /* 九格棋盘：列＝变体，行＝屏。九屏同时可见，没有要点的开关。 */
+  .board{display:grid;grid-template-columns:74px repeat(3,1fr);gap:13px var(--col-gap);
+    align-items:start;padding:24px 40px 40px}
+  .rowlab{font-size:11.5px;font-weight:600;letter-spacing:.1em;color:var(--muted);padding-top:3px}
+  .vhead,.cell{min-width:0;margin:0}
+  .vhead .name{font-size:15px;font-weight:600}
+  .vhead .desc{font-size:12.5px;color:var(--muted);line-height:1.6;min-height:2.6em}
   .frame{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;
     position:relative;aspect-ratio:var(--stage-ar)}
   .stage{width:var(--stage-w);height:var(--stage-h);transform-origin:0 0;position:absolute;top:0;left:0}
-  .stage > .screen{display:none;width:100%;height:100%}
-  .stage > .screen.on{display:block}
+  .stage > .screen{width:100%;height:100%;overflow:hidden}
 
   /* ── 确认区 ── */
   .confirm{border-top:1px solid var(--line);padding:36px 40px 80px;max-width:820px}
@@ -60,27 +59,41 @@
 <header>
   <h1>{{产品名}} · 三个方案，请选一个</h1>
   <p class="axis">这三个方案沿同一条轴排开：<b>{{轴的名字，如「取舍程度」}}</b>。{{一句话说明这条轴为什么是它}}</p>
-  <div class="screens" role="tablist">
-    <button role="tab" aria-selected="true"  data-s="0">首屏</button>
-    <button role="tab" aria-selected="false" data-s="1">{{核心操作屏名，如「记录一次」}}</button>
-    <button role="tab" aria-selected="false" data-s="2">{{空状态或结果屏名}}</button>
-  </div>
+  <p class="hint-read">九屏全在这一页上，不用切换：<b>横着看</b>三版在同一屏上的差别，<b>竖着看</b>一版从首屏到空状态撑不撑得住。</p>
 </header>
 
-<div class="grid">
-  <!-- 三版名字锁死：贴着做 / 取其神 / 反着来。复制三次，不要另起外号。 -->
-  <section class="variant">
-    <div class="meta">
-      <div class="name">贴着做</div>
-      <div class="desc">{{这一档在轴上的位置，一句话}}</div>
-    </div>
-    <div class="frame"><div class="stage">
-      <div class="screen on"><!-- 首屏真实渲染 --></div>
-      <div class="screen"><!-- 操作屏真实渲染 --></div>
-      <div class="screen"><!-- 空状态真实渲染 --></div>
-    </div></div>
-  </section>
-  <!-- 变体二、变体三 同上 -->
+<div class="board">
+  <!-- 第一行：三版的名字和它们在轴上的位置。名字锁死：贴着做 / 取其神 / 反着来，不要另起外号。 -->
+  <div class="rowlab"></div>
+  <div class="vhead">
+    <div class="name">贴着做</div>
+    <div class="desc">{{这一档在轴上的位置，一句话}}</div>
+  </div>
+  <div class="vhead">
+    <div class="name">取其神</div>
+    <div class="desc">{{这一档在轴上的位置，一句话}}</div>
+  </div>
+  <div class="vhead">
+    <div class="name">反着来</div>
+    <div class="desc">{{这一档在轴上的位置，一句话}}</div>
+  </div>
+
+  <!-- 之后每一行是一屏，行内三格＝三版在这一屏上的样子。三行照抄，换掉行名和片段。 -->
+  <div class="rowlab">首屏</div>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 贴着做 · 首屏 --></div></div></div></figure>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 取其神 · 首屏 --></div></div></div></figure>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 反着来 · 首屏 --></div></div></div></figure>
+
+  <div class="rowlab">{{核心操作屏名，如「记录一次」}}</div>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 贴着做 · 操作屏 --></div></div></div></figure>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 取其神 · 操作屏 --></div></div></div></figure>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 反着来 · 操作屏 --></div></div></div></figure>
+
+  <!-- 空状态这一行一定要填——最能暴露一套风格撑不撑得住，也是所有 AI 样张都会跳过的地方。 -->
+  <div class="rowlab">{{空状态或结果屏名}}</div>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 贴着做 · 空状态 --></div></div></div></figure>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 取其神 · 空状态 --></div></div></div></figure>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 反着来 · 空状态 --></div></div></div></figure>
 </div>
 
 <div class="confirm">
@@ -121,17 +134,6 @@
     });
   }
   window.addEventListener('resize', fit); fit();
-
-  var tabs = [].slice.call(document.querySelectorAll('.screens button'));
-  tabs.forEach(function(b){
-    b.addEventListener('click', function(){
-      tabs.forEach(function(x){ x.setAttribute('aria-selected', x === b); });
-      var i = +b.dataset.s;
-      stages.forEach(function(st){
-        [].slice.call(st.children).forEach(function(sc, j){ sc.classList.toggle('on', i === j); });
-      });
-    });
-  });
 
   document.getElementById('copyBtn').addEventListener('click', function(){
     var txt = '【设计方向确认】\n'

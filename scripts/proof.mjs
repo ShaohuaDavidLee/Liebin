@@ -2,7 +2,7 @@
 /**
  * 列宾 · 样张脚手架
  *
- * 三变体 × 三屏的外壳每次都一样：三列并排、scale 缩放、切屏、放大、底部确认表单。
+ * 三变体 × 三屏的外壳每次都一样：九格棋盘、scale 缩放、点开放大、底部确认表单。
  * 这部分是机械的，不该每次让模型重写一遍 —— 重写一遍就多一次踩坑的机会。
  * 你只写 9 个 HTML 片段（那才是定制的部分），外壳交给这个脚本。
  *
@@ -12,15 +12,18 @@
  *   proof.json           轴、三个变体名、三屏名
  *   v1s1.html … v3s3.html   9 个片段（变体序号 × 屏序号），每个是一屏的完整渲染
  *
- * 它会拦下三件事，拦不过就不出文件：
+ * 它会拦下四件事，拦不过就不出文件：
  *   - 片段里有占位文字（Lorem ipsum / 标题标题 / TODO / 占位）
  *   - 不是正好 3 变体 × 3 屏
  *   - 变体名不是固定的「贴着做 / 取其神 / 反着来」（轴可以变，名字不许另起）
+ *   - 有屏排不进画布（要一个浏览器；找不到就明说没量到，不假装通过）
  *
- * 无依赖，Node 18+。
+ * 脚本本身无依赖，Node 18+。--no-render 跳过最后一项，--bleed <px> 放宽出血容差。
  */
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, readdirSync, unlinkSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { tmpdir } from "node:os";
+import { spawnSync } from "node:child_process";
 
 const argv = process.argv.slice(2);
 const arg = (k, d) => { const i = argv.indexOf(k); return i >= 0 && argv[i + 1] ? argv[i + 1] : d; };
@@ -87,9 +90,99 @@ variants.forEach((v) => {
   if (!v.desc) warn.push(`变体「${v.name}」没写 desc（它在轴上的位置，一句话）`);
 });
 
+/* 三版是不是在比同一份内容 —— 不拦，但要说 */
+const plain = (s) => s
+  .replace(/<(style|script|svg)[\s\S]*?<\/\1>/gi, " ")
+  .replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+/* 逐字相同太严了——「取其神」本来就允许重排。看的是重合度，低到一半就是在比两件不同的东西 */
+const overlap = (a, b) => {
+  const A = new Set(plain(a).split(/[\s，。、·|—]+/).filter(Boolean));
+  const B = new Set(plain(b).split(/[\s，。、·|—]+/).filter(Boolean));
+  const hit = [...A].filter((w) => B.has(w)).length;
+  return A.size + B.size ? (2 * hit) / (A.size + B.size) : 1;
+};
+const worst = Math.min(...screens.map((_, s) => Math.min(...cells.map((col) => overlap(col[s], cells[0][s])))));
+const sameCopy = worst >= 0.7;
+if (!sameCopy) warn.push(
+  `三版的文案重合度只有 ${(worst * 100).toFixed(0)}%——那比的就不只是形式了。` +
+  "有意增删就在 desc 里写清楚，不是就把文案对齐。"
+);
+
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const W = cfg.stage?.w ?? 1280, H = cfg.stage?.h ?? 880;
 const ROMAN = ["I", "II", "III"];
+
+/* ── 排得下吗：把九个片段各自放进 W×H 量一遍 ──
+   固定画布配上会滚动的落地页，是这套流程最容易翻的车：内容溢出去，
+   被样张外壳的 overflow:hidden 悄悄吃掉，交出去的样张少了半屏没人知道。
+   这一项要一个浏览器。找不到就明说没量到，绝不假装通过。 */
+const BLEED = Number(arg("--bleed", "2"));
+const findChrome = () => {
+  const cands = [process.env.CHROME_PATH, process.env.CHROMIUM_PATH];
+  const pw = process.env.PLAYWRIGHT_BROWSERS_PATH || "/opt/pw-browsers";
+  if (existsSync(pw)) {
+    try {
+      for (const d of readdirSync(pw)) {
+        if (!d.startsWith("chromium")) continue;
+        cands.push(join(pw, d, "chrome-linux", "chrome"));
+        cands.push(join(pw, d, "chrome-mac", "Chromium.app", "Contents", "MacOS", "Chromium"));
+      }
+    } catch { /* 读不动就算了 */ }
+  }
+  cands.push(
+    "/usr/bin/chromium", "/usr/bin/chromium-browser", "/usr/bin/google-chrome", "/usr/bin/google-chrome-stable",
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/Applications/Chromium.app/Contents/MacOS/Chromium",
+  );
+  return cands.find((p) => p && existsSync(p)) ?? null;
+};
+
+const measureFit = (exe) => {
+  const boxes = [];
+  for (let v = 0; v < 3; v++) for (let s = 0; s < 3; s++)
+    boxes.push(`<div class="__w" data-k="${v}.${s}">${cells[v][s]}</div>`);
+  const probe = `<!DOCTYPE html><meta charset="utf-8">
+<style>.__w{width:${W}px;height:${H}px;position:relative;overflow:visible;margin:0 0 60px}</style>
+${boxes.join("\n")}
+<script>window.addEventListener('load',function(){var o=[];
+document.querySelectorAll('.__w').forEach(function(w){var t=w.getBoundingClientRect().top,m=0;
+w.querySelectorAll('*').forEach(function(n){var r=n.getBoundingClientRect();
+if(r.width||r.height){var b=r.bottom-t;if(b>m)m=b;}});o.push(w.dataset.k+':'+Math.round(m));});
+var p=document.createElement('pre');p.id='__M';p.textContent=o.join(' ');document.body.appendChild(p);});<\/script>`;
+  const tmp = join(tmpdir(), `liebin-fit-${process.pid}.html`);
+  writeFileSync(tmp, probe, "utf8");
+  const r = spawnSync(exe, ["--headless=new", "--no-sandbox", "--disable-gpu",
+    "--virtual-time-budget=6000", `--window-size=${W + 120},${H + 40}`, "--dump-dom", "file://" + tmp],
+    { encoding: "utf8", timeout: 90_000, maxBuffer: 512 * 1024 * 1024 });
+  try { unlinkSync(tmp); } catch { /* 临时文件删不掉不影响结果 */ }
+  const m = /<pre id="__M">([^<]*)<\/pre>/.exec(r.stdout || "");
+  if (!m) return null;
+  return m[1].trim().split(/\s+/).filter(Boolean)
+    .map((x) => x.split(":")).map(([k, h]) => [k, Number(h)]);
+};
+
+if (argv.includes("--no-render")) {
+  warn.push("--no-render：没量九屏排不排得下。溢出的内容会被 overflow:hidden 悄悄吃掉。");
+} else {
+  const exe = findChrome();
+  if (!exe) warn.push("没找到 Chrome/Chromium，九屏排不排得下这一项没量到——用 CHROME_PATH 指一个，或自己把九屏各自看一眼。");
+  else {
+    const got = measureFit(exe);
+    if (!got || got.length !== 9) warn.push("浏览器没返回测量结果，九屏排不排得下这一项没量到。");
+    else {
+      const over = got.filter(([, h]) => h > H + BLEED).map(([k, h]) => {
+        const [v, s] = k.split(".");
+        return `  「${variants[+v].name}」的${screens[+s]}：内容高 ${h}px，超出画布 ${h - H}px`;
+      });
+      if (over.length) die(
+        `有屏排不进 ${W}×${H} 的画布，不出样张：\n` + over.join("\n") +
+        "\n\n  片段是按会滚动的页面写的，样张是定尺画布——超出去的部分会被 overflow:hidden 吃掉，\n" +
+        "  用户看到的是一屏残缺的设计，还以为那就是你的方案。重排到排得下，别靠裁切藏。\n" +
+        `  确实是有意出血（图片贴边流出去），用 --bleed <px> 放宽容差。`
+      );
+    }
+  }
+}
 
 /* ── 外壳 ── */
 const html = `<!DOCTYPE html>
@@ -119,19 +212,16 @@ body{margin:0;background:var(--bg);color:var(--ink);line-height:1.75;
 h1{font-size:clamp(18px,2vw,23px);line-height:1.45;margin:0 0 10px;font-weight:600;letter-spacing:0;text-wrap:balance}
 .axis{font-size:14px;line-height:1.8;color:var(--ink-soft);margin:0;max-width:88ch}
 .axis b{color:var(--ink)}
-.bar{display:flex;flex-wrap:wrap;gap:20px;align-items:center;margin-top:16px}
-.screens{display:flex;gap:7px;flex-wrap:wrap}
-.screens button{font:inherit;font-size:13px;padding:7px 17px;border:1px solid var(--hair2);background:transparent;
-  color:var(--muted);border-radius:999px;cursor:pointer;transition:.15s}
-.screens button:hover{color:var(--ink)}
-.screens button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.hint{font-size:12.5px;color:var(--muted);margin:0}
+.hint{font-size:12.5px;color:var(--muted);margin:14px 0 0;line-height:1.8;max-width:88ch}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:22px 0 8px}
-.grid.solo{grid-template-columns:minmax(0,1fr)}
-.grid.solo .variant.off{display:none}
-.grid.solo .frame,.grid.solo .meta,.grid.solo .desc{max-width:${W}px;margin-left:auto;margin-right:auto}
-.variant{min-width:0}
+.board{display:grid;grid-template-columns:74px repeat(3,minmax(0,1fr));gap:13px 18px;
+  align-items:start;padding:22px 0 8px}
+.board.solo{grid-template-columns:minmax(0,1fr);max-width:${W}px}
+.board.solo>:not(.pick){display:none}
+.rowlab{font-size:11.5px;font-weight:600;letter-spacing:.1em;color:var(--muted);padding-top:3px;line-height:1.6}
+.vhead,.cell{min-width:0;margin:0}
+.cap{font-size:12.5px;color:var(--muted);margin:9px 0 0}
+.board:not(.solo) .cap{display:none}
 .meta{display:flex;align-items:baseline;gap:9px;padding-bottom:9px;border-bottom:1px solid var(--hair2)}
 .meta .num{font-size:17px;color:var(--gold);font-style:italic}
 .meta .name{font-weight:700;font-size:17px}
@@ -140,14 +230,13 @@ h1{font-size:clamp(18px,2vw,23px);line-height:1.45;margin:0 0 10px;font-weight:6
 .frame{position:relative;aspect-ratio:var(--stage-ar);border:1px solid var(--hair2);border-radius:6px;overflow:hidden;
   background:#fff;cursor:zoom-in;display:block;width:100%;padding:0;margin:0;font:inherit;text-align:left;color:inherit;
   -webkit-appearance:none;appearance:none}
-.grid.solo .frame{cursor:zoom-out}
+.board.solo .frame{cursor:zoom-out}
 .frame::after{content:"点开放大";position:absolute;right:8px;bottom:8px;z-index:5;font-size:10px;letter-spacing:.1em;
   padding:3px 9px;border-radius:999px;background:rgba(30,27,18,.62);color:#F6F1E4;opacity:0;transition:opacity .16s}
 .frame:hover::after{opacity:1}
-.grid.solo .frame::after{content:"收起"}
+.board.solo .frame::after{content:"收起"}
 .stage{width:var(--stage-w);height:var(--stage-h);transform-origin:0 0;position:absolute;top:0;left:0}
-.stage>.screen{display:none;width:100%;height:100%;position:relative;overflow:hidden}
-.stage>.screen.on{display:block}
+.stage>.screen{width:100%;height:100%;position:relative;overflow:hidden}
 .confirm{border-top:1px solid var(--hair);margin-top:34px;padding:34px 0 90px;max-width:800px}
 .confirm h2{font-size:19px;margin:0 0 6px}
 .confirm .sub{font-size:13.5px;color:var(--muted);margin:0 0 26px;line-height:1.8}
@@ -162,7 +251,8 @@ h1{font-size:clamp(18px,2vw,23px);line-height:1.45;margin:0 0 10px;font-weight:6
 .tip{font-size:13px;color:var(--muted);margin-left:12px}
 #fallback{white-space:pre-wrap;font-size:12.5px;background:var(--surface);border:1px solid var(--hair);
   border-radius:7px;padding:14px;margin-top:14px;overflow-x:auto}
-@media(max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}.desc{min-height:0}}
+@media(max-width:900px){.board{grid-template-columns:minmax(0,1fr)}.rowlab{display:none}
+  .desc{min-height:0}.board:not(.solo) .cap{display:block}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -172,23 +262,22 @@ h1{font-size:clamp(18px,2vw,23px);line-height:1.45;margin:0 0 10px;font-weight:6
   <p class="eyebrow">${esc(product)} · 设计方向确认</p>
   <h1>三版并列，请选一版，并说清另外两版哪里不要。</h1>
   <p class="axis">三版沿同一条轴排开：<b>${esc(axis.name)}</b>。${esc(axis.why)}
-  三版只差在这一条轴上，文案完全相同，全部是真实文案。</p>
-  <div class="bar">
-    <div class="screens" role="tablist" aria-label="切换屏">
-${screens.map((s, i) => `      <button type="button" role="tab" aria-selected="${i === 0}" data-s="${i}">${esc(s)}</button>`).join("\n")}
-    </div>
-    <p class="hint">点任意一张放大到整宽读细节，再点一次收起。</p>
-  </div>
+  ${sameCopy ? "三版只差在这一条轴上，文案完全相同，全部是真实文案。" : "文案是真实文案，但三版并不完全一致——差在哪，看每版下面那句说明。"}</p>
+  <p class="hint">九屏全在这一页上，不用切换：<b>横着看</b>三版在同一屏上的差别，<b>竖着看</b>一版从首屏到空状态撑不撑得住。
+  点任意一张放大到整宽读细节，再点一次收起。</p>
 </header>
 
-<div class="grid" id="grid">
-${variants.map((v, i) => `  <section class="variant" data-i="${i}">
+<div class="board" id="board">
+  <div class="rowlab"></div>
+${variants.map((v, i) => `  <div class="vhead">
     <div class="meta"><span class="num">${ROMAN[i]}</span><span class="name">${esc(v.name)}</span><span class="tag">${esc(v.tag ?? "")}</span></div>
     <p class="desc">${esc(v.desc ?? "")}</p>
-    <button class="frame" type="button" aria-label="放大「${esc(v.name)}」"><div class="stage">
-${cells[i].map((c, j) => `      <div class="screen${j === 0 ? " on" : ""}">${c}</div>`).join("\n")}
-    </div></button>
-  </section>`).join("\n")}
+  </div>`).join("\n")}
+${screens.map((sc, j) => `  <div class="rowlab">${esc(sc)}</div>
+${variants.map((v, i) => `  <figure class="cell">
+    <button class="frame" type="button" aria-label="放大「${esc(v.name)}」的${esc(sc)}"><div class="stage"><div class="screen">${cells[i][j]}</div></div></button>
+    <figcaption class="cap">${ROMAN[i]} ${esc(v.name)} · ${esc(sc)}</figcaption>
+  </figure>`).join("\n")}`).join("\n")}
 </div>
 
 <section class="confirm">
@@ -218,23 +307,20 @@ ${variants.map((v) => `      <option>${esc(v.name)}（${esc(v.tag ?? "")}）</op
 </div>
 <script>
 (function(){
-  var stages=[].slice.call(document.querySelectorAll('.stage')), grid=document.getElementById('grid');
-  function fit(){stages.forEach(function(st){st.style.transform='scale('+(st.parentElement.clientWidth/${W})+')';});}
+  var stages=[].slice.call(document.querySelectorAll('.stage')), board=document.getElementById('board');
+  function fit(){stages.forEach(function(st){var w=st.parentElement.clientWidth;
+    if(w)st.style.transform='scale('+(w/${W})+')';});}
   window.addEventListener('resize',fit);
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
   fit();
-  var tabs=[].slice.call(document.querySelectorAll('.screens button'));
-  tabs.forEach(function(b){b.addEventListener('click',function(){
-    tabs.forEach(function(x){x.setAttribute('aria-selected',String(x===b));});
-    var i=+b.dataset.s;
-    stages.forEach(function(st){[].slice.call(st.children).forEach(function(sc,j){sc.classList.toggle('on',i===j);});});
-  });});
-  var vs=[].slice.call(document.querySelectorAll('.variant'));
-  vs.forEach(function(v){v.querySelector('.frame').addEventListener('click',function(){
-    var solo=grid.classList.contains('solo')&&!v.classList.contains('off');
-    if(solo){grid.classList.remove('solo');vs.forEach(function(x){x.classList.remove('off');});}
-    else{grid.classList.add('solo');vs.forEach(function(x){x.classList.toggle('off',x!==v);});}
+  var cells=[].slice.call(document.querySelectorAll('.cell'));
+  cells.forEach(function(c){c.querySelector('.frame').addEventListener('click',function(){
+    var was=c.classList.contains('pick');
+    cells.forEach(function(x){x.classList.remove('pick');});
+    board.classList.toggle('solo',!was);
+    if(!was)c.classList.add('pick');
     fit();
+    if(!was)c.scrollIntoView({block:'nearest'});
   });});
   document.getElementById('copyBtn').addEventListener('click',function(){
     var t='【列宾 · 设计方向确认】\\n'
