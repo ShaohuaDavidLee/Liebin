@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>列宾 · 三版样张</title>
+<style>
+:root{
+  --bg:#F2F0EA;--surface:#fff;--ink:#252319;--ink-soft:#4C4738;--muted:#7B7360;
+  --hair:rgba(37,35,25,.14);--hair2:rgba(37,35,25,.26);--accent:#A8102F;--gold:#9C7A26;
+  --stage-w:1280px;--stage-h:880px;--stage-ar:1280/880;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17160F;--surface:rgba(255,255,255,.055);--ink:#F0ECE0;--ink-soft:#D2CBB9;--muted:#968F7C;
+  --hair:rgba(255,255,255,.14);--hair2:rgba(255,255,255,.26);--accent:#EE8AA2;--gold:#D9AE59;}}
+:root[data-theme="dark"]{
+  --bg:#17160F;--surface:rgba(255,255,255,.055);--ink:#F0ECE0;--ink-soft:#D2CBB9;--muted:#968F7C;
+  --hair:rgba(255,255,255,.14);--hair2:rgba(255,255,255,.26);--accent:#EE8AA2;--gold:#D9AE59;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.75;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+.shell{max-width:1760px;margin:0 auto;padding:0 clamp(16px,2.4vw,40px)}
+.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--hair);padding:26px 0 14px}
+.eyebrow{font-size:10.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 8px}
+h1{font-size:clamp(18px,2vw,23px);line-height:1.45;margin:0 0 10px;font-weight:600;letter-spacing:0;text-wrap:balance}
+.axis{font-size:14px;line-height:1.8;color:var(--ink-soft);margin:0;max-width:88ch}
+.axis b{color:var(--ink)}
+.bar{display:flex;flex-wrap:wrap;gap:20px;align-items:center;margin-top:16px}
+.screens{display:flex;gap:7px;flex-wrap:wrap}
+.screens button{font:inherit;font-size:13px;padding:7px 17px;border:1px solid var(--hair2);background:transparent;
+  color:var(--muted);border-radius:999px;cursor:pointer;transition:.15s}
+.screens button:hover{color:var(--ink)}
+.screens button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.hint{font-size:12.5px;color:var(--muted);margin:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:22px 0 8px}
+.grid.solo{grid-template-columns:minmax(0,1fr)}
+.grid.solo .variant.off{display:none}
+.grid.solo .frame,.grid.solo .meta,.grid.solo .desc{max-width:1280px;margin-left:auto;margin-right:auto}
+.variant{min-width:0}
+.meta{display:flex;align-items:baseline;gap:9px;padding-bottom:9px;border-bottom:1px solid var(--hair2)}
+.meta .num{font-size:17px;color:var(--gold);font-style:italic}
+.meta .name{font-weight:700;font-size:17px}
+.meta .tag{margin-left:auto;font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.desc{font-size:12.5px;line-height:1.75;color:var(--muted);margin:9px 0 11px;min-height:4.4em}
+.frame{position:relative;aspect-ratio:var(--stage-ar);border:1px solid var(--hair2);border-radius:6px;overflow:hidden;
+  background:#fff;cursor:zoom-in;display:block;width:100%;padding:0;margin:0;font:inherit;text-align:left;color:inherit;
+  -webkit-appearance:none;appearance:none}
+.grid.solo .frame{cursor:zoom-out}
+.frame::after{content:"点开放大";position:absolute;right:8px;bottom:8px;z-index:5;font-size:10px;letter-spacing:.1em;
+  padding:3px 9px;border-radius:999px;background:rgba(30,27,18,.62);color:#F6F1E4;opacity:0;transition:opacity .16s}
+.frame:hover::after{opacity:1}
+.grid.solo .frame::after{content:"收起"}
+.stage{width:var(--stage-w);height:var(--stage-h);transform-origin:0 0;position:absolute;top:0;left:0}
+.stage>.screen{display:none;width:100%;height:100%;position:relative;overflow:hidden}
+.stage>.screen.on{display:block}
+.confirm{border-top:1px solid var(--hair);margin-top:34px;padding:34px 0 90px;max-width:800px}
+.confirm h2{font-size:19px;margin:0 0 6px}
+.confirm .sub{font-size:13.5px;color:var(--muted);margin:0 0 26px;line-height:1.8}
+.q{margin-bottom:24px}
+.q label{display:block;font-size:14.5px;font-weight:600;margin-bottom:4px}
+.q .why{font-size:12.5px;color:var(--muted);margin:0 0 10px;line-height:1.8}
+.q select,.q textarea{width:100%;font:inherit;font-size:14px;padding:11px 13px;border:1px solid var(--hair2);
+  border-radius:7px;background:var(--surface);color:var(--ink);resize:vertical}
+.q textarea{min-height:82px;line-height:1.8}
+.copy{font:inherit;font-size:14px;font-weight:600;padding:12px 28px;border:0;border-radius:999px;
+  background:var(--ink);color:var(--bg);cursor:pointer}
+.tip{font-size:13px;color:var(--muted);margin-left:12px}
+#fallback{white-space:pre-wrap;font-size:12.5px;background:var(--surface);border:1px solid var(--hair);
+  border-radius:7px;padding:14px;margin-top:14px;overflow-x:auto}
+@media(max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}.desc{min-height:0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="top">
+  <p class="eyebrow">列宾 · 设计方向确认</p>
+  <h1>三版并列，请选一版，并说清另外两版哪里不要。</h1>
+  <p class="axis">三版沿同一条轴排开：<b>数值松紧</b>。参考只有三张截图、没有 DOM，缺的是精确数值——同一套暖纸墨字，沿紧凑 / 照量 / 舒展排开；第三版顺手拿掉参考里最显眼的悬浮白卡，试那个卡到底是不是你要的。
+  三版只差在这一条轴上，文案完全相同，全部是真实文案。</p>
+  <div class="bar">
+    <div class="screens" role="tablist" aria-label="切换屏">
+      <button type="button" role="tab" aria-selected="true" data-s="0">首屏</button>
+      <button type="button" role="tab" aria-selected="false" data-s="1">任务包表单</button>
+      <button type="button" role="tab" aria-selected="false" data-s="2">空状态</button>
+    </div>
+    <p class="hint">点任意一张放大到整宽读细节，再点一次收起。</p>
+  </div>
+</header>
+
+<div class="grid" id="grid">
+  <section class="variant" data-i="0">
+    <div class="meta"><span class="num">I</span><span class="name">贴紧</span><span class="tag">紧凑解读</span></div>
+    <p class="desc">截图数值的最紧解释：标题 2.25em、留白减半、圆角 0.75em、导航 54px。信息密度优先，一屏说完更多事。</p>
+    <button class="frame" type="button" aria-label="放大「贴紧」"><div class="stage">
+      <div class="screen on"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<div class="k1">
+<style>
+.k1{height:100%;overflow:hidden;background:linear-gradient(180deg,#F1EBE5 0%,#F5F3E8 100%);color:#16130B;
+  font:16px/1.65 Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;display:flex;flex-direction:column}
+.k1 *{box-sizing:border-box;margin:0;padding:0}
+.k1 nav{height:54px;flex:none;display:flex;align-items:center;gap:1.4em;max-width:1080px;width:92%;margin:0 auto}
+.k1 .logo{font-weight:700;font-size:1.06em;letter-spacing:.02em}
+.k1 .logo sup{font-size:.55em;color:#74674F;margin-left:.15em}
+.k1 .lk{font-size:.8125em;color:#5F5D5A;text-decoration:none}
+.k1 .lk:hover{color:#16130B}
+.k1 .cta{margin-left:auto;background:#16130B;color:#F6F6F2;font-size:.8125em;font-weight:600;
+  padding:.5em 1.15em;border-radius:999px;text-decoration:none}
+.k1 header{text-align:center;padding:2.6em 1em 0;max-width:1080px;width:92%;margin:0 auto}
+.k1 .eb{font-size:.6875em;font-weight:600;letter-spacing:.22em;color:#74674F;margin-bottom:1.1em}
+.k1 h1{font-size:2.25em;line-height:1.22;font-weight:700;letter-spacing:0}
+.k1 .qt{font-size:.875em;color:#74674F;margin-top:.9em}
+.k1 .sub{font-size:.9375em;color:#3E393A;max-width:52ch;margin:1em auto 0}
+.k1 .row{margin-top:1.5em;display:flex;gap:1.2em;justify-content:center;align-items:center}
+.k1 .pill{background:#16130B;color:#F6F6F2;font-weight:600;font-size:.9375em;padding:.65em 1.6em;border-radius:999px;text-decoration:none}
+.k1 .lnk{font-size:.875em;color:#5F5D5A;text-decoration:underline;text-underline-offset:.25em;text-decoration-color:rgba(22,19,11,.3)}
+.k1 .mock{width:88%;max-width:960px;margin:2.2em auto 2.5em;background:#F6F6F2;border-radius:.75em;
+  padding:1.3em 1.6em 1.5em;box-shadow:0 1px 0 rgba(22,19,11,.05)}
+.k1 .mock .mt{font-size:.75em;font-weight:600;color:#5F5D5A;letter-spacing:.06em;margin-bottom:1em}
+.k1 .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:.9em}
+.k1 .mini{border:1px solid rgba(22,19,11,.12);border-radius:.5em;padding:.8em .9em;text-align:left}
+.k1 .mini b{display:block;font-size:.8125em;margin-bottom:.35em}
+.k1 .mini i{font-style:normal;font-size:.6875em;color:#74674F}
+.k1 .qs{display:flex;gap:.6em;justify-content:center;margin-top:1.1em;flex-wrap:wrap}
+.k1 .qs span{font-size:.75em;color:#3E393A;border:1px solid rgba(22,19,11,.14);border-radius:999px;padding:.3em 1em}
+</style>
+<nav>
+  <span class="logo">列宾<sup>®</sup></span>
+  <a class="lk" href="#">输出什么</a><a class="lk" href="#">怎么用</a><a class="lk" href="#">三个坑</a><a class="lk" href="#">FAQ</a>
+  <a class="cta" href="#">立即使用</a>
+</nav>
+<header>
+  <p class="eb">列宾 SKILL · 设计方向确认</p>
+  <h1>让大师帮你「偷」设计。</h1>
+  <p class="qt">「优秀的艺术家模仿，伟大的艺术家偷窃。」</p>
+  <p class="sub">把你想要的设计风格，先给出三个版本。你确定一版、吐槽另外两版哪里不好，它据此重新生成 DESIGN.md——你的 agent 拿着这份文件，去精准修改你的产品。</p>
+  <div class="row"><a class="pill" href="#">立即使用</a><a class="lnk" href="#">先看看三个坑</a></div>
+</header>
+<div class="mock">
+  <p class="mt">确认现场 · 三版并列，不是示意图</p>
+  <div class="cols">
+    <div class="mini"><b>照搬</b><i>I · 贴着参考走，先看合不合身</i></div>
+    <div class="mini"><b>取气</b><i>II · 味道留下，版面按自己内容重排</i></div>
+    <div class="mini"><b>反手</b><i>III · 刻意偏离，试出你的边界</i></div>
+  </div>
+  <div class="qs"><span>选哪个？</span><span>另外两个，哪里不要？</span><span>谁会在什么状态下打开它？</span></div>
+</div>
+</div>
+</div>
+      <div class="screen"><div class="k1f">
+<style>
+.k1f{height:100%;overflow:hidden;background:linear-gradient(180deg,#F1EBE5 0%,#F5F3E8 100%);color:#16130B;
+  font:16px/1.65 Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif}
+.k1f *{box-sizing:border-box;margin:0;padding:0}
+.k1f .wrap{max-width:720px;width:90%;margin:0 auto;padding:2.6em 0}
+.k1f .eb{font-size:.6875em;font-weight:600;letter-spacing:.22em;color:#74674F;text-align:center}
+.k1f h2{font-size:1.5em;font-weight:700;text-align:center;margin:.5em 0 .3em}
+.k1f .sub{font-size:.875em;color:#3E393A;text-align:center;margin-bottom:1.8em}
+.k1f .card{background:#F6F6F2;border-radius:.75em;padding:1.4em 1.5em;box-shadow:0 1px 0 rgba(22,19,11,.05)}
+.k1f .f{margin-bottom:1em}
+.k1f .f:last-child{margin-bottom:0}
+.k1f label{display:flex;align-items:baseline;font-size:.8125em;font-weight:600;margin-bottom:.4em}
+.k1f .opt{margin-left:auto;font-size:.625em;font-weight:600;letter-spacing:.1em;color:#74674F;border:1px solid rgba(116,103,79,.4);border-radius:999px;padding:.15em .7em}
+.k1f .req{margin-left:auto;font-size:.625em;font-weight:600;letter-spacing:.1em;color:#F6F6F2;background:#16130B;border-radius:999px;padding:.15em .7em}
+.k1f .in{border:1px solid rgba(22,19,11,.14);border-radius:.5em;padding:.55em .8em;font-size:.875em;color:#3E393A;background:#FBFAF6}
+.k1f .hint{font-size:.6875em;color:#5F5D5A;margin-top:.3em}
+.k1f .drop{border:1.5px dashed rgba(22,19,11,.28);border-radius:.5em;padding:.8em;font-size:.8125em;color:#5F5D5A;text-align:center}
+.k1f .drop b{color:#16130B}
+.k1f .files{display:flex;gap:.5em;margin-top:.6em}
+.k1f .files span{font-size:.6875em;background:#EDE8DC;border-radius:.35em;padding:.25em .7em;color:#3E393A}
+.k1f .out{margin-top:1.2em;background:#F6F6F2;border-radius:.75em;padding:1.2em 1.5em;box-shadow:0 1px 0 rgba(22,19,11,.05)}
+.k1f .out .ot{font-size:.75em;font-weight:600;letter-spacing:.06em;color:#5F5D5A;margin-bottom:.6em}
+.k1f .mono{font-size:.8125em;line-height:1.7;color:#16130B;border-left:2px solid #74674F;padding-left:1em}
+.k1f .copyrow{margin-top:1em;display:flex;align-items:center;gap:1em}
+.k1f .pill{background:#16130B;color:#F6F6F2;font-weight:600;font-size:.875em;padding:.6em 1.5em;border-radius:999px;text-decoration:none}
+.k1f .note{font-size:.6875em;color:#5F5D5A}
+</style>
+<div class="wrap">
+  <p class="eb">任务包 · BRIEF</p>
+  <h2>装一次，之后每次只做一件事</h2>
+  <p class="sub">把你手上有的填进这张表，复制成一段话，粘给你的 agent。</p>
+  <div class="card">
+    <div class="f">
+      <label>参考网址<span class="opt">选填 · 我想做成那样</span></label>
+      <div class="in">https://（空着）</div>
+      <p class="hint">图多的时候改成下载 zip。</p>
+    </div>
+    <div class="f">
+      <label>现在的页面<span class="opt">选填 · 我已经有一版了</span></label>
+      <div class="in">https://liebin-skills.pages.dev</div>
+    </div>
+    <div class="f">
+      <label>要设计的是什么<span class="req">必填 · 真实文案</span></label>
+      <div class="in">列宾落地页重设计。参考是三张暖纸奶油底 AI 产品站截图：墨黑大字、悬浮白卡、实心黑 pill 按钮、零彩色。</div>
+    </div>
+    <div class="f">
+      <label>参考图片<span class="opt">选填 · 我想做成那样</span></label>
+      <div class="drop"><b>⌘V 直接贴</b> · 拖进来 · 或点击选择，整页都能粘</div>
+      <div class="files"><span>shot-1.png</span><span>shot-2.png</span><span>shot-3.png</span></div>
+    </div>
+  </div>
+  <div class="out">
+    <p class="ot">一段话 · 装上 ＋ 提示词 ＋ 任务包</p>
+    <p class="mono">读一下 liebin 的 SKILL.md，按它走一遍我贴在下面的任务包：先给我三版样张，别直接写代码。我选完之后，把我的原话写进 DESIGN.md。</p>
+    <div class="copyrow"><a class="pill" href="#">复制任务包</a><span class="note">空着的栏不会写进任务包</span></div>
+  </div>
+</div>
+</div>
+</div>
+      <div class="screen"><div class="k1e">
+<style>
+.k1e{height:100%;overflow:hidden;background:linear-gradient(180deg,#F1EBE5 0%,#F5F3E8 100%);color:#16130B;
+  font:16px/1.65 Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;display:flex;flex-direction:column}
+.k1e *{box-sizing:border-box;margin:0;padding:0}
+.k1e .wrap{max-width:640px;width:90%;margin:auto;padding:2em 0;text-align:center}
+.k1e .eb{font-size:.6875em;font-weight:600;letter-spacing:.22em;color:#74674F}
+.k1e h2{font-size:1.5em;font-weight:700;line-height:1.3;margin:.6em 0 .4em}
+.k1e .sub{font-size:.875em;color:#3E393A;margin-bottom:1.8em}
+.k1e .card{background:#F6F6F2;border-radius:.75em;padding:1.3em 1.5em;text-align:left;box-shadow:0 1px 0 rgba(22,19,11,.05)}
+.k1e .f{display:flex;align-items:center;gap:.8em;padding:.6em 0;border-bottom:1px dashed rgba(22,19,11,.14)}
+.k1e .f:last-of-type{border-bottom:0}
+.k1e .f b{font-size:.8125em;font-weight:600}
+.k1e .f .e{font-size:.8125em;color:#A39B8D}
+.k1e .opt{margin-left:auto;font-size:.625em;font-weight:600;letter-spacing:.1em;color:#74674F;border:1px solid rgba(116,103,79,.4);border-radius:999px;padding:.15em .7em}
+.k1e .drop{border:1.5px dashed rgba(22,19,11,.28);border-radius:.5em;padding:.9em;font-size:.8125em;color:#A39B8D;text-align:center;margin-top:.8em}
+.k1e .hintbox{margin-top:1.1em;font-size:.8125em;color:#5F5D5A}
+.k1e .hintbox b{color:#16130B}
+.k1e .agents{display:flex;gap:.5em;justify-content:center;flex-wrap:wrap;margin-top:1.6em}
+.k1e .agents span{font-size:.6875em;color:#5F5D5A;border:1px solid rgba(22,19,11,.14);border-radius:999px;padding:.3em .9em}
+</style>
+<div class="wrap">
+  <p class="eb">空状态 · EMPTY</p>
+  <h2>空着是正经选项，不是漏填。</h2>
+  <p class="sub">全新产品、什么稿都没有，只写文案就行。</p>
+  <div class="card">
+    <div class="f"><b>参考网址</b><span class="e">空着</span><span class="opt">选填</span></div>
+    <div class="f"><b>现在的页面</b><span class="e">空着</span><span class="opt">选填</span></div>
+    <div class="f"><b>参考图片</b><span class="e">空着</span><span class="opt">选填</span></div>
+    <div class="drop">⌘V · 截图后直接贴，不必先存成文件</div>
+  </div>
+  <p class="hintbox">空着的栏不会写进任务包。<b>文案在，就能开工。</b></p>
+  <div class="agents"><span>Claude Code</span><span>Codex</span><span>Cursor</span><span>Grok</span><span>Kimi Work</span></div>
+</div>
+</div>
+</div>
+    </div></button>
+  </section>
+  <section class="variant" data-i="1">
+    <div class="meta"><span class="num">II</span><span class="name">照量</span><span class="tag">按图直译</span></div>
+    <p class="desc">按量到的比例直译：标题 3em、浮卡内缩 6%、圆角 1.5em、墨黑实心 pill。参考什么样，就什么样。</p>
+    <button class="frame" type="button" aria-label="放大「照量」"><div class="stage">
+      <div class="screen on"><div class="k2">
+<style>
+.k2{height:100%;overflow:hidden;background:linear-gradient(180deg,#F1EBE5 0%,#F5F3E8 100%);color:#16130B;
+  font:16px/1.8 Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;display:flex;flex-direction:column}
+.k2 *{box-sizing:border-box;margin:0;padding:0}
+.k2 nav{height:72px;flex:none;display:flex;align-items:center;gap:1.8em;max-width:1140px;width:88%;margin:0 auto}
+.k2 .logo{font-weight:700;font-size:1.125em;letter-spacing:.02em}
+.k2 .logo sup{font-size:.55em;color:#74674F;margin-left:.15em}
+.k2 .lk{font-size:.875em;color:#5F5D5A;text-decoration:none}
+.k2 .lk:hover{color:#16130B}
+.k2 .cta{margin-left:auto;background:#16130B;color:#F6F6F2;font-size:.875em;font-weight:600;
+  padding:.6em 1.35em;border-radius:999px;text-decoration:none}
+.k2 header{text-align:center;padding:4em 1em 0;max-width:1140px;width:88%;margin:0 auto}
+.k2 .eb{font-size:.75em;font-weight:600;letter-spacing:.24em;color:#74674F;margin-bottom:1.4em}
+.k2 h1{font-size:3em;line-height:1.18;font-weight:700;letter-spacing:0}
+.k2 .qt{font-size:.9375em;color:#74674F;margin-top:1.1em}
+.k2 .sub{font-size:1em;color:#3E393A;max-width:56ch;margin:1.3em auto 0}
+.k2 .row{margin-top:2em;display:flex;gap:1.4em;justify-content:center;align-items:center}
+.k2 .pill{background:#16130B;color:#F6F6F2;font-weight:600;font-size:1em;padding:.75em 1.9em;border-radius:999px;text-decoration:none}
+.k2 .lnk{font-size:.9375em;color:#5F5D5A;text-decoration:underline;text-underline-offset:.25em;text-decoration-color:rgba(22,19,11,.3)}
+.k2 .mock{width:88%;max-width:1060px;margin:2.8em auto 3em;background:#F6F6F2;border-radius:1.5em;
+  padding:1.8em 2.2em 2em;box-shadow:0 1px 0 rgba(22,19,11,.05)}
+.k2 .mock .mt{font-size:.8125em;font-weight:600;color:#5F5D5A;letter-spacing:.06em;margin-bottom:1.2em}
+.k2 .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1em}
+.k2 .mini{border:1px solid rgba(22,19,11,.12);border-radius:.75em;padding:1em 1.1em;text-align:left}
+.k2 .mini b{display:block;font-size:.9375em;margin-bottom:.4em}
+.k2 .mini i{font-style:normal;font-size:.75em;color:#74674F}
+.k2 .qs{display:flex;gap:.7em;justify-content:center;margin-top:1.4em;flex-wrap:wrap}
+.k2 .qs span{font-size:.8125em;color:#3E393A;border:1px solid rgba(22,19,11,.14);border-radius:999px;padding:.4em 1.2em}
+</style>
+<nav>
+  <span class="logo">列宾<sup>®</sup></span>
+  <a class="lk" href="#">输出什么</a><a class="lk" href="#">怎么用</a><a class="lk" href="#">三个坑</a><a class="lk" href="#">FAQ</a>
+  <a class="cta" href="#">立即使用</a>
+</nav>
+<header>
+  <p class="eb">列宾 SKILL · 设计方向确认</p>
+  <h1>让大师帮你「偷」设计。</h1>
+  <p class="qt">「优秀的艺术家模仿，伟大的艺术家偷窃。」</p>
+  <p class="sub">把你想要的设计风格，先给出三个版本。你确定一版、吐槽另外两版哪里不好，它据此重新生成 DESIGN.md——你的 agent 拿着这份文件，去精准修改你的产品。</p>
+  <div class="row"><a class="pill" href="#">立即使用</a><a class="lnk" href="#">先看看三个坑</a></div>
+</header>
+<div class="mock">
+  <p class="mt">确认现场 · 三版并列，不是示意图</p>
+  <div class="cols">
+    <div class="mini"><b>照搬</b><i>I · 贴着参考走，先看合不合身</i></div>
+    <div class="mini"><b>取气</b><i>II · 味道留下，版面按自己内容重排</i></div>
+    <div class="mini"><b>反手</b><i>III · 刻意偏离，试出你的边界</i></div>
+  </div>
+  <div class="qs"><span>选哪个？</span><span>另外两个，哪里不要？</span><span>谁会在什么状态下打开它？</span></div>
+</div>
+</div>
+</div>
+      <div class="screen"><div class="k2f">
+<style>
+.k2f{height:100%;overflow:hidden;background:linear-gradient(180deg,#F1EBE5 0%,#F5F3E8 100%);color:#16130B;
+  font:16px/1.8 Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif}
+.k2f *{box-sizing:border-box;margin:0;padding:0}
+.k2f .wrap{max-width:760px;width:88%;margin:0 auto;padding:3.4em 0}
+.k2f .eb{font-size:.75em;font-weight:600;letter-spacing:.24em;color:#74674F;text-align:center}
+.k2f h2{font-size:2em;font-weight:700;text-align:center;margin:.6em 0 .35em}
+.k2f .sub{font-size:.9375em;color:#3E393A;text-align:center;margin-bottom:2.2em}
+.k2f .card{background:#F6F6F2;border-radius:1.5em;padding:1.8em 2em;box-shadow:0 1px 0 rgba(22,19,11,.05)}
+.k2f .f{margin-bottom:1.2em}
+.k2f .f:last-child{margin-bottom:0}
+.k2f label{display:flex;align-items:baseline;font-size:.875em;font-weight:600;margin-bottom:.45em}
+.k2f .opt{margin-left:auto;font-size:.6875em;font-weight:600;letter-spacing:.1em;color:#74674F;border:1px solid rgba(116,103,79,.4);border-radius:999px;padding:.2em .8em}
+.k2f .req{margin-left:auto;font-size:.6875em;font-weight:600;letter-spacing:.1em;color:#F6F6F2;background:#16130B;border-radius:999px;padding:.2em .8em}
+.k2f .in{border:1px solid rgba(22,19,11,.14);border-radius:.65em;padding:.65em .9em;font-size:.9375em;color:#3E393A;background:#FBFAF6}
+.k2f .hint{font-size:.75em;color:#5F5D5A;margin-top:.35em}
+.k2f .drop{border:1.5px dashed rgba(22,19,11,.28);border-radius:.65em;padding:.95em;font-size:.875em;color:#5F5D5A;text-align:center}
+.k2f .drop b{color:#16130B}
+.k2f .files{display:flex;gap:.6em;margin-top:.7em}
+.k2f .files span{font-size:.75em;background:#EDE8DC;border-radius:.4em;padding:.3em .8em;color:#3E393A}
+.k2f .out{margin-top:1.5em;background:#F6F6F2;border-radius:1.5em;padding:1.5em 2em;box-shadow:0 1px 0 rgba(22,19,11,.05)}
+.k2f .out .ot{font-size:.8125em;font-weight:600;letter-spacing:.06em;color:#5F5D5A;margin-bottom:.7em}
+.k2f .mono{font-size:.875em;line-height:1.75;color:#16130B;border-left:2px solid #74674F;padding-left:1.1em}
+.k2f .copyrow{margin-top:1.1em;display:flex;align-items:center;gap:1.1em}
+.k2f .pill{background:#16130B;color:#F6F6F2;font-weight:600;font-size:.9375em;padding:.7em 1.7em;border-radius:999px;text-decoration:none}
+.k2f .note{font-size:.75em;color:#5F5D5A}
+</style>
+<div class="wrap">
+  <p class="eb">任务包 · BRIEF</p>
+  <h2>装一次，之后每次只做一件事</h2>
+  <p class="sub">把你手上有的填进这张表，复制成一段话，粘给你的 agent。</p>
+  <div class="card">
+    <div class="f">
+      <label>参考网址<span class="opt">选填 · 我想做成那样</span></label>
+      <div class="in">https://（空着）</div>
+      <p class="hint">图多的时候改成下载 zip。</p>
+    </div>
+    <div class="f">
+      <label>现在的页面<span class="opt">选填 · 我已经有一版了</span></label>
+      <div class="in">https://liebin-skills.pages.dev</div>
+    </div>
+    <div class="f">
+      <label>要设计的是什么<span class="req">必填 · 真实文案</span></label>
+      <div class="in">列宾落地页重设计。参考是三张暖纸奶油底 AI 产品站截图：墨黑大字、悬浮白卡、实心黑 pill 按钮、零彩色。</div>
+    </div>
+    <div class="f">
+      <label>参考图片<span class="opt">选填 · 我想做成那样</span></label>
+      <div class="drop"><b>⌘V 直接贴</b> · 拖进来 · 或点击选择，整页都能粘</div>
+      <div class="files"><span>shot-1.png</span><span>shot-2.png</span><span>shot-3.png</span></div>
+    </div>
+  </div>
+  <div class="out">
+    <p class="ot">一段话 · 装上 ＋ 提示词 ＋ 任务包</p>
+    <p class="mono">读一下 liebin 的 SKILL.md，按它走一遍我贴在下面的任务包：先给我三版样张，别直接写代码。我选完之后，把我的原话写进 DESIGN.md。</p>
+    <div class="copyrow"><a class="pill" href="#">复制任务包</a><span class="note">空着的栏不会写进任务包</span></div>
+  </div>
+</div>
+</div>
+</div>
+      <div class="screen"><div class="k2e">
+<style>
+.k2e{height:100%;overflow:hidden;background:linear-gradient(180deg,#F1EBE5 0%,#F5F3E8 100%);color:#16130B;
+  font:16px/1.8 Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;display:flex;flex-direction:column}
+.k2e *{box-sizing:border-box;margin:0;padding:0}
+.k2e .wrap{max-width:680px;width:88%;margin:auto;padding:2em 0;text-align:center}
+.k2e .eb{font-size:.75em;font-weight:600;letter-spacing:.24em;color:#74674F}
+.k2e h2{font-size:2em;font-weight:700;line-height:1.3;margin:.7em 0 .45em}
+.k2e .sub{font-size:.9375em;color:#3E393A;margin-bottom:2.2em}
+.k2e .card{background:#F6F6F2;border-radius:1.5em;padding:1.6em 2em;text-align:left;box-shadow:0 1px 0 rgba(22,19,11,.05)}
+.k2e .f{display:flex;align-items:center;gap:1em;padding:.75em 0;border-bottom:1px dashed rgba(22,19,11,.14)}
+.k2e .f:last-of-type{border-bottom:0}
+.k2e .f b{font-size:.875em;font-weight:600}
+.k2e .f .e{font-size:.875em;color:#A39B8D}
+.k2e .opt{margin-left:auto;font-size:.6875em;font-weight:600;letter-spacing:.1em;color:#74674F;border:1px solid rgba(116,103,79,.4);border-radius:999px;padding:.2em .8em}
+.k2e .drop{border:1.5px dashed rgba(22,19,11,.28);border-radius:.65em;padding:1.1em;font-size:.875em;color:#A39B8D;text-align:center;margin-top:1em}
+.k2e .hintbox{margin-top:1.4em;font-size:.875em;color:#5F5D5A}
+.k2e .hintbox b{color:#16130B}
+.k2e .agents{display:flex;gap:.6em;justify-content:center;flex-wrap:wrap;margin-top:2em}
+.k2e .agents span{font-size:.75em;color:#5F5D5A;border:1px solid rgba(22,19,11,.14);border-radius:999px;padding:.35em 1em}
+</style>
+<div class="wrap">
+  <p class="eb">空状态 · EMPTY</p>
+  <h2>空着是正经选项，不是漏填。</h2>
+  <p class="sub">全新产品、什么稿都没有，只写文案就行。</p>
+  <div class="card">
+    <div class="f"><b>参考网址</b><span class="e">空着</span><span class="opt">选填</span></div>
+    <div class="f"><b>现在的页面</b><span class="e">空着</span><span class="opt">选填</span></div>
+    <div class="f"><b>参考图片</b><span class="e">空着</span><span class="opt">选填</span></div>
+    <div class="drop">⌘V · 截图后直接贴，不必先存成文件</div>
+  </div>
+  <p class="hintbox">空着的栏不会写进任务包。<b>文案在，就能开工。</b></p>
+  <div class="agents"><span>Claude Code</span><span>Codex</span><span>Cursor</span><span>Grok</span><span>Kimi Work</span></div>
+</div>
+</div>
+</div>
+    </div></button>
+  </section>
+  <section class="variant" data-i="2">
+    <div class="meta"><span class="num">III</span><span class="name">破框</span><span class="tag">舒展＋拿掉浮卡</span></div>
+    <p class="desc">故意偏离：参考里最显眼的悬浮白卡整个拿掉——纸底直通、发丝线分隔、左对齐、留白拉到 7em。那个卡是不是你要的，看这一版的反应就知道。</p>
+    <button class="frame" type="button" aria-label="放大「破框」"><div class="stage">
+      <div class="screen on"><div class="k3">
+<style>
+.k3{height:100%;overflow:hidden;background:#F1EBE5;color:#16130B;
+  font:16px/1.9 Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;display:flex;flex-direction:column}
+.k3 *{box-sizing:border-box;margin:0;padding:0}
+.k3 nav{flex:none;display:flex;align-items:baseline;gap:2em;max-width:1040px;width:86%;margin:0 auto;
+  padding:1.6em 0 1.2em;border-bottom:1px solid rgba(22,19,11,.16)}
+.k3 .logo{font-weight:700;font-size:1.06em}
+.k3 .logo sup{font-size:.55em;color:#74674F;margin-left:.15em}
+.k3 .lk{font-size:.875em;color:#5F5D5A;text-decoration:none}
+.k3 .lk:hover{color:#16130B}
+.k3 .go{margin-left:auto;font-size:.875em;font-weight:600;color:#16130B;text-decoration:underline;
+  text-underline-offset:.3em;text-decoration-thickness:1px}
+.k3 header{max-width:1040px;width:86%;margin:0 auto;padding:5em 0 0}
+.k3 .eb{font-size:.75em;font-weight:600;letter-spacing:.26em;color:#74674F;margin-bottom:1.8em}
+.k3 h1{font-size:3.75em;line-height:1.14;font-weight:700;letter-spacing:0;max-width:12ch}
+.k3 .qt{font-size:1em;color:#74674F;margin-top:1.6em}
+.k3 .sub{font-size:1em;color:#3E393A;max-width:52ch;margin-top:1.2em}
+.k3 .row{margin-top:2.2em;display:flex;gap:1.6em;align-items:center}
+.k3 .pill{background:#16130B;color:#F6F6F2;font-weight:600;font-size:.9375em;padding:.7em 1.7em;border-radius:999px;text-decoration:none}
+.k3 .lnk{font-size:.9375em;color:#5F5D5A;text-decoration:underline;text-underline-offset:.25em;text-decoration-color:rgba(22,19,11,.3)}
+.k3 .strip{max-width:1040px;width:86%;margin:auto auto 3.2em;padding-top:1.8em;border-top:1px solid rgba(22,19,11,.16);
+  display:grid;grid-template-columns:repeat(3,1fr);gap:2em}
+.k3 .strip .n{font-size:.75em;color:#74674F;letter-spacing:.14em;margin-bottom:.5em}
+.k3 .strip b{display:block;font-size:1.06em;margin-bottom:.3em}
+.k3 .strip p{font-size:.8125em;color:#5F5D5A;line-height:1.75}
+.k3 .qline{max-width:1040px;width:86%;margin:0 auto 2.6em;font-size:.8125em;color:#5F5D5A}
+.k3 .qline b{color:#16130B;font-weight:600}
+</style>
+<nav>
+  <span class="logo">列宾<sup>®</sup></span>
+  <a class="lk" href="#">输出什么</a><a class="lk" href="#">怎么用</a><a class="lk" href="#">三个坑</a><a class="lk" href="#">FAQ</a>
+  <a class="go" href="#">立即使用 →</a>
+</nav>
+<header>
+  <p class="eb">列宾 SKILL · 设计方向确认</p>
+  <h1>让大师帮你「偷」设计。</h1>
+  <p class="qt">「优秀的艺术家模仿，伟大的艺术家偷窃。」</p>
+  <p class="sub">把你想要的设计风格，先给出三个版本。你确定一版、吐槽另外两版哪里不好，它据此重新生成 DESIGN.md——你的 agent 拿着这份文件，去精准修改你的产品。</p>
+  <div class="row"><a class="pill" href="#">立即使用</a><a class="lnk" href="#">先看看三个坑</a></div>
+</header>
+<div style="flex:1"></div>
+<div class="strip">
+  <div><p class="n">01 · 照搬</p><b>贴着参考走</b><p>结构、密度、节奏都照搬，先看「就照这个做」合不合身。</p></div>
+  <div><p class="n">02 · 取气</p><b>只取气质</b><p>味道留下，版面按你自己的内容重新组织。</p></div>
+  <div><p class="n">03 · 反手</p><b>刻意偏离</b><p>参考怎么做它偏不那么做，用来试出你的边界。</p></div>
+</div>
+<p class="qline">看完只问三句：<b>选哪个？另外两个，哪里不要？谁会在什么状态下打开它？</b></p>
+</div>
+</div>
+      <div class="screen"><div class="k3f">
+<style>
+.k3f{height:100%;overflow:hidden;background:#F1EBE5;color:#16130B;
+  font:16px/1.9 Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif}
+.k3f *{box-sizing:border-box;margin:0;padding:0}
+.k3f .wrap{max-width:860px;width:86%;margin:0 auto;padding:4em 0}
+.k3f .eb{font-size:.75em;font-weight:600;letter-spacing:.26em;color:#74674F}
+.k3f h2{font-size:2.25em;font-weight:700;line-height:1.25;margin:.5em 0 .3em;max-width:16ch}
+.k3f .sub{font-size:.9375em;color:#3E393A;margin-bottom:2.4em}
+.k3f .f{display:grid;grid-template-columns:11em 1fr;gap:2em;padding:1.3em 0;border-top:1px solid rgba(22,19,11,.16)}
+.k3f .f .lb{font-size:.9375em;font-weight:600}
+.k3f .f .lb i{display:block;font-style:normal;font-size:.75em;font-weight:400;color:#74674F;margin-top:.2em}
+.k3f .bd{font-size:.9375em;color:#3E393A}
+.k3f .bd .dim{color:#8A8378}
+.k3f .chips{display:flex;gap:.6em;margin-top:.6em}
+.k3f .chips span{font-size:.75em;border-bottom:1px solid rgba(22,19,11,.25);padding-bottom:.1em;color:#3E393A}
+.k3f .out{margin-top:2.6em;padding-top:1.8em;border-top:1px solid rgba(22,19,11,.16)}
+.k3f .ot{font-size:.75em;font-weight:600;letter-spacing:.14em;color:#74674F;margin-bottom:.8em}
+.k3f .mono{font-size:.9375em;line-height:1.85;color:#16130B;max-width:56ch}
+.k3f .copyrow{margin-top:1.4em;display:flex;align-items:center;gap:1.4em}
+.k3f .pill{background:#16130B;color:#F6F6F2;font-weight:600;font-size:.9375em;padding:.7em 1.7em;border-radius:999px;text-decoration:none}
+.k3f .note{font-size:.8125em;color:#5F5D5A}
+</style>
+<div class="wrap">
+  <p class="eb">任务包 · BRIEF</p>
+  <h2>装一次，之后每次只做一件事</h2>
+  <p class="sub">把你手上有的填进这张表，复制成一段话，粘给你的 agent。</p>
+  <div class="f">
+    <p class="lb">01 · 参考网址<i>选填 · 我想做成那样</i></p>
+    <p class="bd"><span class="dim">https://（空着）——图多的时候改成下载 zip。</span></p>
+  </div>
+  <div class="f">
+    <p class="lb">02 · 现在的页面<i>选填 · 我已经有一版了</i></p>
+    <p class="bd">https://liebin-skills.pages.dev</p>
+  </div>
+  <div class="f">
+    <p class="lb">03 · 要设计的是什么<i>必填 · 真实文案</i></p>
+    <p class="bd">列宾落地页重设计。参考是三张暖纸奶油底 AI 产品站截图：墨黑大字、悬浮白卡、实心黑 pill 按钮、零彩色。</p>
+  </div>
+  <div class="f">
+    <p class="lb">04 · 参考图片<i>选填 · 我想做成那样</i></p>
+    <div class="bd"><span class="dim">⌘V 直接贴 · 拖进来 · 整页都能粘</span>
+      <div class="chips"><span>shot-1.png</span><span>shot-2.png</span><span>shot-3.png</span></div>
+    </div>
+  </div>
+  <div class="out">
+    <p class="ot">一段话 · 装上 ＋ 提示词 ＋ 任务包</p>
+    <p class="mono">读一下 liebin 的 SKILL.md，按它走一遍我贴在下面的任务包：先给我三版样张，别直接写代码。我选完之后，把我的原话写进 DESIGN.md。</p>
+    <div class="copyrow"><a class="pill" href="#">复制任务包</a><span class="note">空着的栏不会写进任务包</span></div>
+  </div>
+</div>
+</div>
+</div>
+      <div class="screen"><div class="k3e">
+<style>
+.k3e{height:100%;overflow:hidden;background:#F1EBE5;color:#16130B;
+  font:16px/1.9 Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;display:flex;flex-direction:column}
+.k3e *{box-sizing:border-box;margin:0;padding:0}
+.k3e .wrap{max-width:860px;width:86%;margin:auto;padding:3em 0}
+.k3e .eb{font-size:.75em;font-weight:600;letter-spacing:.26em;color:#74674F}
+.k3e h2{font-size:3.75em;font-weight:700;line-height:1.16;max-width:14ch;margin:.5em 0 .4em}
+.k3e .sub{font-size:1em;color:#3E393A;max-width:44ch;margin-bottom:2.6em}
+.k3e .rows{border-top:1px solid rgba(22,19,11,.16)}
+.k3e .f{display:grid;grid-template-columns:11em 1fr auto;gap:2em;align-items:baseline;
+  padding:1.1em 0;border-bottom:1px solid rgba(22,19,11,.16)}
+.k3e .f b{font-size:.9375em;font-weight:600}
+.k3e .f .e{font-size:.9375em;color:#A39B8D}
+.k3e .f .opt{font-size:.75em;font-weight:600;letter-spacing:.12em;color:#74674F}
+.k3e .paste{padding:1.1em 0;border-bottom:1px solid rgba(22,19,11,.16);font-size:.9375em;color:#A39B8D}
+.k3e .hintbox{margin-top:2em;font-size:1.06em;color:#5F5D5A}
+.k3e .hintbox b{color:#16130B}
+.k3e .agents{margin-top:3em;padding-top:1.4em;border-top:1px solid rgba(22,19,11,.16);
+  display:flex;gap:2em;flex-wrap:wrap}
+.k3e .agents span{font-size:.8125em;color:#5F5D5A}
+</style>
+<div class="wrap">
+  <p class="eb">空状态 · EMPTY</p>
+  <h2>空着是正经选项，不是漏填。</h2>
+  <p class="sub">全新产品、什么稿都没有，只写文案就行。</p>
+  <div class="rows">
+    <div class="f"><b>参考网址</b><span class="e">空着</span><span class="opt">选填</span></div>
+    <div class="f"><b>现在的页面</b><span class="e">空着</span><span class="opt">选填</span></div>
+    <div class="f"><b>参考图片</b><span class="e">空着</span><span class="opt">选填</span></div>
+    <div class="paste">⌘V · 截图后直接贴，不必先存成文件</div>
+  </div>
+  <p class="hintbox">空着的栏不会写进任务包。<b>文案在，就能开工。</b></p>
+  <div class="agents"><span>Claude Code</span><span>Codex</span><span>Cursor</span><span>Grok</span><span>Kimi Work</span></div>
+</div>
+</div>
+</div>
+    </div></button>
+  </section>
+</div>
+
+<section class="confirm">
+  <h2>三个问题</h2>
+  <p class="sub">填完点按钮，内容会复制到剪贴板，贴回对话里就行。第 2 问最重要——你骂出来的原话会一字不改地进 DESIGN.md 的 Don'ts。</p>
+  <div class="q">
+    <label for="pick">1 · 选哪个？</label>
+    <select id="pick">
+      <option value="">— 请选择 —</option>
+      <option>贴紧（紧凑解读）</option>
+      <option>照量（按图直译）</option>
+      <option>破框（舒展＋拿掉浮卡）</option>
+      <option>三个都不要</option>
+    </select>
+  </div>
+  <div class="q">
+    <label for="reject">2 · 另外两个，哪里不要？</label>
+    <p class="why">说得越具体越好，用你自己的话，别帮我润色。「这个圆角太软了」「字太挤」「这个蓝太商务」——这种话才有约束力。</p>
+    <textarea id="reject" placeholder="例：「照量」的圆角太软，看着像儿童产品；「破框」留白太多，滑半天看不到重点。"></textarea>
+  </div>
+  <div class="q">
+    <label for="context">3 · 你的用户，在什么状态下打开这个产品？</label>
+    <p class="why">不是问画面，是问人——什么时间、什么心情、单手还是双手、周围有没有人。这一问会推翻一半「好看」的选择。</p>
+    <textarea id="context" placeholder="例：多半是深夜躺床上，一只手拿手机，另一只手空不出来，情绪偏焦虑。"></textarea>
+  </div>
+  <button class="copy" id="copyBtn" type="button">复制我的选择</button><span class="tip" id="tip"></span>
+  <pre id="fallback" hidden></pre>
+</section>
+</div>
+<script>
+(function(){
+  var stages=[].slice.call(document.querySelectorAll('.stage')), grid=document.getElementById('grid');
+  function fit(){stages.forEach(function(st){st.style.transform='scale('+(st.parentElement.clientWidth/1280)+')';});}
+  window.addEventListener('resize',fit);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+  fit();
+  var tabs=[].slice.call(document.querySelectorAll('.screens button'));
+  tabs.forEach(function(b){b.addEventListener('click',function(){
+    tabs.forEach(function(x){x.setAttribute('aria-selected',String(x===b));});
+    var i=+b.dataset.s;
+    stages.forEach(function(st){[].slice.call(st.children).forEach(function(sc,j){sc.classList.toggle('on',i===j);});});
+  });});
+  var vs=[].slice.call(document.querySelectorAll('.variant'));
+  vs.forEach(function(v){v.querySelector('.frame').addEventListener('click',function(){
+    var solo=grid.classList.contains('solo')&&!v.classList.contains('off');
+    if(solo){grid.classList.remove('solo');vs.forEach(function(x){x.classList.remove('off');});}
+    else{grid.classList.add('solo');vs.forEach(function(x){x.classList.toggle('off',x!==v);});}
+    fit();
+  });});
+  document.getElementById('copyBtn').addEventListener('click',function(){
+    var t='【列宾 · 设计方向确认】\n'
+      +'1 选择：'+(document.getElementById('pick').value||'（未选）')+'\n'
+      +'2 否决理由（原话）：'+(document.getElementById('reject').value||'（空）')+'\n'
+      +'3 使用场景：'+(document.getElementById('context').value||'（空）');
+    var tip=document.getElementById('tip'),fb=document.getElementById('fallback');
+    function manual(){tip.textContent='复制失败，请手动选中下面这段：';fb.textContent=t;fb.hidden=false;}
+    if(navigator.clipboard&&navigator.clipboard.writeText)
+      navigator.clipboard.writeText(t).then(function(){tip.textContent='已复制，贴回对话里即可';fb.hidden=true;},manual);
+    else manual();
+  });
+})();
+</script>
+</body>
+</html>
