@@ -87,6 +87,15 @@ variants.forEach((v) => {
   if (!v.desc) warn.push(`变体「${v.name}」没写 desc（它在轴上的位置，一句话）`);
 });
 
+/* 三版是不是在比同一份内容 —— 不拦，但要说 */
+const plain = (s) => s
+  .replace(/<(style|script|svg)[\s\S]*?<\/\1>/gi, " ")
+  .replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+const sameCopy = screens.every((_, s) => cells.every((col) => plain(col[s]) === plain(cells[0][s])));
+if (!sameCopy) warn.push(
+  "三版的可见文案不完全相同——那比的就不只是形式了。有意增删就在 desc 里写清楚，不是就把文案对齐。"
+);
+
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const W = cfg.stage?.w ?? 1280, H = cfg.stage?.h ?? 880;
 const ROMAN = ["I", "II", "III"];
@@ -119,19 +128,16 @@ body{margin:0;background:var(--bg);color:var(--ink);line-height:1.75;
 h1{font-size:clamp(18px,2vw,23px);line-height:1.45;margin:0 0 10px;font-weight:600;letter-spacing:0;text-wrap:balance}
 .axis{font-size:14px;line-height:1.8;color:var(--ink-soft);margin:0;max-width:88ch}
 .axis b{color:var(--ink)}
-.bar{display:flex;flex-wrap:wrap;gap:20px;align-items:center;margin-top:16px}
-.screens{display:flex;gap:7px;flex-wrap:wrap}
-.screens button{font:inherit;font-size:13px;padding:7px 17px;border:1px solid var(--hair2);background:transparent;
-  color:var(--muted);border-radius:999px;cursor:pointer;transition:.15s}
-.screens button:hover{color:var(--ink)}
-.screens button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.hint{font-size:12.5px;color:var(--muted);margin:0}
+.hint{font-size:12.5px;color:var(--muted);margin:14px 0 0;line-height:1.8;max-width:88ch}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:22px 0 8px}
-.grid.solo{grid-template-columns:minmax(0,1fr)}
-.grid.solo .variant.off{display:none}
-.grid.solo .frame,.grid.solo .meta,.grid.solo .desc{max-width:${W}px;margin-left:auto;margin-right:auto}
-.variant{min-width:0}
+.board{display:grid;grid-template-columns:74px repeat(3,minmax(0,1fr));gap:13px 18px;
+  align-items:start;padding:22px 0 8px}
+.board.solo{grid-template-columns:minmax(0,1fr);max-width:${W}px}
+.board.solo>:not(.pick){display:none}
+.rowlab{font-size:11.5px;font-weight:600;letter-spacing:.1em;color:var(--muted);padding-top:3px;line-height:1.6}
+.vhead,.cell{min-width:0;margin:0}
+.cap{font-size:12.5px;color:var(--muted);margin:9px 0 0}
+.board:not(.solo) .cap{display:none}
 .meta{display:flex;align-items:baseline;gap:9px;padding-bottom:9px;border-bottom:1px solid var(--hair2)}
 .meta .num{font-size:17px;color:var(--gold);font-style:italic}
 .meta .name{font-weight:700;font-size:17px}
@@ -140,14 +146,13 @@ h1{font-size:clamp(18px,2vw,23px);line-height:1.45;margin:0 0 10px;font-weight:6
 .frame{position:relative;aspect-ratio:var(--stage-ar);border:1px solid var(--hair2);border-radius:6px;overflow:hidden;
   background:#fff;cursor:zoom-in;display:block;width:100%;padding:0;margin:0;font:inherit;text-align:left;color:inherit;
   -webkit-appearance:none;appearance:none}
-.grid.solo .frame{cursor:zoom-out}
+.board.solo .frame{cursor:zoom-out}
 .frame::after{content:"点开放大";position:absolute;right:8px;bottom:8px;z-index:5;font-size:10px;letter-spacing:.1em;
   padding:3px 9px;border-radius:999px;background:rgba(30,27,18,.62);color:#F6F1E4;opacity:0;transition:opacity .16s}
 .frame:hover::after{opacity:1}
-.grid.solo .frame::after{content:"收起"}
+.board.solo .frame::after{content:"收起"}
 .stage{width:var(--stage-w);height:var(--stage-h);transform-origin:0 0;position:absolute;top:0;left:0}
-.stage>.screen{display:none;width:100%;height:100%;position:relative;overflow:hidden}
-.stage>.screen.on{display:block}
+.stage>.screen{width:100%;height:100%;position:relative;overflow:hidden}
 .confirm{border-top:1px solid var(--hair);margin-top:34px;padding:34px 0 90px;max-width:800px}
 .confirm h2{font-size:19px;margin:0 0 6px}
 .confirm .sub{font-size:13.5px;color:var(--muted);margin:0 0 26px;line-height:1.8}
@@ -162,7 +167,8 @@ h1{font-size:clamp(18px,2vw,23px);line-height:1.45;margin:0 0 10px;font-weight:6
 .tip{font-size:13px;color:var(--muted);margin-left:12px}
 #fallback{white-space:pre-wrap;font-size:12.5px;background:var(--surface);border:1px solid var(--hair);
   border-radius:7px;padding:14px;margin-top:14px;overflow-x:auto}
-@media(max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}.desc{min-height:0}}
+@media(max-width:900px){.board{grid-template-columns:minmax(0,1fr)}.rowlab{display:none}
+  .desc{min-height:0}.board:not(.solo) .cap{display:block}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -172,23 +178,22 @@ h1{font-size:clamp(18px,2vw,23px);line-height:1.45;margin:0 0 10px;font-weight:6
   <p class="eyebrow">${esc(product)} · 设计方向确认</p>
   <h1>三版并列，请选一版，并说清另外两版哪里不要。</h1>
   <p class="axis">三版沿同一条轴排开：<b>${esc(axis.name)}</b>。${esc(axis.why)}
-  三版只差在这一条轴上，文案完全相同，全部是真实文案。</p>
-  <div class="bar">
-    <div class="screens" role="tablist" aria-label="切换屏">
-${screens.map((s, i) => `      <button type="button" role="tab" aria-selected="${i === 0}" data-s="${i}">${esc(s)}</button>`).join("\n")}
-    </div>
-    <p class="hint">点任意一张放大到整宽读细节，再点一次收起。</p>
-  </div>
+  ${sameCopy ? "三版只差在这一条轴上，文案完全相同，全部是真实文案。" : "文案是真实文案，但三版并不完全一致——差在哪，看每版下面那句说明。"}</p>
+  <p class="hint">九屏全在这一页上，不用切换：<b>横着看</b>三版在同一屏上的差别，<b>竖着看</b>一版从首屏到空状态撑不撑得住。
+  点任意一张放大到整宽读细节，再点一次收起。</p>
 </header>
 
-<div class="grid" id="grid">
-${variants.map((v, i) => `  <section class="variant" data-i="${i}">
+<div class="board" id="board">
+  <div class="rowlab"></div>
+${variants.map((v, i) => `  <div class="vhead">
     <div class="meta"><span class="num">${ROMAN[i]}</span><span class="name">${esc(v.name)}</span><span class="tag">${esc(v.tag ?? "")}</span></div>
     <p class="desc">${esc(v.desc ?? "")}</p>
-    <button class="frame" type="button" aria-label="放大「${esc(v.name)}」"><div class="stage">
-${cells[i].map((c, j) => `      <div class="screen${j === 0 ? " on" : ""}">${c}</div>`).join("\n")}
-    </div></button>
-  </section>`).join("\n")}
+  </div>`).join("\n")}
+${screens.map((sc, j) => `  <div class="rowlab">${esc(sc)}</div>
+${variants.map((v, i) => `  <figure class="cell">
+    <button class="frame" type="button" aria-label="放大「${esc(v.name)}」的${esc(sc)}"><div class="stage"><div class="screen">${cells[i][j]}</div></div></button>
+    <figcaption class="cap">${ROMAN[i]} ${esc(v.name)} · ${esc(sc)}</figcaption>
+  </figure>`).join("\n")}`).join("\n")}
 </div>
 
 <section class="confirm">
@@ -218,23 +223,20 @@ ${variants.map((v) => `      <option>${esc(v.name)}（${esc(v.tag ?? "")}）</op
 </div>
 <script>
 (function(){
-  var stages=[].slice.call(document.querySelectorAll('.stage')), grid=document.getElementById('grid');
-  function fit(){stages.forEach(function(st){st.style.transform='scale('+(st.parentElement.clientWidth/${W})+')';});}
+  var stages=[].slice.call(document.querySelectorAll('.stage')), board=document.getElementById('board');
+  function fit(){stages.forEach(function(st){var w=st.parentElement.clientWidth;
+    if(w)st.style.transform='scale('+(w/${W})+')';});}
   window.addEventListener('resize',fit);
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
   fit();
-  var tabs=[].slice.call(document.querySelectorAll('.screens button'));
-  tabs.forEach(function(b){b.addEventListener('click',function(){
-    tabs.forEach(function(x){x.setAttribute('aria-selected',String(x===b));});
-    var i=+b.dataset.s;
-    stages.forEach(function(st){[].slice.call(st.children).forEach(function(sc,j){sc.classList.toggle('on',i===j);});});
-  });});
-  var vs=[].slice.call(document.querySelectorAll('.variant'));
-  vs.forEach(function(v){v.querySelector('.frame').addEventListener('click',function(){
-    var solo=grid.classList.contains('solo')&&!v.classList.contains('off');
-    if(solo){grid.classList.remove('solo');vs.forEach(function(x){x.classList.remove('off');});}
-    else{grid.classList.add('solo');vs.forEach(function(x){x.classList.toggle('off',x!==v);});}
+  var cells=[].slice.call(document.querySelectorAll('.cell'));
+  cells.forEach(function(c){c.querySelector('.frame').addEventListener('click',function(){
+    var was=c.classList.contains('pick');
+    cells.forEach(function(x){x.classList.remove('pick');});
+    board.classList.toggle('solo',!was);
+    if(!was)c.classList.add('pick');
     fit();
+    if(!was)c.scrollIntoView({block:'nearest'});
   });});
   document.getElementById('copyBtn').addEventListener('click',function(){
     var t='【列宾 · 设计方向确认】\\n'
