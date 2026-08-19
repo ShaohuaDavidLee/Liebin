@@ -11,7 +11,6 @@
 
 [![列宾落地页首屏](assets/readme-hero.jpg)](https://liebin.caojuege.com)
 
-一个 Claude Code / Claude Skill：在动手写页面之前，先把设计方向做成三张能被否决的样张。
 
 ---
 
