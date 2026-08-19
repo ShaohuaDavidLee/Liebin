@@ -138,17 +138,22 @@ const findChrome = () => {
 };
 
 const measureFit = (exe) => {
+  /* 探针里去掉外链样式表：受限网络下那个请求既不成也不断，load 事件永远不来，
+     整个量测就挂在那儿。字体退回本地栈，行高会有零点几像素出入，但比量不到强得多。 */
+  const noWebfont = (h) => h.replace(/<link\b[^>]*rel=["']?stylesheet[^>]*>/gi, "");
   const boxes = [];
   for (let v = 0; v < 3; v++) for (let s = 0; s < 3; s++)
-    boxes.push(`<div class="__w" data-k="${v}.${s}">${cells[v][s]}</div>`);
+    boxes.push(`<div class="__w" data-k="${v}.${s}">${noWebfont(cells[v][s])}</div>`);
   const probe = `<!DOCTYPE html><meta charset="utf-8">
 <style>.__w{width:${W}px;height:${H}px;position:relative;overflow:visible;margin:0 0 60px}</style>
 ${boxes.join("\n")}
-<script>window.addEventListener('load',function(){var o=[];
+<script>function __m(){var o=[];
 document.querySelectorAll('.__w').forEach(function(w){var t=w.getBoundingClientRect().top,m=0;
 w.querySelectorAll('*').forEach(function(n){var r=n.getBoundingClientRect();
 if(r.width||r.height){var b=r.bottom-t;if(b>m)m=b;}});o.push(w.dataset.k+':'+Math.round(m));});
-var p=document.createElement('pre');p.id='__M';p.textContent=o.join(' ');document.body.appendChild(p);});<\/script>`;
+var p=document.createElement('pre');p.id='__M';p.textContent=o.join(' ');document.body.appendChild(p);}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){requestAnimationFrame(__m);});
+else requestAnimationFrame(__m);<\/script>`;
   const tmp = join(tmpdir(), `liebin-fit-${process.pid}.html`);
   writeFileSync(tmp, probe, "utf8");
   const r = spawnSync(exe, ["--headless=new", "--no-sandbox", "--disable-gpu",
