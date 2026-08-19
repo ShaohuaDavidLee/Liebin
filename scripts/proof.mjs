@@ -91,9 +91,18 @@ variants.forEach((v) => {
 const plain = (s) => s
   .replace(/<(style|script|svg)[\s\S]*?<\/\1>/gi, " ")
   .replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-const sameCopy = screens.every((_, s) => cells.every((col) => plain(col[s]) === plain(cells[0][s])));
+/* 逐字相同太严了——「取其神」本来就允许重排。看的是重合度，低到一半就是在比两件不同的东西 */
+const overlap = (a, b) => {
+  const A = new Set(plain(a).split(/[\s，。、·|—]+/).filter(Boolean));
+  const B = new Set(plain(b).split(/[\s，。、·|—]+/).filter(Boolean));
+  const hit = [...A].filter((w) => B.has(w)).length;
+  return A.size + B.size ? (2 * hit) / (A.size + B.size) : 1;
+};
+const worst = Math.min(...screens.map((_, s) => Math.min(...cells.map((col) => overlap(col[s], cells[0][s])))));
+const sameCopy = worst >= 0.7;
 if (!sameCopy) warn.push(
-  "三版的可见文案不完全相同——那比的就不只是形式了。有意增删就在 desc 里写清楚，不是就把文案对齐。"
+  `三版的文案重合度只有 ${(worst * 100).toFixed(0)}%——那比的就不只是形式了。` +
+  "有意增删就在 desc 里写清楚，不是就把文案对齐。"
 );
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
