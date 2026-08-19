@@ -99,16 +99,29 @@ python3 -c "import yaml,sys;yaml.safe_load(open('DESIGN.md').read().split('---')
 
 规范默认拉丁文。中文必须在 Typography 段补这几项，否则 agent 生成的中文页面必然失调：
 
+`typography` 只认七个属性——`fontFamily / fontSize / fontWeight / lineHeight / letterSpacing / fontFeature / fontVariation`。
+中文那几项没有对应的字段，硬塞成 `cjk: { font_stack, heading_tracking, latin_gap, … }` 会**每条属性报一个 warning**（实测六条全中）。
+按规范的分工来：锁得住的落进 token，锁不住的写进正文——和渐变、`clamp()` 是同一个处理方式。
+
 ```yaml
 typography:
-  cjk:
-    font_stack: '"Source Han Serif SC", "Noto Serif SC", "Songti SC", serif'
-    heading_tracking: 0em          # 中文标题不用负字距，最多 -0.01em
-    body_line_height: 1.8          # 中文正文 1.7–1.9，不是拉丁文的 1.4–1.6
-    weight_map: { light: 300, regular: 400, bold: 700 }  # 中文字体多数只有 3-5 档，别设 500
-    latin_gap: 0.25em              # 中西文混排间隙
-    punctuation: compress          # 标点挤压
+  cjk-heading:
+    fontFamily: '"Source Han Serif SC", "Noto Serif SC", "Songti SC", serif'
+    fontWeight: 700
+    lineHeight: 1.25
+    letterSpacing: 0em     # 中文标题不用负字距，最多 -0.01em
+  cjk-body:
+    fontFamily: '"Source Han Sans SC", "Noto Sans SC", sans-serif'
+    fontWeight: 400
+    fontSize: 1rem
+    lineHeight: 1.8        # 中文正文 1.7–1.9，不是拉丁文的 1.4–1.6
 ```
+
+剩下三样 schema 锁不住，写进 Typography 那一节的正文，一句话一条：
+
+- **字重档位**：中文字体多数只有 3–5 档（300 / 400 / 700），别设 500——落地时会被合成成假粗体
+- **中西文混排间隙**：0.25em
+- **标点挤压**：开
 
 **迁移拉丁文 spec 时最容易翻车的一条**：负字距。拉丁文大标题常用 `-0.03em` 制造高级感，中文方块字之间本来就没有多余空间，负字距会直接把字挤连。
 

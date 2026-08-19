@@ -80,6 +80,16 @@ function check(name, ok, detail) {
 }
 
 {
+  const dir = mkdtempSync(join(tmpdir(), "liebin-proof-mention-"));
+  writeProof(dir, { cells: {
+    "v1s1.html": "<h1>列宾</h1><p>别写占位文字，也不许 Lorem ipsum —— 真实文案才会暴露问题</p>",
+  } });
+  const r = run(dir);
+  check("在「讲」占位文字不算犯规", r.status === 0 && existsSync(join(dir, "out.html")));
+  rmSync(dir, { recursive: true });
+}
+
+{
   const dir = mkdtempSync(join(tmpdir(), "liebin-proof-missing-"));
   writeProof(dir, { skip: ["v3s2.html"] });
   const r = run(dir);

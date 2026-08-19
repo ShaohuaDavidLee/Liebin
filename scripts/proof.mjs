@@ -56,7 +56,14 @@ const PLACEHOLDER = [
   [/xxx+/i, "xxx"],
   [/待补充|待填|请替换/, "「待补充 / 待填 / 请替换」"],
 ];
+/* 「在用占位文字」和「在讲占位文字」是两回事。产品文案里写着「别写占位文字」的，
+   守卫照样命中——真发生过，用户只好把自己的真文案删掉。命中处周围有否定或引号，就放过。 */
+const MENTION = /[别不勿]|避免|禁止|杜绝|拒绝|警惕|拦|查出|例如|比如|所谓|[「」『』"'"'']/;
+const isMention = (html, at, len) =>
+  MENTION.test(html.slice(Math.max(0, at - 12), at + len + 8));
+
 const cells = [], offences = [];
+let mentions = 0;
 for (let v = 0; v < 3; v++) {
   cells[v] = [];
   for (let s = 0; s < 3; s++) {
@@ -64,8 +71,12 @@ for (let v = 0; v < 3; v++) {
     if (!existsSync(f)) die(`缺片段 ${f}\n  「${variants[v]?.name ?? v + 1}」的第 ${s + 1} 屏（${screens[s] ?? ""}）还没写。三屏一个都不能少。`);
     const html = readFileSync(f, "utf8");
     if (!html.trim()) die(`${f} 是空的。`);
-    for (const [re, label] of PLACEHOLDER)
-      if (re.test(html)) offences.push(`  ${f} 里有 ${label}`);
+    for (const [re, label] of PLACEHOLDER) {
+      const m = re.exec(html);
+      if (!m) continue;
+      if (isMention(html, m.index, m[0].length)) mentions++;
+      else offences.push(`  ${f} 里有 ${label}`);
+    }
     cells[v][s] = html;
   }
 }
@@ -86,6 +97,10 @@ variants.forEach((v, i) => {
   );
 });
 const warn = [];
+if (mentions) warn.push(
+  `有 ${mentions} 处像占位文字的词看着是在「讲」它而不是在「用」它（周围有否定或引号），已放过——` +
+  "如果那真是占位文字，自己再看一眼。"
+);
 variants.forEach((v) => {
   if (!v.desc) warn.push(`变体「${v.name}」没写 desc（它在轴上的位置，一句话）`);
 });
