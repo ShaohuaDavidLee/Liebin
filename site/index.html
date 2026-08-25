@@ -197,9 +197,13 @@
               <input type="file" accept="image/*" multiple="{{ true }}" onChange="{{ onFiles }}" style="display:none">
             </label>
             <p style="margin:0;color:var(--muted);font-size:12.5px;line-height:1.7">截图后直接 Ctrl+V 或 ⌘V，不必先存成文件。整页都能粘，焦点在输入框里也行。</p>
-            <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <div data-ref-list style="display:flex;flex-wrap:wrap;gap:10px">
               <sc-for list="{{ files }}" as="f" hint-placeholder-count="0">
-                <span style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px 6px 14px;border-radius:var(--r-pill);border:1px solid var(--hair);background:var(--paper-1);font-family:var(--font-sans);font-size:12.5px;color:var(--ink-soft)">{{ f.name }}<button type="button" onClick="{{ f.remove }}" style="border:0;background:transparent;cursor:pointer;color:var(--muted);font-size:14px;line-height:1;padding:0 2px">×</button></span>
+                <span data-ref-chip style="display:inline-flex;align-items:center;gap:10px;padding:4px 10px 4px 4px;border-radius:10px;border:1px solid var(--hair);background:var(--paper-0);font-family:var(--font-sans);font-size:12.5px;color:var(--ink-soft);max-width:100%">
+                  <img src="{{ f.preview }}" alt="" width="44" height="44" style="width:44px;height:44px;object-fit:cover;border-radius:7px;background:var(--paper-2);flex:none">
+                  <span style="max-width:11em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.name }}</span>
+                  <button type="button" onClick="{{ f.remove }}" aria-label="移除" style="border:0;background:transparent;cursor:pointer;color:var(--muted);font-size:16px;line-height:1;padding:0 2px">×</button>
+                </span>
               </sc-for>
             </div>
           </div>
@@ -306,6 +310,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     [1,2,3,4,5].forEach(i => clearTimeout(this["_t" + i]));
     if (this._onDocPaste) document.removeEventListener("paste", this._onDocPaste);
+    this.state.files.forEach(f => { if (f.preview) URL.revokeObjectURL(f.preview); });
   }
 
   _crc32(u8) {
@@ -403,16 +408,29 @@ class Component extends DCLogic {
       return f && f.size && (!f.type || f.type.indexOf("image/") === 0);
     });
     if (!picked.length) return;
+    const stamp = Date.now();
     let n = 0;
-    const read = await Promise.all(picked.map(async f => {
+    const batch = new Set();
+    const read = [];
+    for (let i = 0; i < picked.length; i++) {
+      const f = picked[i];
+      const bytes = new Uint8Array(await f.arrayBuffer());
+      const key = this._crc32(bytes) + ":" + bytes.length;
+      if (batch.has(key)) continue;
+      batch.add(key);
       let name = (f.name || "").replace(/[\\/]/g, "_");
       if (!name || /^image\.(png|jpe?g|gif|webp)$/i.test(name)) {
         n++;
         const ext = ((f.type || "").split("/")[1] || "png").replace("jpeg", "jpg");
-        name = "paste-" + Date.now() + (n > 1 ? "-" + n : "") + "." + ext;
+        name = "paste-" + stamp + (n > 1 ? "-" + n : "") + "." + ext;
       }
-      return { name, bytes: new Uint8Array(await f.arrayBuffer()) };
-    }));
+      read.push({
+        name,
+        bytes,
+        preview: URL.createObjectURL(new Blob([bytes], { type: f.type || "image/png" }))
+      });
+    }
+    if (!read.length) return;
     this.setState(s => ({ files: s.files.concat(read) }));
   }
 
@@ -423,17 +441,19 @@ class Component extends DCLogic {
     const seen = new Set();
     const take = function (f) {
       if (!f || !f.size || (f.type && f.type.indexOf("image/") !== 0)) return;
-      if (seen.has(f)) return;
-      seen.add(f);
+      const key = f.size + ":" + (f.type || "");
+      if (seen.has(key)) return;
+      seen.add(key);
       out.push(f);
     };
-    if (cd.files) Array.prototype.forEach.call(cd.files, take);
+    /* 同一张图会同时出现在 files 和 items 里；getAsFile() 是新对象，引用去重拦不住 */
     if (cd.items) {
       for (let i = 0; i < cd.items.length; i++) {
         const it = cd.items[i];
-        if (it.kind === "file" && it.type && it.type.indexOf("image/") === 0) take(it.getAsFile());
+        if (it.kind === "file") take(it.getAsFile());
       }
     }
+    if (cd.files) Array.prototype.forEach.call(cd.files, take);
     return out;
   }
 
@@ -466,7 +486,12 @@ class Component extends DCLogic {
 
     const files = this.state.files.map((f, i) => ({
       name: f.name,
-      remove: () => this.setState(s => ({ files: s.files.filter((_, j) => j !== i) }))
+      preview: f.preview,
+      remove: () => this.setState(s => {
+        const gone = s.files[i];
+        if (gone && gone.preview) URL.revokeObjectURL(gone.preview);
+        return { files: s.files.filter((_, j) => j !== i) };
+      })
     }));
     const n = this.state.files.length;
 
