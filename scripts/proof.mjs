@@ -206,18 +206,14 @@ if (argv.includes("--no-render")) {
 
 /* ── 确认区选项：点选 +「其他」手填。空文本框会把人吓跑；原话出口在「其他」。 ── */
 const REJECT = [
-  "颜色刺眼，开久了受不了",
-  "阴影或装饰太重，像贴上去的",
-  "太满太挤，重点要滑很久才看到",
-  "留白太多，一屏里没什么可抓的",
+  "太满太挤，或装饰抢戏",
+  "太空太素，一屏里没什么可抓的",
   "气质不对（太嫩 / 太商务 / 太炫）",
 ];
 const CONTEXT = [
   "手机上，经常单手",
-  "电脑前，坐着细看",
-  "旁边有人，或投在大屏上",
+  "电脑前，或投在大屏上",
   "赶时间，扫一眼就得懂",
-  "情绪紧（着急、焦虑、不想被围观）",
 ];
 const opt = (name, t) =>
   `<label><input type="checkbox" name="${name}" value="${esc(t)}"><span>${esc(t)}</span></label>`;
@@ -326,7 +322,7 @@ ${variants.map((v, i) => `  <figure class="cell">
 
 <section class="confirm">
   <h2>三个问题</h2>
-  <p class="sub">点选项就行。对不上的写在「其他」——那句原话会一字不改地进 DESIGN.md 的 Don'ts。</p>
+  <p class="sub">每问三条，对不上的写在「其他」。确认页只有三版，没有「现在」。</p>
   <div class="q">
     <p class="ttl" id="pick-ttl">1 · 选哪个？</p>
     <select id="pick" aria-labelledby="pick-ttl">
@@ -337,7 +333,7 @@ ${variants.map((v) => `      <option>${esc(v.name)}（${esc(v.tag ?? "")}）</op
   </div>
   <div class="q">
     <p class="ttl" id="reject-ttl">2 · 另外两个，哪里不要？</p>
-    <p class="why">可多选。选项对不上就点「其他」，点名是哪一版。点中的句子和「其他」里的原话，原样进 Don'ts，不润色。</p>
+    <p class="why">三选，可多选。具体的那句骂写在「其他」，并点名是哪一版。</p>
     <div class="opts" role="group" aria-labelledby="reject-ttl">
       ${REJECT.map((t) => opt("reject", t)).join("")}
       <label><input type="checkbox" name="reject" data-other value="其他"><span>其他</span></label>
@@ -347,7 +343,7 @@ ${variants.map((v) => `      <option>${esc(v.name)}（${esc(v.tag ?? "")}）</op
   </div>
   <div class="q">
     <p class="ttl" id="context-ttl">3 · 你的用户，在什么状态下打开这个产品？</p>
-    <p class="why">不是问画面，是问人。可多选；场景比选项具体，写在「其他」。</p>
+    <p class="why">三选，可多选。更具体的现场写在「其他」。</p>
     <div class="opts" role="group" aria-labelledby="context-ttl">
       ${CONTEXT.map((t) => opt("context", t)).join("")}
       <label><input type="checkbox" name="context" data-other value="其他"><span>其他</span></label>
