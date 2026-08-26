@@ -123,9 +123,7 @@
     <div class="wrap">
       <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="输出什么" title="三版并列，你只要指着说：要这个、不要那个。" aside="one axis, three answers —" hint-size="100%,90px"></x-import>
 
-      <p style="color:var(--ink-soft);font-size:16px;line-height:1.85;max-width:var(--measure-note);margin:0 0 34px">下面这三张不是示意图，是这一页自己的确认现场：同一份真实文案，沿一条轴（<span style="color:var(--gold)">贴着做 → 取其神 → 反着来</span>）分化成三版，各自完整。三版只差在这一条轴上——不是换个颜色。这三个名字每次都一样。</p>
-
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:26px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:26px;margin-top:8px">
         <div class="dir-card">
           <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
             <span class="latin" style="color:var(--gold);font-size:22px;line-height:1">I</span>
@@ -135,7 +133,7 @@
           <div class="dir-photo">
             <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-1-bewen.png" alt="方向一「贴着做」的首屏样张" ratio="843/540" object-position="50% 0%" caption="贴着做 · 首屏" hint="close" hint-size="100%,210px"></x-import>
           </div>
-          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">贴着参考走：结构、密度、节奏都搬过来，先看看「就照这个做」到底合不合身。</p>
+          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">结构、密度、节奏都搬过来。</p>
         </div>
 
         <div class="dir-card">
@@ -147,7 +145,7 @@
           <div class="dir-photo">
             <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-2-liubai.png" alt="方向二「取其神」的首屏样张" ratio="843/540" object-position="50% 0%" caption="取其神 · 首屏" hint="distilled" hint-size="100%,210px"></x-import>
           </div>
-          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">只取味道，不搬结构：参考里那点气质留下来，版面按你自己的内容重新组织。</p>
+          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">只留气质，版面重排。</p>
         </div>
 
         <div class="dir-card">
@@ -159,11 +157,9 @@
           <div class="dir-photo">
             <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-3-jingye.png" alt="方向三「反着来」的首屏样张" ratio="843/540" object-position="50% 0%" caption="反着来 · 首屏" hint="opposite" hint-size="100%,210px"></x-import>
           </div>
-          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">故意反着来：参考怎么做，它偏不那么做。用来试出你的边界——你会在哪一刻说「这个不行」。</p>
+          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">参考怎么做，偏不那么做。</p>
         </div>
       </div>
-
-      <p class="latin" style="color:var(--muted);font-size:15px;margin:22px 0 0">each direction also renders the core screen and the empty state — three screens apiece, one HTML file —</p>
 
       <div style="border:1px solid var(--hair-2);border-radius:var(--r-lg);background:var(--surface);padding:32px 34px;margin-top:44px">
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;padding-bottom:20px;border-bottom:1px solid var(--hair)">
@@ -174,19 +170,19 @@
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:26px;margin-top:24px">
           <div>
             <div style="display:flex;align-items:baseline;gap:9px"><span class="latin" style="color:var(--crimson);font-size:19px">1</span><span style="font-family:var(--font-serif);font-weight:700;font-size:17px">选哪个？</span></div>
-            <p style="color:var(--muted);font-size:14.5px;line-height:1.75;margin:9px 0 0">贴着做 / 取其神 / 反着来，或者「三个都不要」。都不要也是一次有效判断。</p>
+            <p style="color:var(--muted);font-size:14.5px;line-height:1.75;margin:9px 0 0">或者三个都不要。</p>
           </div>
           <div>
             <div style="display:flex;align-items:baseline;gap:9px"><span class="latin" style="color:var(--crimson);font-size:19px">2</span><span style="font-family:var(--font-serif);font-weight:700;font-size:17px">另外两个，哪里不要？</span></div>
-            <p style="color:var(--muted);font-size:14.5px;line-height:1.75;margin:9px 0 0">请用原话：「贴着做太满」「反着来没说清它怎么用」。这句话会一字不改地进入设计契约。</p>
+            <p style="color:var(--muted);font-size:14.5px;line-height:1.75;margin:9px 0 0">原话。它会一字不改写进去。</p>
           </div>
           <div>
             <div style="display:flex;align-items:baseline;gap:9px"><span class="latin" style="color:var(--crimson);font-size:19px">3</span><span style="font-family:var(--font-serif);font-weight:700;font-size:17px">谁会在什么状态下打开它？</span></div>
-            <p style="color:var(--muted);font-size:14.5px;line-height:1.75;margin:9px 0 0">他正在做什么、为什么此刻需要这个产品。场景定下来，密度和语气才有依据。</p>
+            <p style="color:var(--muted);font-size:14.5px;line-height:1.75;margin:9px 0 0">场景定语气。</p>
           </div>
         </div>
 
-        <p style="font-family:var(--font-serif);font-size:17px;line-height:1.85;color:var(--ink-soft);margin:24px 0 0;padding-top:20px;border-top:1px solid var(--hair)">回答完这三句，它把你的原话逐字写进 <span class="latin" style="color:var(--gold);font-size:18px">DESIGN.md</span>——包括你吐槽的那两版哪里不好。</p>
+        <p style="font-family:var(--font-serif);font-size:17px;line-height:1.85;color:var(--ink-soft);margin:24px 0 0;padding-top:20px;border-top:1px solid var(--hair)">回答完这三句，原话写进 <span class="latin" style="color:var(--gold);font-size:18px">DESIGN.md</span>。</p>
       </div>
     </div>
   </section>
@@ -264,7 +260,6 @@
         </div>
       </div>
       <p style="margin:18px 0 0;color:var(--muted);font-size:15px;line-height:1.8;max-width:var(--measure-note)">{{ installNote }}</p>
-      <p style="margin:14px 0 0;color:var(--muted);font-size:15px;line-height:1.8;max-width:var(--measure-note)">拿到三版之后，选一版、说清另外两版哪里不要——它把你的原话写进 DESIGN.md。之后让任何会写代码的 agent 读这份文件去落地。落地后再回来并排看一眼：这跟你当初选的，还是同一个东西吗。<br><span class="latin" style="font-size:15px">the skill does not write the product —</span></p>
     </div>
   </section>
 
@@ -275,7 +270,7 @@
         <div style="border:1px solid var(--hair);border-radius:var(--r);background:var(--surface);padding:30px 32px">
           <div class="latin" style="color:var(--gold);font-size:20px;margin-bottom:10px">i.</div>
           <h3 style="margin:0 0 10px">数值崇拜</h3>
-          <p style="color:var(--muted);font-size:15px;line-height:1.75">参考里的 <span class="latin" style="color:var(--ink-soft)">-2.46px</span> 字距，是 80px 拉丁标题下的 <span class="latin" style="color:var(--ink-soft)">-0.031em</span>。照抄到 48px 中文标题上会挤成一团。所有间距一律转 em 再迁移，<span style="color:var(--ink-soft)">中文标题不用负字距</span>。</p>
+          <p style="color:var(--muted);font-size:15px;line-height:1.75">参考里的 px 是别人的字号解出来的。照抄到中文标题上会挤成一团。</p>
         </div>
         <div style="border:1px solid var(--hair);border-radius:var(--r);background:var(--surface);padding:30px 32px">
           <div class="latin" style="color:var(--gold);font-size:20px;margin-bottom:10px">ii.</div>
@@ -293,23 +288,19 @@
 
   <section id="faq" class="section">
     <div class="wrap">
-      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="FAQ · 常见问题" title="被问过不止一次的四个问题。" aside="asked more than once —" hint-size="100%,90px"></x-import>
+      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="FAQ · 常见问题" title="被问过不止一次的三个问题。" aside="asked more than once —" hint-size="100%,90px"></x-import>
       <div style="border-top:1px solid var(--hair-2)">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
           <h3 style="margin:0;max-width:20ch">它会直接帮我把网站写出来吗？</h3>
-          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">不会。列宾只管动笔前最关键那一步：给你三张可视化的样张，让你的 DESIGN.md 不再是盲盒。写代码是下一步的事——把这份文件交给 Claude Code、Codex 或任何会写代码的 agent 去落地。</p>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
-          <h3 style="margin:0;max-width:20ch">我不是设计师，看得懂那三版吗？</h3>
-          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">你不需要说出自己要什么。你要做的只是指着三版说「要这个、不要那个」，再补一句哪里不像——它要的就是这个。</p>
+          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">不会。它只给你三张样张和一份 DESIGN.md，代码交给别的 agent。<br><span class="latin" style="font-size:15px">the skill does not write the product —</span></p>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
           <h3 style="margin:0;max-width:20ch">只能配 Claude Code 用吗？</h3>
-          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">不挑 agent。Codex、Cursor、Grok、Openclaw、Kimi Work、WorkBuddy、Hermes、DeepSeek harness——把仓库放进项目里，让它读 SKILL.md 就行。</p>
+          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">不挑。仓库放进项目，让它读 SKILL.md。</p>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
           <h3 style="margin:0;max-width:20ch">它和那些「一键提取设计系统」的工具有什么不同？</h3>
-          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">提取器满大街都是，提得再准也解决不了开头那个问题：你说不清哪里不对。列宾知道，你看到三版设计样稿之后，才知道自己想要什么。</p>
+          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">提取器告诉你参考长什么样。列宾逼你说出哪里不要。</p>
         </div>
       </div>
     </div>
@@ -514,8 +505,8 @@ class Component extends DCLogic {
       ? "git clone https://github.com/ShaohuaDavidLee/Liebin.git .claude/skills/liebin"
       : "git clone https://github.com/ShaohuaDavidLee/Liebin.git ~/.claude/skills/liebin";
     const installNote = isProject
-      ? "只对当前仓库生效，团队里其他人拉下代码就一起有了。重开一个 Claude Code 会话即可，或直接 /liebin 调用。别的 agent 就让它读仓库里的 SKILL.md，一样能走完五步。"
-      : "重开一个 Claude Code 会话即可生效，或直接 /liebin 调用。Codex、Cursor、Grok、Openclaw、Kimi Work、WorkBuddy、Hermes、DeepSeek harness——把仓库放进项目里，让它读 SKILL.md 就行，不挑 agent。";
+      ? "只对当前仓库生效。重开会话，或直接 /liebin。别的 agent 读 SKILL.md 就行。"
+      : "重开会话，或直接 /liebin。别的 agent 读 SKILL.md 就行。";
 
     this._installCmd = installCmd;
 
