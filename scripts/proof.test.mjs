@@ -58,6 +58,7 @@ function check(name, ok, detail) {
   check("合法输入出文件", r.status === 0 && existsSync(out), r.stderr);
   const html = existsSync(out) ? readFileSync(out, "utf8") : "";
   check("外壳含三问和三个变体名", /另外两个/.test(html) && /贴着做/.test(html) && /取其神/.test(html) && /反着来/.test(html));
+  check("否决和场景是选项加其他", /data-other/.test(html) && /颜色刺眼/.test(html) && /手机上，经常单手/.test(html) && !/<textarea id="reject"/.test(html));
   check("画布默认 1280×880", /--stage-w:1280px/.test(html) && /--stage-h:880px/.test(html));
   rmSync(dir, { recursive: true });
 }

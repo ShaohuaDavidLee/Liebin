@@ -44,11 +44,17 @@
   .confirm h2{font-size:16px;margin:0 0 4px}
   .confirm .hint{font-size:13px;color:var(--muted);margin:0 0 28px}
   .q{margin-bottom:26px}
-  .q label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
-  .q .why{font-size:12.5px;color:var(--muted);margin-bottom:10px}
-  .q textarea,.q select{width:100%;font:inherit;font-size:14px;padding:10px 12px;
-    border:1px solid var(--line);border-radius:8px;background:#fff;resize:vertical}
-  .q textarea{min-height:76px}
+  .q .ttl{font-size:14px;font-weight:600;margin:0 0 4px}
+  .q .why{font-size:12.5px;color:var(--muted);margin:0 0 10px}
+  .q select,.q .other{width:100%;font:inherit;font-size:14px;padding:10px 12px;
+    border:1px solid var(--line);border-radius:8px;background:#fff}
+  .opts{display:flex;flex-wrap:wrap;gap:8px}
+  .opts label{display:inline-flex;align-items:center;gap:7px;padding:7px 14px 7px 11px;border:1px solid var(--line);
+    border-radius:999px;cursor:pointer;font-size:13.5px;line-height:1.45;background:#fff;user-select:none}
+  .opts input{margin:0;accent-color:var(--ink);flex:none}
+  .opts label:has(:checked){border-color:var(--accent);background:var(--accent);color:#fff}
+  .other{display:none;margin-top:10px}
+  .q:has([data-other]:checked) .other{display:block}
   .copy{font:inherit;font-size:14px;font-weight:600;padding:11px 26px;border:none;border-radius:999px;
     background:var(--accent);color:#fff;cursor:pointer}
   .copied{font-size:13px;color:var(--muted);margin-left:12px}
@@ -98,11 +104,11 @@
 
 <div class="confirm">
   <h2>三个问题</h2>
-  <p class="hint">填完点下面的按钮，内容会复制到剪贴板，贴回对话里就行。</p>
+  <p class="hint">点选项就行。对不上的写在「其他」——那句原话会一字不改地进 DESIGN.md。</p>
 
   <div class="q">
-    <label>1 · 选哪个？</label>
-    <select id="pick">
+    <p class="ttl" id="pick-ttl">1 · 选哪个？</p>
+    <select id="pick" aria-labelledby="pick-ttl">
       <option value="">— 请选择 —</option>
       <option>贴着做</option><option>取其神</option><option>反着来</option>
       <option>三个都不要</option>
@@ -110,15 +116,31 @@
   </div>
 
   <div class="q">
-    <label>2 · 另外两个，哪里不要？</label>
-    <p class="why">这一问最重要。说得越具体越好——「圆角太软」「字太挤」「这个蓝太商务」。你骂出来的原话会原样变成设计约束，不会被改写。</p>
-    <textarea id="reject" placeholder="例：「取其神」的圆角太软，看着像儿童产品；「反着来」留白太多，滑半天看不到重点。"></textarea>
+    <p class="ttl" id="reject-ttl">2 · 另外两个，哪里不要？</p>
+    <p class="why">可多选。选项对不上就点「其他」，点名是哪一版。点中的句子和「其他」里的原话，原样进 Don'ts，不润色。</p>
+    <div class="opts" role="group" aria-labelledby="reject-ttl">
+      <label><input type="checkbox" name="reject" value="颜色刺眼，开久了受不了"><span>颜色刺眼，开久了受不了</span></label>
+      <label><input type="checkbox" name="reject" value="阴影或装饰太重，像贴上去的"><span>阴影或装饰太重，像贴上去的</span></label>
+      <label><input type="checkbox" name="reject" value="太满太挤，重点要滑很久才看到"><span>太满太挤，重点要滑很久才看到</span></label>
+      <label><input type="checkbox" name="reject" value="留白太多，一屏里没什么可抓的"><span>留白太多，一屏里没什么可抓的</span></label>
+      <label><input type="checkbox" name="reject" value="气质不对（太嫩 / 太商务 / 太炫）"><span>气质不对（太嫩 / 太商务 / 太炫）</span></label>
+      <label><input type="checkbox" name="reject" data-other value="其他"><span>其他</span></label>
+    </div>
+    <input class="other" id="reject-other" type="text" autocomplete="off" placeholder="例：「取其神」圆角太软，看着像儿童产品">
   </div>
 
   <div class="q">
-    <label>3 · 你的用户，在什么状态下打开这个产品？</label>
-    <p class="why">不是问画面。是问人——什么时间、什么心情、单手还是双手、周围有没有人。这一问会推翻一半「好看」的选择。</p>
-    <textarea id="context" placeholder="例：多半是深夜躺床上，一只手拿手机，另一只手空不出来，情绪偏焦虑。"></textarea>
+    <p class="ttl" id="context-ttl">3 · 你的用户，在什么状态下打开这个产品？</p>
+    <p class="why">不是问画面，是问人。可多选；场景比选项具体，写在「其他」。</p>
+    <div class="opts" role="group" aria-labelledby="context-ttl">
+      <label><input type="checkbox" name="context" value="手机上，经常单手"><span>手机上，经常单手</span></label>
+      <label><input type="checkbox" name="context" value="电脑前，坐着细看"><span>电脑前，坐着细看</span></label>
+      <label><input type="checkbox" name="context" value="旁边有人，或投在大屏上"><span>旁边有人，或投在大屏上</span></label>
+      <label><input type="checkbox" name="context" value="赶时间，扫一眼就得懂"><span>赶时间，扫一眼就得懂</span></label>
+      <label><input type="checkbox" name="context" value="情绪紧（着急、焦虑、不想被围观）"><span>情绪紧（着急、焦虑、不想被围观）</span></label>
+      <label><input type="checkbox" name="context" data-other value="其他"><span>其他</span></label>
+    </div>
+    <input class="other" id="context-other" type="text" autocomplete="off" placeholder="例：闭门会现场，二三十人扫码进来，写的人在别人讲话时单手打字">
   </div>
 
   <button class="copy" id="copyBtn">复制我的选择</button><span class="copied" id="tip"></span>
@@ -135,11 +157,28 @@
   }
   window.addEventListener('resize', fit); fit();
 
+  function wireOther(name){
+    var box=document.querySelector('input[name="'+name+'"][data-other]');
+    var inp=document.getElementById(name+'-other');
+    if(!box||!inp) return;
+    box.addEventListener('change',function(){ if(box.checked) inp.focus(); });
+    inp.addEventListener('input',function(){ if(inp.value.trim()) box.checked=true; });
+  }
+  wireOther('reject'); wireOther('context');
+
   document.getElementById('copyBtn').addEventListener('click', function(){
+    function gather(name){
+      var parts=[], extra=(document.getElementById(name+'-other').value||'').trim();
+      [].slice.call(document.querySelectorAll('input[name="'+name+'"]:checked')).forEach(function(el){
+        if(!el.hasAttribute('data-other')) parts.push(el.value);
+      });
+      if(extra) parts.push(extra);
+      return parts.join('；')||'（空）';
+    }
     var txt = '【设计方向确认】\n'
       + '1 选择：' + (document.getElementById('pick').value || '（未选）') + '\n'
-      + '2 否决理由（原话）：' + (document.getElementById('reject').value || '（空）') + '\n'
-      + '3 使用场景：' + (document.getElementById('context').value || '（空）');
+      + '2 否决理由（原话）：' + gather('reject') + '\n'
+      + '3 使用场景：' + gather('context');
     navigator.clipboard.writeText(txt).then(function(){
       document.getElementById('tip').textContent = '已复制，贴回对话里即可';
     }, function(){
