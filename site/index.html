@@ -32,16 +32,54 @@
   a{color:var(--link);text-decoration:none}
   a:hover{color:var(--link-hover)}
   input::placeholder,textarea::placeholder{color:var(--muted);opacity:1}
+
+  /* --------------------------------
+   * 窄屏：图在上、字在下、整块居中
+   * auto-fit + margin-left:auto 会在
+   * 中等宽度把肖像挤到右侧，看起来歪。
+   * 宽屏仍左文右图。图片 cover，不拉变形。
+   * -------------------------------- */
+  #top{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:28px;
+    align-items:start;
+  }
+  .hero-portrait{
+    order:-1;
+    width:100%;
+    max-width:min(360px,100%);
+    margin-inline:auto;
+  }
+  .hero-portrait .sc-host,
+  .dir-card .sc-host{display:block;width:100%}
+  .rn-photo{width:100%}
+  .rn-photo img{width:100%;height:100%;object-fit:cover}
+
+  .dir-card{display:flex;flex-direction:column}
+  .dir-card .dir-photo{order:-1;margin:0 0 16px}
+
   @media (min-width:900px){
-    .hero-copy{margin-left:clamp(32px,3vw,56px)}
-    .hero-portrait{margin-right:clamp(48px,4vw,72px)}
+    #top{
+      grid-template-columns:1fr 1fr;
+      gap:56px;
+      align-items:center;
+    }
+    .hero-copy{order:0;margin-left:clamp(32px,3vw,56px)}
+    .hero-portrait{
+      order:0;
+      margin-inline:unset;
+      margin-left:auto;
+      margin-right:clamp(48px,4vw,72px);
+    }
+    .dir-card .dir-photo{order:0;margin:16px 0 0}
   }
   @media (max-width:720px){
     header > div{height:64px!important;padding:0 var(--gutter-sm)!important;gap:12px!important}
     header > div > a{white-space:nowrap}
     header nav{margin-left:auto;gap:0!important}
     header nav > a{display:none}
-    #top{padding:48px var(--gutter-sm) 32px!important;gap:36px!important}
+    #top{padding:32px var(--gutter-sm) 28px!important;gap:24px!important}
   }
 </style>
 </helmet>
@@ -61,7 +99,7 @@
     </div>
   </header>
 
-  <section id="top" style="max-width:var(--page-max);margin:0 auto;padding:64px var(--gutter) 48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:56px;align-items:center">
+  <section id="top" style="max-width:var(--page-max);margin:0 auto;padding:64px var(--gutter) 48px">
     <div class="rise hero-copy">
       <x-import component-from-global-scope="DesignSystem_ee75f1.Badge" variant="live" hint-size="auto,32px">列宾 Skill · 设计方向确认</x-import>
       <h1 style="margin:22px 0 0;max-width:14ch">让大师帮你<em>「偷」</em>设计。</h1>
@@ -74,7 +112,7 @@
     </div>
 
     <sc-if value="{{ showSchematic }}" hint-placeholder-val="{{ true }}">
-      <div class="rise d2 hero-portrait" style="max-width:360px;width:100%;margin-left:auto">
+      <div class="rise d2 hero-portrait">
         <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/repin-self-portrait.png" alt="伊利亚·列宾自画像，1878" ratio="789/1000" object-position="50% 22%" caption="Ilya Repin · 列宾自画像 1878" hint-size="100%,440px"></x-import>
         <p class="latin" style="color:var(--muted);font-size:14.5px;line-height:1.6;margin:14px 0 0">Ilya Repin, <span style="font-style:normal;font-family:var(--font-serif);font-size:13.5px">列宾自画像</span> 1878 · Tretyakov Gallery — public domain, via Wikimedia Commons</p>
       </div>
@@ -88,37 +126,37 @@
       <p style="color:var(--ink-soft);font-size:16px;line-height:1.85;max-width:var(--measure-note);margin:0 0 34px">下面这三张不是示意图，是这一页自己的确认现场：同一份真实文案，沿一条轴（<span style="color:var(--gold)">贴着做 → 取其神 → 反着来</span>）分化成三版，各自完整。三版只差在这一条轴上——不是换个颜色。这三个名字每次都一样。</p>
 
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:26px">
-        <div>
+        <div class="dir-card">
           <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
             <span class="latin" style="color:var(--gold);font-size:22px;line-height:1">I</span>
             <span style="font-family:var(--font-serif);font-weight:900;font-size:20px">贴着做</span>
             <span style="margin-left:auto;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">贴着参考</span>
           </div>
-          <div style="margin-top:16px">
+          <div class="dir-photo">
             <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-1-bewen.png" alt="方向一「贴着做」的首屏样张" ratio="843/540" object-position="50% 0%" caption="贴着做 · 首屏" hint="close" hint-size="100%,210px"></x-import>
           </div>
           <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">贴着参考走：结构、密度、节奏都搬过来，先看看「就照这个做」到底合不合身。</p>
         </div>
 
-        <div>
+        <div class="dir-card">
           <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
             <span class="latin" style="color:var(--gold);font-size:22px;line-height:1">II</span>
             <span style="font-family:var(--font-serif);font-weight:900;font-size:20px">取其神</span>
             <span style="margin-left:auto;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">只取味道</span>
           </div>
-          <div style="margin-top:16px">
+          <div class="dir-photo">
             <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-2-liubai.png" alt="方向二「取其神」的首屏样张" ratio="843/540" object-position="50% 0%" caption="取其神 · 首屏" hint="distilled" hint-size="100%,210px"></x-import>
           </div>
           <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">只取味道，不搬结构：参考里那点气质留下来，版面按你自己的内容重新组织。</p>
         </div>
 
-        <div>
+        <div class="dir-card">
           <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
             <span class="latin" style="color:var(--crimson);font-size:22px;line-height:1">III</span>
             <span style="font-family:var(--font-serif);font-weight:900;font-size:20px">反着来</span>
             <span style="margin-left:auto;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">刻意偏离</span>
           </div>
-          <div style="margin-top:16px">
+          <div class="dir-photo">
             <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-3-jingye.png" alt="方向三「反着来」的首屏样张" ratio="843/540" object-position="50% 0%" caption="反着来 · 首屏" hint="opposite" hint-size="100%,210px"></x-import>
           </div>
           <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">故意反着来：参考怎么做，它偏不那么做。用来试出你的边界——你会在哪一刻说「这个不行」。</p>
