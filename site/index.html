@@ -34,6 +34,114 @@
   input::placeholder,textarea::placeholder{color:var(--muted);opacity:1}
 
   /* --------------------------------
+   * 前两屏四档（header / #top / #directions）
+   * 展示 — 现有 h1 --fs-display
+   * 标题 — 现有 h2 --fs-h2
+   * 正文 — 16px
+   * 元信息 — 11px
+   * 17–22px 收进标题或正文。罗马数字/阿拉伯数字
+   * 跟旁边标题同级，只靠金/绯红分色。
+   * -------------------------------- */
+  header .brand{
+    font-family:var(--font-serif);
+    font-size:16px;
+    font-weight:900;
+    letter-spacing:-.01em;
+    color:var(--ink);
+  }
+  header .brand-latin{
+    font-family:var(--font-latin);
+    font-size:11px;
+    font-style:italic;
+    font-weight:500;
+    color:var(--crimson);
+    margin-left:6px;
+  }
+  header nav{font-size:16px}
+
+  .hero-quote{
+    font-family:var(--font-serif);
+    font-size:16px;
+    line-height:1.8;
+    color:var(--ink-soft);
+    margin:18px 0 0;
+    white-space:nowrap;
+  }
+  .hero-quote-latin{
+    margin:10px 0 0;
+    font-size:16px;
+    color:var(--muted);
+  }
+  .hero-bio{
+    font-size:16px;
+    line-height:var(--lh-bio);
+    color:var(--ink-soft);
+    max-width:var(--measure-bio);
+    margin:26px 0 0;
+  }
+  .hero-credit{
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.6;
+    margin:14px 0 0;
+  }
+  .hero-portrait .caption-pill{
+    font-size:11px;
+    padding:5px 12px;
+  }
+
+  #directions .rn-aside{font-size:11px}
+  .dir-roman{font-size:16px;line-height:1}
+  .dir-name{
+    font-family:var(--font-serif);
+    font-weight:900;
+    font-size:16px;
+  }
+  .dir-tag{
+    margin-left:auto;
+    font-family:var(--font-sans);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .dir-cap{
+    color:var(--muted);
+    font-size:16px;
+    line-height:1.75;
+    margin:16px 0 0;
+  }
+
+  .q-block h3{
+    font-size:var(--fs-h2);
+    line-height:var(--lh-h2);
+  }
+  .q-block-latin{color:var(--muted);font-size:11px}
+  .q-n{color:var(--crimson);font-size:16px}
+  .q-q{
+    font-family:var(--font-serif);
+    font-weight:700;
+    font-size:16px;
+  }
+  .q-a{
+    color:var(--muted);
+    font-size:16px;
+    line-height:1.75;
+    margin:9px 0 0;
+  }
+  .q-foot{
+    font-family:var(--font-serif);
+    font-size:16px;
+    line-height:1.85;
+    color:var(--ink-soft);
+    margin:24px 0 0;
+    padding-top:20px;
+    border-top:1px solid var(--hair);
+  }
+  .q-foot .latin{color:var(--gold);font-size:16px}
+
+  /* --------------------------------
    * 窄屏：图在上、字在下、整块居中
    * auto-fit + margin-left:auto 会在
    * 中等宽度把肖像挤到右侧，看起来歪。
@@ -56,14 +164,6 @@
   .rn-photo{width:100%}
   .rn-photo img{width:100%;height:100%;object-fit:cover}
 
-  .hero-quote{
-    font-family:var(--font-serif);
-    font-size:clamp(15px,4.5vw,21px);
-    line-height:1.8;
-    color:var(--ink-soft);
-    margin:18px 0 0;
-    white-space:nowrap;
-  }
   .dir-card{display:flex;flex-direction:column}
   .dir-card .dir-photo{order:-1;margin:0 0 16px}
 
@@ -96,8 +196,8 @@
 
   <header style="position:sticky;top:0;z-index:50;background:rgba(247,247,244,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)">
     <div style="max-width:var(--page-max);margin:0 auto;padding:0 var(--gutter);height:70px;display:flex;align-items:center;justify-content:space-between;gap:20px">
-      <a href="#top" style="font-family:var(--font-serif);font-size:21px;font-weight:900;letter-spacing:-.01em;color:var(--ink)">列宾<span style="font-family:var(--font-latin);font-style:italic;font-weight:500;color:var(--crimson);margin-left:6px">Liebin</span></a>
-      <nav style="display:flex;align-items:center;gap:24px;font-family:var(--font-sans);font-size:14px;font-weight:500">
+      <a href="#top" class="brand">列宾<span class="latin brand-latin">Liebin</span></a>
+      <nav style="display:flex;align-items:center;gap:24px;font-family:var(--font-sans);font-weight:500">
         <a href="#directions" style="color:var(--ink-soft)" style-hover="color:var(--primary)">输出什么</a>
         <a href="#how" style="color:var(--ink-soft)" style-hover="color:var(--primary)">怎么用</a>
         <a href="#pitfalls" style="color:var(--ink-soft)" style-hover="color:var(--primary)">三个坑</a>
@@ -112,8 +212,8 @@
       <x-import component-from-global-scope="DesignSystem_ee75f1.Badge" variant="live" hint-size="auto,32px">列宾 Skill · 设计方向确认</x-import>
       <h1 style="margin:22px 0 0;max-width:14ch">让大师帮你<em>「偷」</em>设计。</h1>
       <p class="hero-quote">「优秀的艺术家模仿，伟大的艺术家偷窃。」</p>
-      <p class="latin" style="margin:10px 0 0;font-size:18px;color:var(--muted)">good artists copy, great artists steal —</p>
-      <p style="font-size:var(--fs-bio);line-height:var(--lh-bio);color:var(--ink-soft);max-width:var(--measure-bio);margin:26px 0 0">把你想要的设计风格，直接给出三个可视化的版本。你确定一版、<span style="font-family:var(--font-serif);font-style:italic;color:var(--crimson)">吐槽另外两版哪里不好</span>，它据此重新生成 DESIGN.md——你的 agent 拿着这份文件，再去精准修改你的产品。</p>
+      <p class="latin hero-quote-latin">good artists copy, great artists steal —</p>
+      <p class="hero-bio">把你想要的设计风格，直接给出三个可视化的版本。你确定一版、<span style="font-family:var(--font-serif);font-style:italic;color:var(--crimson)">吐槽另外两版哪里不好</span>，它据此重新生成 DESIGN.md——你的 agent 拿着这份文件，再去精准修改你的产品。</p>
       <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:34px">
         <x-import component-from-global-scope="DesignSystem_ee75f1.Button" variant="dark" href="#how" arrow="{{ true }}" hint-size="auto,48px">立即使用</x-import>
       </div>
@@ -122,7 +222,7 @@
     <sc-if value="{{ showSchematic }}" hint-placeholder-val="{{ true }}">
       <div class="rise d2 hero-portrait">
         <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/repin-self-portrait.png" alt="伊利亚·列宾自画像，1878" ratio="789/1000" object-position="50% 22%" caption="Ilya Repin · 列宾自画像 1878" hint-size="100%,440px"></x-import>
-        <p class="latin" style="color:var(--muted);font-size:14.5px;line-height:1.6;margin:14px 0 0">Ilya Repin, <span style="font-style:normal;font-family:var(--font-serif);font-size:13.5px">列宾自画像</span> 1878 · Tretyakov Gallery — public domain, via Wikimedia Commons</p>
+        <p class="latin hero-credit">Ilya Repin, <span style="font-style:normal;font-family:var(--font-serif)">列宾自画像</span> 1878 · Tretyakov Gallery — public domain, via Wikimedia Commons</p>
       </div>
     </sc-if>
   </section>
@@ -134,63 +234,63 @@
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:26px;margin-top:8px">
         <div class="dir-card">
           <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
-            <span class="latin" style="color:var(--gold);font-size:22px;line-height:1">I</span>
-            <span style="font-family:var(--font-serif);font-weight:900;font-size:20px">贴着做</span>
-            <span style="margin-left:auto;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">贴着参考</span>
+            <span class="latin dir-roman" style="color:var(--gold)">I</span>
+            <span class="dir-name">贴着做</span>
+            <span class="dir-tag">贴着参考</span>
           </div>
           <div class="dir-photo">
             <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-1-bewen.png" alt="方向一「贴着做」的首屏样张" ratio="843/540" object-position="50% 0%" hint-size="100%,210px"></x-import>
           </div>
-          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">结构、密度、节奏都搬过来。</p>
+          <p class="dir-cap">结构、密度、节奏都搬过来。</p>
         </div>
 
         <div class="dir-card">
           <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
-            <span class="latin" style="color:var(--gold);font-size:22px;line-height:1">II</span>
-            <span style="font-family:var(--font-serif);font-weight:900;font-size:20px">取其神</span>
-            <span style="margin-left:auto;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">只取味道</span>
+            <span class="latin dir-roman" style="color:var(--gold)">II</span>
+            <span class="dir-name">取其神</span>
+            <span class="dir-tag">只取味道</span>
           </div>
           <div class="dir-photo">
             <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-2-liubai.png" alt="方向二「取其神」的首屏样张" ratio="843/540" object-position="50% 0%" hint-size="100%,210px"></x-import>
           </div>
-          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">只留气质，版面重排。</p>
+          <p class="dir-cap">只留气质，版面重排。</p>
         </div>
 
         <div class="dir-card">
           <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
-            <span class="latin" style="color:var(--crimson);font-size:22px;line-height:1">III</span>
-            <span style="font-family:var(--font-serif);font-weight:900;font-size:20px">反着来</span>
-            <span style="margin-left:auto;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">刻意偏离</span>
+            <span class="latin dir-roman" style="color:var(--crimson)">III</span>
+            <span class="dir-name">反着来</span>
+            <span class="dir-tag">刻意偏离</span>
           </div>
           <div class="dir-photo">
             <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-3-jingye.png" alt="方向三「反着来」的首屏样张" ratio="843/540" object-position="50% 0%" hint-size="100%,210px"></x-import>
           </div>
-          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">参考怎么做，偏不那么做。</p>
+          <p class="dir-cap">参考怎么做，偏不那么做。</p>
         </div>
       </div>
 
-      <div style="border:1px solid var(--hair-2);border-radius:var(--r-lg);background:var(--surface);padding:32px 34px;margin-top:44px">
+      <div class="q-block" style="border:1px solid var(--hair-2);border-radius:var(--r-lg);background:var(--surface);padding:32px 34px;margin-top:44px">
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;padding-bottom:20px;border-bottom:1px solid var(--hair)">
           <h3 style="margin:0">大师不乱猜你的想法，只需要你回答三个问题</h3>
-          <span class="latin" style="color:var(--muted);font-size:15px">answer in your own words —</span>
+          <span class="latin q-block-latin">answer in your own words —</span>
         </div>
 
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:26px;margin-top:24px">
           <div>
-            <div style="display:flex;align-items:baseline;gap:9px"><span class="latin" style="color:var(--crimson);font-size:19px">1</span><span style="font-family:var(--font-serif);font-weight:700;font-size:17px">选哪个？</span></div>
-            <p style="color:var(--muted);font-size:14.5px;line-height:1.75;margin:9px 0 0">或者三个都不要。</p>
+            <div style="display:flex;align-items:baseline;gap:9px"><span class="latin q-n">1</span><span class="q-q">选哪个？</span></div>
+            <p class="q-a">或者三个都不要。</p>
           </div>
           <div>
-            <div style="display:flex;align-items:baseline;gap:9px"><span class="latin" style="color:var(--crimson);font-size:19px">2</span><span style="font-family:var(--font-serif);font-weight:700;font-size:17px">另外两个，哪里不要？</span></div>
-            <p style="color:var(--muted);font-size:14.5px;line-height:1.75;margin:9px 0 0">原话。它会一字不改写进去。</p>
+            <div style="display:flex;align-items:baseline;gap:9px"><span class="latin q-n">2</span><span class="q-q">另外两个，哪里不要？</span></div>
+            <p class="q-a">原话。它会一字不改写进去。</p>
           </div>
           <div>
-            <div style="display:flex;align-items:baseline;gap:9px"><span class="latin" style="color:var(--crimson);font-size:19px">3</span><span style="font-family:var(--font-serif);font-weight:700;font-size:17px">谁会在什么状态下打开它？</span></div>
-            <p style="color:var(--muted);font-size:14.5px;line-height:1.75;margin:9px 0 0">场景定语气。</p>
+            <div style="display:flex;align-items:baseline;gap:9px"><span class="latin q-n">3</span><span class="q-q">谁会在什么状态下打开它？</span></div>
+            <p class="q-a">场景定语气。</p>
           </div>
         </div>
 
-        <p style="font-family:var(--font-serif);font-size:17px;line-height:1.85;color:var(--ink-soft);margin:24px 0 0;padding-top:20px;border-top:1px solid var(--hair)">回答完这三句，原话写进 <span class="latin" style="color:var(--gold);font-size:18px">DESIGN.md</span>。</p>
+        <p class="q-foot">回答完这三句，原话写进 <span class="latin">DESIGN.md</span>。</p>
       </div>
     </div>
   </section>
