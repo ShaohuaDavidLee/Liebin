@@ -56,13 +56,20 @@
   .rn-photo{width:100%}
   .rn-photo img{width:100%;height:100%;object-fit:cover}
 
+  .hero-quote,
+  .hero-quote-latin{
+    font-size:clamp(15px,4.5vw,21px);
+  }
   .hero-quote{
     font-family:var(--font-serif);
-    font-size:clamp(15px,4.5vw,21px);
     line-height:1.8;
     color:var(--ink-soft);
     margin:18px 0 0;
     white-space:nowrap;
+  }
+  .hero-quote-latin{
+    margin:10px 0 0;
+    color:var(--muted);
   }
   .dir-card{display:flex;flex-direction:column}
   .dir-card .dir-photo{order:-1;margin:0 0 16px}
@@ -111,9 +118,9 @@
     <div class="rise hero-copy">
       <x-import component-from-global-scope="DesignSystem_ee75f1.Badge" variant="live" hint-size="auto,32px">列宾 Skill · 设计方向确认</x-import>
       <h1 style="margin:22px 0 0;max-width:14ch">让大师帮你<em>「偷」</em>设计。</h1>
-      <p class="hero-quote">「优秀的艺术家模仿，伟大的艺术家偷窃。」</p>
-      <p class="latin" style="margin:10px 0 0;font-size:18px;color:var(--muted)">good artists copy, great artists steal —</p>
-      <p style="font-size:var(--fs-bio);line-height:var(--lh-bio);color:var(--ink-soft);max-width:var(--measure-bio);margin:26px 0 0">把你想要的设计风格，直接给出三个可视化的版本。你确定一版、<span style="font-family:var(--font-serif);font-style:italic;color:var(--crimson)">吐槽另外两版哪里不好</span>，它据此重新生成 DESIGN.md——你的 agent 拿着这份文件，再去精准修改你的产品。</p>
+      <p class="hero-quote">优秀的艺术家模仿，伟大的艺术家偷窃。</p>
+      <p class="latin hero-quote-latin">Good artists copy, great artists steal — Steve Jobs</p>
+      <p style="font-size:var(--fs-bio);line-height:var(--lh-bio);color:var(--ink-soft);max-width:var(--measure-bio);margin:26px 0 0">粘贴你想“<span style="font-family:var(--font-serif);font-style:italic;color:var(--crimson)">偷</span>”的网址或图片，列宾用独特的方式帮你确认+重写Design.md，把你的agent变成懂你的设计师</p>
       <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:34px">
         <x-import component-from-global-scope="DesignSystem_ee75f1.Button" variant="dark" href="#how" arrow="{{ true }}" hint-size="auto,48px">立即使用</x-import>
       </div>
