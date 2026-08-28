@@ -88,6 +88,10 @@
       margin-right:clamp(48px,4vw,72px);
     }
     .dir-card .dir-photo{order:0;margin:16px 0 0}
+    #directions .rn-sechead__lead,
+    #how .rn-sechead__lead{max-width:none}
+    #directions .rn-sechead__title,
+    #how .rn-sechead__title{white-space:nowrap;text-wrap:nowrap}
   }
   @media (max-width:720px){
     header > div{height:64px!important;padding:0 var(--gutter-sm)!important;gap:12px!important}
@@ -117,7 +121,7 @@
   <section id="top" style="max-width:var(--page-max);margin:0 auto;padding:64px var(--gutter) 48px">
     <div class="rise hero-copy">
       <x-import component-from-global-scope="DesignSystem_ee75f1.Badge" variant="live" hint-size="auto,32px">列宾 Skill · 设计方向确认</x-import>
-      <h1 style="margin:22px 0 0;max-width:14ch">让大师帮你<em>「偷」</em>设计。</h1>
+      <h1 style="margin:22px 0 0;max-width:14ch">让大师帮你<em>「偷」</em>设计</h1>
       <p class="hero-quote">优秀的艺术家模仿，伟大的艺术家偷窃。</p>
       <p class="latin hero-quote-latin">Good artists copy, great artists steal — Steve Jobs</p>
       <p style="font-size:var(--fs-bio);line-height:var(--lh-bio);color:var(--ink-soft);max-width:var(--measure-bio);margin:26px 0 0">粘贴你想“<span style="font-family:var(--font-serif);font-style:italic;color:var(--crimson)">偷</span>”的网址或图片，列宾用独特的方式帮你确认+重写Design.md，把你的agent变成懂你的设计师</p>
@@ -204,7 +208,7 @@
 
   <section id="how" class="section">
     <div class="wrap">
-      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="怎么用？输入什么" title="填一张表，复制一段话，丢给你的 agent。" aside="one paste, that's it —" hint-size="100%,90px"></x-import>
+      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="怎么用？输入什么" title="填一张表，复制一段话，丢给你的 agent" aside="one paste, that's it —" hint-size="100%,90px"></x-import>
 
       <div class="rn-chips">
         <span class="rn-chip">Claude Code</span>
@@ -280,7 +284,7 @@
 
   <section id="pitfalls" class="section">
     <div class="wrap">
-      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="Pitfalls · 三个坑" title="列宾帮你避开的三件事。" aside="three ways this goes wrong —" hint-size="100%,90px"></x-import>
+      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="Pitfalls · 三个坑" title="列宾帮你避开的三件事" aside="three ways this goes wrong —" hint-size="100%,90px"></x-import>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px">
         <div style="border:1px solid var(--hair);border-radius:var(--r);background:var(--surface);padding:30px 32px">
           <div class="latin" style="color:var(--gold);font-size:20px;margin-bottom:10px">i.</div>
@@ -303,7 +307,7 @@
 
   <section id="faq" class="section">
     <div class="wrap">
-      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="FAQ · 常见问题" title="被问过不止一次的三个问题。" aside="asked more than once —" hint-size="100%,90px"></x-import>
+      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="FAQ · 常见问题" title="被问过不止一次的三个问题" aside="asked more than once —" hint-size="100%,90px"></x-import>
       <div style="border-top:1px solid var(--hair-2)">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
           <h3 style="margin:0;max-width:20ch">它会直接帮我把网站写出来吗？</h3>
