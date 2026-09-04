@@ -132,7 +132,7 @@
 
     <sc-if value="{{ showSchematic }}" hint-placeholder-val="{{ true }}">
       <div class="rise d2 hero-portrait">
-        <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/repin-self-portrait.png" alt="伊利亚·列宾自画像，1878" ratio="789/1000" object-position="50% 22%" caption="Ilya Repin · 列宾自画像 1878" hint-size="100%,440px"></x-import>
+        <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/repin-self-portrait.jpg" alt="伊利亚·列宾自画像，1878" ratio="789/1000" object-position="50% 22%" caption="Ilya Repin · 列宾自画像 1878" hint-size="100%,440px"></x-import>
         <p class="latin" style="color:var(--muted);font-size:14.5px;line-height:1.6;margin:14px 0 0">Ilya Repin, <span style="font-style:normal;font-family:var(--font-serif);font-size:13.5px">列宾自画像</span> 1878 · Tretyakov Gallery — public domain, via Wikimedia Commons</p>
       </div>
     </sc-if>
@@ -140,7 +140,7 @@
 
   <section id="directions" class="section">
     <div class="wrap">
-      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="输出什么" title="大师不用你不懂的设计词汇沟通，直接上三版视觉效果图" aside="one axis, three answers —" hint-size="100%,90px"></x-import>
+      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="输出什么" title="大师不用你不懂的设计术语，直接给你看三版效果" aside="one axis, three answers —" hint-size="100%,90px"></x-import>
 
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:26px;margin-top:8px">
         <div class="dir-card">
@@ -311,15 +311,11 @@
       <div style="border-top:1px solid var(--hair-2)">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
           <h3 style="margin:0;max-width:20ch">它会直接帮我把网站写出来吗？</h3>
-          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">列宾先帮你确认设计方向，交付样张和 DESIGN.md。文件里会保留你的选择与原话，并附上实现时的创意指令。把它交给 Claude Code、Codex 或其他编程 agent，继续完成页面。</p>
+          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">不会。列宾只管动笔前最关键那一步：给你三张可视化的样张，让你的 DESIGN.md 不再是盲盒，大幅提高你的agent做出好设计的概率。</p>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
           <h3 style="margin:0;max-width:20ch">没有参考网站或图片，也能用吗？</h3>
           <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">可以。告诉列宾你要设计什么、给谁看，并提供需要展示的内容，就能开始。参考是可选的，有喜欢的再提供。</p>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
-          <h3 style="margin:0;max-width:20ch">只能配 Claude Code 用吗？</h3>
-          <p style="color:var(--muted);font-size:15.5px;line-height:1.8;margin:0;max-width:var(--measure-note)">不挑 agent。Codex、Cursor、Grok、Openclaw、Kimi Work、WorkBuddy、Hermes、DeepSeek harness——把仓库放进项目里，让它读 SKILL.md 就行。</p>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--hair)">
           <h3 style="margin:0;max-width:20ch">它和那些「一键提取设计系统」的工具有什么不同？</h3>
