@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,78 +27,19 @@
 <link rel="stylesheet" href="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/styles.css">
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 <script src="_ds/ds-ee75f102-e2d2-4cec-b7c6-fa4086cf4863/_ds_bundle.js"></script>
+<script src="js/hero-showcase.js?v=3"></script>
+<link rel="stylesheet" href="css/hero-showcase.css?v=4">
 <style>
   body{margin:0;background:var(--paper-1);color:var(--ink-900);font-family:var(--font-sans)}
   a{color:var(--link);text-decoration:none}
   a:hover{color:var(--link-hover)}
   input::placeholder,textarea::placeholder{color:var(--muted);opacity:1}
-
-  /* --------------------------------
-   * 窄屏：图在上、字在下、整块居中
-   * auto-fit + margin-left:auto 会在
-   * 中等宽度把肖像挤到右侧，看起来歪。
-   * 宽屏仍左文右图。图片 cover，不拉变形。
-   * -------------------------------- */
-  #top{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:28px;
-    align-items:start;
-  }
-  .hero-portrait{
-    order:-1;
-    width:100%;
-    max-width:min(360px,100%);
-    margin-inline:auto;
-  }
-  .hero-portrait .sc-host,
-  .dir-card .sc-host{display:block;width:100%}
-  .rn-photo{width:100%}
-  .rn-photo img{width:100%;height:100%;object-fit:cover}
-
-  .hero-quote,
-  .hero-quote-latin{
-    font-size:clamp(15px,4.5vw,21px);
-  }
-  .hero-quote{
-    font-family:var(--font-serif);
-    line-height:1.8;
-    color:var(--ink-soft);
-    margin:18px 0 0;
-    white-space:nowrap;
-  }
-  .hero-quote-latin{
-    margin:10px 0 0;
-    color:var(--muted);
-  }
-  .dir-card{display:flex;flex-direction:column}
-  .dir-card .dir-photo{order:-1;margin:0 0 16px}
-
-  @media (min-width:900px){
-    #top{
-      grid-template-columns:1fr 1fr;
-      gap:56px;
-      align-items:center;
-    }
-    .hero-copy{order:0;margin-left:clamp(32px,3vw,56px)}
-    .hero-portrait{
-      order:0;
-      margin-inline:unset;
-      margin-left:auto;
-      margin-right:clamp(48px,4vw,72px);
-    }
-    .dir-card .dir-photo{order:0;margin:16px 0 0}
-    #directions .rn-sechead__lead,
-    #how .rn-sechead__lead{max-width:none}
-    #directions .rn-sechead__title,
-    #how .rn-sechead__title{white-space:nowrap;text-wrap:nowrap}
-  }
+  @media (min-width:900px){#how .rn-sechead__lead{max-width:none}}
   @media (max-width:720px){
     header > div{height:64px!important;padding:0 var(--gutter-sm)!important;gap:12px!important}
     header > div > a{white-space:nowrap}
     header nav{margin-left:auto;gap:0!important}
     header nav > a{display:none}
-    #top{padding:32px var(--gutter-sm) 28px!important;gap:24px!important}
   }
 </style>
 </helmet>
@@ -118,66 +59,41 @@
     </div>
   </header>
 
-  <section id="top" style="max-width:var(--page-max);margin:0 auto;padding:64px var(--gutter) 48px">
-    <div class="rise hero-copy">
-      <x-import component-from-global-scope="DesignSystem_ee75f1.Badge" variant="live" hint-size="auto,32px">列宾 Skill · 设计方向确认</x-import>
-      <h1 style="margin:22px 0 0;max-width:14ch">让大师帮你<em>「偷」</em>设计</h1>
-      <p class="hero-quote">优秀的艺术家模仿，伟大的艺术家偷窃。</p>
-      <p class="latin hero-quote-latin">Good artists copy, great artists steal — Steve Jobs</p>
-      <p style="font-size:var(--fs-bio);line-height:var(--lh-bio);color:var(--ink-soft);max-width:var(--measure-bio);margin:26px 0 0">粘贴你想“<span style="font-family:var(--font-serif);font-style:italic;color:var(--crimson)">偷</span>”的网址或图片，列宾用独特的方式帮你确认+重写Design.md，把你的agent变成懂你的设计师</p>
-      <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:34px">
-        <x-import component-from-global-scope="DesignSystem_ee75f1.Button" variant="dark" href="#how" arrow="{{ true }}" hint-size="auto,48px">立即使用</x-import>
-      </div>
+  <section id="top" class="hero-experience" data-direction="{{ heroDirection }}" aria-label="列宾的三种设计表达">
+    <div class="hero-stage-wrap" id="hero-stage">
+      <x-import component-from-global-scope="LiebinHero" direction="{{ heroDirection }}" on-select="{{ selectHero }}" show-portrait="{{ showSchematic }}" hint-size="100%,620px"></x-import>
     </div>
-
-    <sc-if value="{{ showSchematic }}" hint-placeholder-val="{{ true }}">
-      <div class="rise d2 hero-portrait">
-        <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/repin-self-portrait.jpg" alt="伊利亚·列宾自画像，1878" ratio="789/1000" object-position="50% 22%" caption="Ilya Repin · 列宾自画像 1878" hint-size="100%,440px"></x-import>
-        <p class="latin" style="color:var(--muted);font-size:14.5px;line-height:1.6;margin:14px 0 0">Ilya Repin, <span style="font-style:normal;font-family:var(--font-serif);font-size:13.5px">列宾自画像</span> 1878 · Tretyakov Gallery — public domain, via Wikimedia Commons</p>
-      </div>
-    </sc-if>
   </section>
 
   <section id="directions" class="section">
     <div class="wrap">
       <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="输出什么" title="大师不用你不懂的设计术语，直接给你看三版效果" aside="one axis, three answers —" hint-size="100%,90px"></x-import>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:26px;margin-top:8px">
-        <div class="dir-card">
-          <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
-            <span class="latin" style="color:var(--gold);font-size:22px;line-height:1">I</span>
-            <span style="font-family:var(--font-serif);font-weight:900;font-size:20px">贴着做</span>
-            <span style="margin-left:auto;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">贴着参考</span>
-          </div>
-          <div class="dir-photo">
-            <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-1-bewen.png" alt="方向一「贴着做」的首屏样张" ratio="843/540" object-position="50% 0%" hint-size="100%,210px"></x-import>
-          </div>
-          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">结构、密度、节奏都搬过来。</p>
-        </div>
-
-        <div class="dir-card">
-          <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
-            <span class="latin" style="color:var(--gold);font-size:22px;line-height:1">II</span>
-            <span style="font-family:var(--font-serif);font-weight:900;font-size:20px">取其神</span>
-            <span style="margin-left:auto;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">只取味道</span>
-          </div>
-          <div class="dir-photo">
-            <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-2-liubai.png" alt="方向二「取其神」的首屏样张" ratio="843/540" object-position="50% 0%" hint-size="100%,210px"></x-import>
-          </div>
-          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">只留气质，版面重排。</p>
-        </div>
-
-        <div class="dir-card">
-          <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair-2)">
-            <span class="latin" style="color:var(--crimson);font-size:22px;line-height:1">III</span>
-            <span style="font-family:var(--font-serif);font-weight:900;font-size:20px">反着来</span>
-            <span style="margin-left:auto;font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">刻意偏离</span>
-          </div>
-          <div class="dir-photo">
-            <x-import component-from-global-scope="DesignSystem_ee75f1.PhotoFrame" src="assets/dir-3-jingye.png" alt="方向三「反着来」的首屏样张" ratio="843/540" object-position="50% 0%" hint-size="100%,210px"></x-import>
-          </div>
-          <p style="color:var(--muted);font-size:15px;line-height:1.75;margin:16px 0 0">参考怎么做，偏不那么做。</p>
-        </div>
+      <div class="direction-grid">
+        <article class="direction-card">
+          <div class="direction-heading"><span class="latin">I</span><h3>贴着做</h3><small>贴着参考</small></div>
+          <button class="direction-preview" type="button" aria-label="在首屏查看贴着做" aria-pressed="{{ isClose }}" onclick="{{ previewClose }}">
+            <x-import component-from-global-scope="LiebinHero" direction="close" mini="{{ true }}" hint-size="100%,210px"></x-import>
+            <span class="direction-view-label">在首屏查看<span aria-hidden="true">↗</span></span>
+          </button>
+          <p>结构、密度、节奏都搬过来。</p>
+        </article>
+        <article class="direction-card">
+          <div class="direction-heading"><span class="latin">II</span><h3>取其神</h3><small>只取味道</small></div>
+          <button class="direction-preview" type="button" aria-label="在首屏查看取其神" aria-pressed="{{ isSpirit }}" onclick="{{ previewSpirit }}">
+            <x-import component-from-global-scope="LiebinHero" direction="spirit" mini="{{ true }}" hint-size="100%,210px"></x-import>
+            <span class="direction-view-label">在首屏查看<span aria-hidden="true">↗</span></span>
+          </button>
+          <p>只留气质，版面重排。</p>
+        </article>
+        <article class="direction-card">
+          <div class="direction-heading"><span class="latin">III</span><h3>反着来</h3><small>刻意偏离</small></div>
+          <button class="direction-preview" type="button" aria-label="在首屏查看反着来" aria-pressed="{{ isReverse }}" onclick="{{ previewReverse }}">
+            <x-import component-from-global-scope="LiebinHero" direction="reverse" mini="{{ true }}" hint-size="100%,210px"></x-import>
+            <span class="direction-view-label">在首屏查看<span aria-hidden="true">↗</span></span>
+          </button>
+          <p>参考怎么做，偏不那么做。</p>
+        </article>
       </div>
 
       <div style="border:1px solid var(--hair-2);border-radius:var(--r-lg);background:var(--surface);padding:32px 34px;margin-top:44px">
@@ -329,6 +245,29 @@
     </div>
   </section>
 
+  <section id="community" class="section" aria-labelledby="community-title">
+    <div class="wrap">
+      <div class="community-invite">
+        <div class="community-copy">
+          <div class="community-kicker">COMMUNITY · 列宾交流</div>
+          <h2 id="community-title">带上你的作品，<br>来聊聊设计。</h2>
+          <p>加入列宾 skill 交流群，晒晒你的三版方案，<br class="community-break">交流使用心得，也把遇到的问题带过来。</p>
+          <span class="community-signature latin">See you in the studio —</span>
+        </div>
+        <figure class="community-code">
+          <a class="community-qr" href="assets/liebin-wechat-group-2026-09-09.jpg" target="_blank" rel="noopener" aria-label="打开列宾 skill 交流群二维码原图">
+            <img src="assets/liebin-wechat-group-2026-09-09.jpg" alt="列宾 skill 交流群微信二维码" width="939" height="1455" loading="lazy">
+          </a>
+          <figcaption>
+            <strong>微信扫码 · 加入交流群</strong>
+            <span>手机可<a href="assets/liebin-wechat-group-2026-09-09.jpg" target="_blank" rel="noopener">打开原图</a>，长按保存后在微信识别</span>
+            <small>本期二维码有效期至 2026 年 9 月 16 日前</small>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
   <footer class="on-ink grain" style="border-radius:var(--r-lg) var(--r-lg) 0 0;margin-top:var(--section-y)">
     <div style="max-width:var(--page-max);margin:0 auto;padding:72px var(--gutter) 44px;text-align:center">
       <x-import component-from-global-scope="DesignSystem_ee75f1.Kicker" hint-size="auto,18px">Liebin · 列宾</x-import>
@@ -352,7 +291,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;紧凑&quot;,&quot;基准&quot;,&quot;舒展&quot;],&quot;default&quot;:&quot;基准&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;版式&quot;},&quot;showSchematic&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;版式&quot;},&quot;installScope&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;全局 ~/.claude/skills&quot;,&quot;项目内 .claude/skills&quot;],&quot;default&quot;:&quot;全局 ~/.claude/skills&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;内容&quot;}}">
 class Component extends DCLogic {
-  state = { installCopied: false, briefCopied: false, kickoffCopied: false, handoffCopied: false, files: [], zipDone: false };
+  state = { installCopied: false, briefCopied: false, kickoffCopied: false, handoffCopied: false, files: [], zipDone: false, heroDirection: "close" };
 
   componentDidMount() {
     this._onDocPaste = this._onDocPaste.bind(this);
@@ -363,6 +302,16 @@ class Component extends DCLogic {
     [1,2,3,4,5].forEach(i => clearTimeout(this["_t" + i]));
     if (this._onDocPaste) document.removeEventListener("paste", this._onDocPaste);
     this.state.files.forEach(f => { if (f.preview) URL.revokeObjectURL(f.preview); });
+  }
+
+  _selectDirection(direction, returnToHero = false, keyboard = false) {
+    this.setState({ heroDirection: direction }, () => {
+      if (!returnToHero) return;
+      const stage = document.getElementById("top");
+      stage?.scrollIntoView({ behavior: "instant", block: "start" });
+      const choice = stage?.querySelector('.hero-choice[aria-pressed="true"]');
+      if (keyboard) choice?.focus({ preventScroll: true });
+    });
   }
 
   _crc32(u8) {
@@ -520,6 +469,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
+    const heroDirection = this.state.heroDirection;
     const density = this.props.density ?? "基准";
     const sectionY = density === "紧凑" ? "56px" : density === "舒展" ? "104px" : "76px";
 
@@ -549,6 +499,14 @@ class Component extends DCLogic {
     const n = this.state.files.length;
 
     return {
+      heroDirection,
+      isClose: heroDirection === "close",
+      isSpirit: heroDirection === "spirit",
+      isReverse: heroDirection === "reverse",
+      selectHero: direction => this._selectDirection(direction),
+      previewClose: e => this._selectDirection("close", true, e.detail === 0),
+      previewSpirit: e => this._selectDirection("spirit", true, e.detail === 0),
+      previewReverse: e => this._selectDirection("reverse", true, e.detail === 0),
       sectionY, installCmd, installNote, files,
       showSchematic: this.props.showSchematic ?? true,
       installLabel: this.state.installCopied ? "已复制" : "复制",
