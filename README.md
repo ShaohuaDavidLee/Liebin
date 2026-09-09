@@ -97,6 +97,10 @@ Claude 会自动走完五步：
 
 ## 安装
 
+**下载技能包：** 落地页的使用区提供「下载列宾 Skill」。在支持导入技能的工具中上传 ZIP；使用本地技能目录的工具，将解压后的完整 `liebin/` 文件夹放进指定目录。详见 [安装说明](docs/skill-install.md)。不同工具的运行能力不同，导入成功后仍需确认样张生成能正常执行。
+
+**Claude Code 命令行安装：**
+
 ```bash
 git clone https://github.com/ShaohuaDavidLee/Liebin.git ~/.claude/skills/liebin
 ```
@@ -104,6 +108,8 @@ git clone https://github.com/ShaohuaDavidLee/Liebin.git ~/.claude/skills/liebin
 重开一个 Claude Code 会话即可生效，或直接 `/liebin` 调用。
 
 放进项目里只给这个仓库用也行：克隆到 `.claude/skills/liebin`。
+
+**维护下载包：** 修改 `SKILL.md`、`references/`、运行脚本、样张模板或安装说明后，在发布落地页前运行 `python3 scripts/package-skill.py`，一并提交生成的 `site/downloads/liebin-skill.zip`。它使用固定的打包元数据，并只包含技能运行资料；不会打包落地页、Git 目录或用户任务内容。当前静态站无构建命令，因此 ZIP 随站点文件一起发布。
 
 ---
 

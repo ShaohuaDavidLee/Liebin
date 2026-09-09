@@ -124,7 +124,7 @@
 
   <section id="how" class="section">
     <div class="wrap">
-      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="怎么用？输入什么" title="填一张表，复制一段话，丢给你的 agent" aside="one paste, that's it —" hint-size="100%,90px"></x-import>
+      <x-import component-from-global-scope="DesignSystem_ee75f1.SectionHead" kicker="怎么用？输入什么" title="装好列宾，把你的设计任务交给它" hint-size="100%,90px"></x-import>
 
       <div class="rn-chips">
         <span class="rn-chip">Claude Code</span>
@@ -137,7 +137,26 @@
         <span class="rn-chip">Hermes</span>
         <span class="rn-chip">DeepSeek harness</span>
       </div>
-      <p style="margin:26px 0 30px;color:var(--ink-soft);font-size:16px;line-height:1.85;max-width:var(--measure-note)">填入你要设计的内容，复制给 agent，就能开始。参考网址和图片都可留空；已有页面也可以直接提供，列宾会从中读取文案。</p>
+      <div id="download-skill" style="margin:28px 0 32px;padding:26px 28px;border:1px solid var(--hair-2);border-radius:var(--r-lg);background:var(--surface);scroll-margin-top:90px">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px">
+          <div style="flex:1 1 250px">
+            <h3 style="margin:0 0 8px;font-size:21px">1 · 下载并安装列宾</h3>
+            <p style="margin:0;color:var(--ink-soft);font-size:16px;line-height:1.8">完整 Skill 安装包，直接下载，无需访问 GitHub。</p>
+          </div>
+          <a class="rn-btn rn-btn--dark" href="downloads/liebin-skill.zip" download="liebin-skill.zip">下载列宾 Skill<span class="rn-btn__arrow" aria-hidden="true">↓</span></a>
+        </div>
+        <p style="margin:14px 0 0;color:var(--muted);font-size:14px;line-height:1.8">ZIP 格式 · 安装一次，后续任务可重复使用。已安装可以直接填写下面的任务。</p>
+        <details style="margin-top:18px;padding-top:16px;border-top:1px solid var(--hair)">
+          <summary style="cursor:pointer;font-size:15px;color:var(--ink-soft);padding:4px 0">如何装到我用的智能体里？</summary>
+          <div style="margin-top:14px;color:var(--ink-soft);font-size:15px;line-height:1.85">
+            <p style="margin:0 0 12px"><strong>有「导入技能 / 上传 Skill」入口：</strong>选择刚下载的 ZIP，按工具提示完成导入并启用。WorkBuddy 可从「添加技能 → 上传技能」进入。</p>
+            <p style="margin:0 0 12px"><strong>通过技能文件夹安装：</strong>解压后，把完整的 liebin 文件夹放进该工具指定的 skills 目录，再按工具要求刷新技能或新建对话。</p>
+            <p style="margin:0">包内附安装说明。不同工具的导入方式和执行能力有差异；生成样张需要工具能够读写文件，使用脚本时还需要相应运行环境。</p>
+          </div>
+        </details>
+      </div>
+      <h3 style="margin:0 0 12px;font-size:21px">2 · 准备这次的设计任务</h3>
+      <p style="margin:0 0 26px;color:var(--ink-soft);font-size:16px;line-height:1.85;max-width:var(--measure-note)">填入你要设计的内容，复制给已安装列宾的 agent，就能开始。参考网址和图片都可留空；已有页面也可以直接提供，列宾会从中读取文案。</p>
 
       <div style="border:1px solid var(--hair-2);border-radius:var(--r-lg);background:var(--surface);padding:30px">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:26px">
@@ -184,17 +203,20 @@
         </div>
       </div>
 
-      <div style="font-family:var(--font-sans);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:36px 0 12px">一段话 · 装上 + 提示词 + 任务包</div>
+      <h3 style="margin:32px 0 14px;font-size:21px">3 · 把任务交给列宾</h3>
       <div style="background:var(--ink-900);border-radius:var(--r);padding:22px 24px">
-        <code style="display:block;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--gold)">{{ installCmd }}</code>
-        <div style="height:1px;background:rgba(255,255,255,.14);margin:16px 0"></div>
         <code style="display:block;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.85;font-family:var(--font-sans);font-size:14.5px;color:var(--paper-1)">读一下 liebin 的 SKILL.md，按它走一遍我贴在下面的任务包：先给我三版样张。我选完之后，把选定方向、我的原话和实现时的创意指令一起写进 DESIGN.md。</code>
         <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:20px">
           <button type="button" onClick="{{ copyBrief }}" style="border-radius:var(--r-pill);padding:10px 20px;font-family:var(--font-sans);font-size:var(--fs-fine);font-weight:500;background:transparent;border:1px solid rgba(255,255,255,.28);color:var(--paper-1);cursor:pointer;transition:background var(--dur-hover)" style-hover="background:rgba(255,255,255,.1)">{{ briefLabel }}</button>
-          <span style="color:rgba(247,247,244,.55);font-size:13.5px">空着的栏不会写进任务包。文案在，就能开工</span>
+          <span style="color:rgba(247,247,244,.65);font-size:14px">复制提示词和已填内容；参考图请一并附上，或上传本次任务资料包。</span>
         </div>
       </div>
-      <p style="margin:18px 0 0;color:var(--muted);font-size:15px;line-height:1.8;max-width:var(--measure-note)">{{ installNote }}</p>
+      <p style="margin:18px 0 0;color:var(--muted);font-size:15px;line-height:1.8;max-width:var(--measure-note)">列宾先给你三版样张，等你选择和反馈，再整理成 DESIGN.md。</p>
+      <details style="margin-top:22px;color:var(--muted);font-size:14px">
+        <summary style="cursor:pointer;padding:4px 0">其他安装方式 · Claude Code 命令行</summary>
+        <code style="display:block;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8;margin:12px 0">{{ installCmd }}</code>
+        <p style="margin:0;line-height:1.8">{{ installNote }}</p>
+      </details>
     </div>
   </section>
 
@@ -384,8 +406,7 @@ class Component extends DCLogic {
   }
 
   _paste() {
-    return "# 装上（终端里跑一次）\n" + (this._installCmd || "") +
-      "\n\n# 然后跟你的 agent 说这一句\n读一下 liebin 的 SKILL.md，按它走一遍我贴在下面的任务包：先给我三版样张。我选完之后，把选定方向、我的原话和实现时的创意指令一起写进 DESIGN.md。\n\n" + this._brief();
+    return "请使用已安装的列宾（liebin）Skill，按它走一遍下面的任务：先给我三版样张。我选完之后，把选定方向、我的原话和实现时的创意指令一起写进 DESIGN.md。\n\n" + this._brief();
   }
 
   _flash(key, timer) {
@@ -510,11 +531,11 @@ class Component extends DCLogic {
       sectionY, installCmd, installNote, files,
       showSchematic: this.props.showSchematic ?? true,
       installLabel: this.state.installCopied ? "已复制" : "复制",
-      briefLabel: this.state.briefCopied ? "已复制到剪贴板" : "复制这一整段",
+      briefLabel: this.state.briefCopied ? "已复制到剪贴板" : "复制提示词和任务内容",
       kickoffLabel: this.state.kickoffCopied ? "已复制" : "复制",
       handoffLabel: this.state.handoffCopied ? "已复制" : "复制",
-      zipLabel: this.state.zipDone ? "已下载" : "打包下载 zip",
-      packHint: n ? "包内：BRIEF.md + refs/（" + n + " 张图）" : "包内：BRIEF.md（还没有参考图也能用）",
+      zipLabel: this.state.zipDone ? "任务资料已下载" : "下载本次任务资料",
+      packHint: "本次需求和提示词" + (n ? " + " + n + " 张参考图" : "") + " · 不含 Skill 安装文件",
       copyInstall: () => this._copy(installCmd, "installCopied", "_t1"),
       copyBrief: () => this._copy(this._paste(), "briefCopied", "_t2"),
       copyKickoff: () => this._copy(kickoff, "kickoffCopied", "_t4"),
