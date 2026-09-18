@@ -241,25 +241,3 @@
   .lb-portrait-frame { transform: rotateZ(var(--portrait-rotation)); }
   .lb-glare { display: none; }
 }
-
-/* An invitation at the end of the page; the supplied QR image stays intact. */
-.community-invite { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 48px; padding: 48px 56px; border: 1px solid var(--hair); border-radius: var(--r-lg); background: var(--surface); }
-.community-kicker { color: var(--gold); font-family: var(--font-sans); font-size: 11px; font-weight: 600; letter-spacing: .18em; }
-.community-copy h2 { margin: 20px 0 18px; font-size: clamp(28px, 3.2vw, 40px); line-height: 1.45; }
-.community-copy p { color: var(--muted); font-size: 15px; line-height: 1.9; margin: 0; }
-.community-signature { display: block; margin-top: 26px; color: var(--muted); font-size: 18px; }
-.community-code { width: 280px; max-width: 100%; margin: 0; text-align: center; }
-/* Frame the QR with its white quiet zone, without modifying the original file. */
-.community-qr { display: block; position: relative; width: 240px; max-width: 100%; aspect-ratio: 1; overflow: hidden; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 6px 24px rgba(38,36,30,.045); }
-.community-qr img { position: absolute; width: 128.630137%; max-width: none; height: auto; left: -14.383562%; top: -69.178082%; }
-.community-qr:focus-visible { outline: 2px solid var(--gold); outline-offset: 5px; }
-.community-code figcaption { margin-top: 17px; font-family: var(--font-sans); line-height: 1.8; }
-.community-code strong { display: block; font-size: 13px; font-weight: 500; }
-.community-code figcaption span { display: block; color: var(--muted); font-size: 11px; margin-top: 4px; }
-.community-code figcaption a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-.community-code small { display: block; margin-top: 7px; color: var(--muted); font-size: 10px; }
-@media (max-width: 700px) {
-  .community-invite { grid-template-columns: 1fr; gap: 32px; padding: 32px 24px; }
-  .community-code { justify-self: center; }
-  .community-break { display: none; }
-}
