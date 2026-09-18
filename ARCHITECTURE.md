@@ -3,6 +3,9 @@
 ```
 SKILL.md                 skill 主流程：收料 → 三变体 → 确认 → DESIGN.md → 验收
 references/              收料、分轴、DESIGN.md 规范、验收
+references/shots/        用户参考截图 + extraction.md（像素测量记录，非 DESIGN.md）
+proof/                   当前轮样张工作区：proof.json + v1s1…v3s3 九片段
+proof.html               脚手架产出的三版并列样张（双击即开）
 scripts/proof.mjs        样张脚手架（无依赖）
 scripts/proof.test.mjs   脚手架自检：占位文字和缺屏必须拦下
 scripts/verify-page.mjs  验收体检（要 playwright，有保底路径）
