@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<!--
+  列宾 · 三变体确认样张模板
+  用法：复制此文件，替换所有 {{...}} 占位，并在 .stage 内写入每个变体每一屏的真实渲染。
+  约束：单文件、内联一切、除 Google Fonts 外无外部依赖、不要用 localStorage。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{产品名}} · 设计方向确认</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --muted:#6b6b6b; --line:#e5e5e5; --bg:#fafaf9; --accent:#1a1a1a;
+    --col-gap:20px; --stage-w:1280px; --stage-h:860px;
+    /* aspect-ratio 只接受无单位数值，必须单独维护一个不带 px 的比例 token。
+       写成 var(--stage-w)/var(--stage-h) 会解析成 1280px/860px —— 非法，frame 会塌成零高。 */
+    --stage-ar:1280/860;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.75;}
+  header{padding:32px 40px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:10}
+  h1{font-size:19px;margin:0 0 6px;font-weight:600;letter-spacing:0}
+  .axis{font-size:13px;color:var(--muted);margin:0}
+  .axis b{color:var(--ink);font-weight:600}
+  .hint-read{font-size:13px;color:var(--muted);margin:14px 0 0;line-height:1.8}
+
+  /* 九格棋盘：列＝变体，行＝屏。九屏同时可见，没有要点的开关。 */
+  .board{display:grid;grid-template-columns:74px repeat(3,1fr);gap:13px var(--col-gap);
+    align-items:start;padding:24px 40px 40px}
+  .rowlab{font-size:11.5px;font-weight:600;letter-spacing:.1em;color:var(--muted);padding-top:3px}
+  .vhead,.cell{min-width:0;margin:0}
+  .vhead .name{font-size:15px;font-weight:600}
+  .vhead .desc{font-size:12.5px;color:var(--muted);line-height:1.6;min-height:2.6em}
+  .frame{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;
+    position:relative;aspect-ratio:var(--stage-ar)}
+  .stage{width:var(--stage-w);height:var(--stage-h);transform-origin:0 0;position:absolute;top:0;left:0}
+  .stage > .screen{width:100%;height:100%;overflow:hidden}
+
+  /* ── 确认区 ── */
+  .confirm{border-top:1px solid var(--line);padding:36px 40px 80px;max-width:820px}
+  .confirm h2{font-size:16px;margin:0 0 4px}
+  .confirm .hint{font-size:13px;color:var(--muted);margin:0 0 28px}
+  .q{margin-bottom:26px}
+  .q .ttl{font-size:14px;font-weight:600;margin:0 0 4px}
+  .q .why{font-size:12.5px;color:var(--muted);margin:0 0 10px}
+  .q select,.q .other{width:100%;font:inherit;font-size:14px;padding:10px 12px;
+    border:1px solid var(--line);border-radius:8px;background:#fff}
+  .opts{display:flex;flex-wrap:wrap;gap:8px}
+  .opts label{display:inline-flex;align-items:center;gap:7px;padding:7px 14px 7px 11px;border:1px solid var(--line);
+    border-radius:999px;cursor:pointer;font-size:13.5px;line-height:1.45;background:#fff;user-select:none}
+  .opts input{margin:0;accent-color:var(--ink);flex:none}
+  .opts label:has(:checked){border-color:var(--accent);background:var(--accent);color:#fff}
+  .other{display:none;margin-top:10px}
+  .q:has([data-other]:checked) .other{display:block}
+  .copy{font:inherit;font-size:14px;font-weight:600;padding:11px 26px;border:none;border-radius:999px;
+    background:var(--accent);color:#fff;cursor:pointer}
+  .copied{font-size:13px;color:var(--muted);margin-left:12px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>{{产品名}} · 三个方案，请选一个</h1>
+  <p class="axis">这三个方案沿同一条轴排开：<b>{{轴的名字，如「取舍程度」}}</b>。{{一句话说明这条轴为什么是它}}</p>
+  <p class="hint-read">九屏全在这一页上，不用切换：<b>横着看</b>三版在同一屏上的差别，<b>竖着看</b>一版从首屏到空状态撑不撑得住。</p>
+</header>
+
+<div class="board">
+  <!-- 第一行：三版的名字和它们在轴上的位置。名字锁死：贴着做 / 取其神 / 反着来，不要另起外号。 -->
+  <div class="rowlab"></div>
+  <div class="vhead">
+    <div class="name">贴着做</div>
+    <div class="desc">{{这一档在轴上的位置，一句话}}</div>
+  </div>
+  <div class="vhead">
+    <div class="name">取其神</div>
+    <div class="desc">{{这一档在轴上的位置，一句话}}</div>
+  </div>
+  <div class="vhead">
+    <div class="name">反着来</div>
+    <div class="desc">{{这一档在轴上的位置，一句话}}</div>
+  </div>
+
+  <!-- 之后每一行是一屏，行内三格＝三版在这一屏上的样子。三行照抄，换掉行名和片段。 -->
+  <div class="rowlab">首屏</div>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 贴着做 · 首屏 --></div></div></div></figure>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 取其神 · 首屏 --></div></div></div></figure>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 反着来 · 首屏 --></div></div></div></figure>
+
+  <div class="rowlab">{{核心操作屏名，如「记录一次」}}</div>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 贴着做 · 操作屏 --></div></div></div></figure>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 取其神 · 操作屏 --></div></div></div></figure>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 反着来 · 操作屏 --></div></div></div></figure>
+
+  <!-- 空状态这一行一定要填——最能暴露一套风格撑不撑得住，也是所有 AI 样张都会跳过的地方。 -->
+  <div class="rowlab">{{空状态或结果屏名}}</div>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 贴着做 · 空状态 --></div></div></div></figure>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 取其神 · 空状态 --></div></div></div></figure>
+  <figure class="cell"><div class="frame"><div class="stage"><div class="screen"><!-- 反着来 · 空状态 --></div></div></div></figure>
+</div>
+
+<div class="confirm">
+  <h2>三个问题</h2>
+  <p class="hint">每问三条，对不上的写在「其他」。确认页只有三版，没有「现在」。</p>
+
+  <div class="q">
+    <p class="ttl" id="pick-ttl">1 · 选哪个？</p>
+    <select id="pick" aria-labelledby="pick-ttl">
+      <option value="">— 请选择 —</option>
+      <option>贴着做</option><option>取其神</option><option>反着来</option>
+      <option>三个都不要</option>
+    </select>
+  </div>
+
+  <div class="q">
+    <p class="ttl" id="reject-ttl">2 · 另外两个，哪里不要？</p>
+    <p class="why">三选，可多选。具体的那句骂写在「其他」，并点名是哪一版。</p>
+    <div class="opts" role="group" aria-labelledby="reject-ttl">
+      <label><input type="checkbox" name="reject" value="太满太挤，或装饰抢戏"><span>太满太挤，或装饰抢戏</span></label>
+      <label><input type="checkbox" name="reject" value="太空太素，一屏里没什么可抓的"><span>太空太素，一屏里没什么可抓的</span></label>
+      <label><input type="checkbox" name="reject" value="气质不对（太嫩 / 太商务 / 太炫）"><span>气质不对（太嫩 / 太商务 / 太炫）</span></label>
+      <label><input type="checkbox" name="reject" data-other value="其他"><span>其他</span></label>
+    </div>
+    <input class="other" id="reject-other" type="text" autocomplete="off" placeholder="例：「取其神」圆角太软，看着像儿童产品">
+  </div>
+
+  <div class="q">
+    <p class="ttl" id="context-ttl">3 · 你的用户，在什么状态下打开这个产品？</p>
+    <p class="why">三选，可多选。更具体的现场写在「其他」。</p>
+    <div class="opts" role="group" aria-labelledby="context-ttl">
+      <label><input type="checkbox" name="context" value="手机上，经常单手"><span>手机上，经常单手</span></label>
+      <label><input type="checkbox" name="context" value="电脑前，或投在大屏上"><span>电脑前，或投在大屏上</span></label>
+      <label><input type="checkbox" name="context" value="赶时间，扫一眼就得懂"><span>赶时间，扫一眼就得懂</span></label>
+      <label><input type="checkbox" name="context" data-other value="其他"><span>其他</span></label>
+    </div>
+    <input class="other" id="context-other" type="text" autocomplete="off" placeholder="例：闭门会现场，二三十人扫码进来，写的人在别人讲话时单手打字">
+  </div>
+
+  <button class="copy" id="copyBtn">复制我的选择</button><span class="copied" id="tip"></span>
+</div>
+
+<script>
+(function(){
+  var stages = [].slice.call(document.querySelectorAll('.stage'));
+  function fit(){
+    stages.forEach(function(st){
+      var w = st.parentElement.clientWidth;
+      st.style.transform = 'scale(' + (w / st.offsetWidth) + ')';
+    });
+  }
+  window.addEventListener('resize', fit); fit();
+
+  function wireOther(name){
+    var box=document.querySelector('input[name="'+name+'"][data-other]');
+    var inp=document.getElementById(name+'-other');
+    if(!box||!inp) return;
+    box.addEventListener('change',function(){ if(box.checked) inp.focus(); });
+    inp.addEventListener('input',function(){ if(inp.value.trim()) box.checked=true; });
+  }
+  wireOther('reject'); wireOther('context');
+
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    function gather(name){
+      var parts=[], extra=(document.getElementById(name+'-other').value||'').trim();
+      [].slice.call(document.querySelectorAll('input[name="'+name+'"]:checked')).forEach(function(el){
+        if(!el.hasAttribute('data-other')) parts.push(el.value);
+      });
+      if(extra) parts.push(extra);
+      return parts.join('；')||'（空）';
+    }
+    var txt = '【设计方向确认】\n'
+      + '1 选择：' + (document.getElementById('pick').value || '（未选）') + '\n'
+      + '2 否决理由（原话）：' + gather('reject') + '\n'
+      + '3 使用场景：' + gather('context');
+    navigator.clipboard.writeText(txt).then(function(){
+      document.getElementById('tip').textContent = '已复制，贴回对话里即可';
+    }, function(){
+      document.getElementById('tip').textContent = '复制失败，请手动选中下方文本';
+      var pre = document.createElement('pre'); pre.textContent = txt;
+      document.getElementById('copyBtn').parentElement.appendChild(pre);
+    });
+  });
+})();
+</script>
+</body>
+</html>
