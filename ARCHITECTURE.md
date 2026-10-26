@@ -15,3 +15,5 @@ wrangler.toml            Pages 配置：产出目录 site
 skill 与落地页互不依赖。落地页只负责让人看清产出、装上、攒任务包。真正的设计方向确认发生在 agent 读 `SKILL.md` 之后。
 
 两个脚本都是可选的：不装 Node 也能走完五步，脚本只是把机械的部分（搭样张外壳、跑体检）自动化了。
+
+Agent 读取入口：发布目录内的 `llms.txt`、`index.md`、`.well-known/agent-skills/index.json`、`agent-skills/` 和带 SHA-256 文件名的 `downloads/agent-*.zip`。生成方式见 README 的 Agent 资源段落。

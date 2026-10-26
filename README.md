@@ -152,3 +152,7 @@ wrangler.toml                   Pages 配置
 ---
 
 DESIGN.md 规范来自 [google-labs-code/design.md](https://github.com/google-labs-code/design.md)（Apache-2.0）。
+
+## Agent 资源
+
+`site/` 发布目录新增 `llms.txt`、`index.md`、skills 发现索引与完整 ZIP。网页和下载包更新后，使用草诀歌官网仓库的 `scripts/agent-resources.py` 统一重新生成；入口与摘要随产物一起发布。维护说明：[草诀歌官网 Agent 资源](https://www.caojuege.com/docs/agent-resources.md)。本轮未增加在线 MCP 服务或 Markdown 请求协商。

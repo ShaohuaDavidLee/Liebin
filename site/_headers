@@ -12,3 +12,35 @@
 
 /js/*
   Cache-Control: public, max-age=86400
+
+# agent-resources:start
+/*
+  Link: </.well-known/agent-skills/index.json>; rel="describedby"; type="application/json", </llms.txt>; rel="describedby"; type="text/plain"
+
+/.well-known/agent-skills/index.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
+/agent-skills/*
+  Access-Control-Allow-Origin: *
+
+/downloads/agent-*
+  Content-Type: application/zip
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
+
+/
+  Link: </index.md>; rel="alternate"; type="text/markdown"
+
+/index.md
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *
+# agent-resources:end
+
+# agent-skill-markdown:start
+/agent-skills/liebin/SKILL.md
+  Content-Type: text/markdown; charset=utf-8
+# agent-skill-markdown:end
